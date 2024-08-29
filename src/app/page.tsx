@@ -3,7 +3,7 @@ import Image from "next/image";
 
 export default function Home() {
   const itemClassName = cn(
-    "flex flex-col gap-4 flex-1 justify-start items-start max-w-72 bg-white/10 p-4 rounded-lg border border-imageBorder min-w-64",
+    "flex flex-col gap-4 flex-1 justify-between items-start max-w-72 bg-white/10 p-4 rounded-lg border border-imageBorder min-w-64",
     "md:max-w-full md:bg-transparent md:p-0 md:rounded-none md:border-none md:flex-row md:items-center md:justify-between"
   );
 
@@ -45,7 +45,7 @@ export default function Home() {
         </div>
 
         {/* Work Section */}
-        <div className="flex flex-col gap-4 mt-8">
+        <div className="flex flex-col gap-4 mt- 8">
           <h2 className="text-xl font-medium font-jetBrainsMono text-secondary">
             ~/work
           </h2>
