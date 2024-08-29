@@ -13,6 +13,25 @@ const config: Config = {
         "gradient-conic":
           "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
       },
+      fontFamily: {
+        spaceGrotesk: "var(--font-spaceGrotesk)",
+        jetBrainsMono: "var(--font-jetbrainsMono)",
+      },
+      colors: {
+        background: "hsl(var(--background-color))",
+        header: "hsl(var(--header-color))",
+        primary: "hsl(var(--primary))",
+        secondary: "hsl(var(--secondary))",
+        imageBorder: "hsl(var(--image-border))",
+        yellow: "hsl(var(--yellow))",
+        green: "hsl(var(--green))",
+        red: "hsl(var(--red))",
+      },
+      boxShadow: {
+        yellow: "0 0 2px 1px hsla(var(--yellow), 0.1)",
+        green: "0 0 2px 1px hsla(var(--green), 0.1)",
+        red: "0 0 2px 1px hsla(var(--red), 0.1)",
+      },
     },
   },
   plugins: [],

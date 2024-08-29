@@ -4,15 +4,27 @@
 
 :root {
   --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
+  --background-color: 35, 11%, 88%;
+  --header-color: 0, 0%, 0%;
+  --primary: 0, 4%, 22%;
+  --secondary: 0, 6%, 37%;
+  --image-border: 0, 4%, 72%;
+  --yellow: 52, 80%, 65%;
+  --green: 137, 60%, 52%;
+  --red: 10, 90%, 62%;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
+    --primary-rgb: 255, 255, 255;
+    --header-color: 0, 0%, 0%;
+    --background-color: 35, 11%, 88%;
+    --primary: 0, 4%, 22%;
+    --secondary: 0, 6%, 37%;
+    --image-border: 0, 4%, 82%;
+    --yellow: 52, 80%, 65%;
+    --green: 137, 60%, 52%;
+    --red: 10, 90%, 62%;
   }
 }
 
