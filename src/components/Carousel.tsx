@@ -54,17 +54,20 @@ export const Carousel: React.FC<CarouselProps> = ({ items }) => {
     const threshold = 10; // Adjust this value to change sensitivity
     const draggedDistance = Math.abs(info.offset.x);
     const direction = info.offset.x > 0 ? -1 : 1;
-    const pagesToMove = Math.floor(
-      draggedDistance /
-        (getChildWidths().reduce((acc, curr) => acc + curr, 0) / items.length)
+    const pagesToMove = direction;
+
+    const newPage = Math.max(0, Math.min(items.length - 1, page + pagesToMove));
+    console.log(
+      draggedDistance,
+      info,
+      direction,
+      pagesToMove,
+      items.length,
+      newPage,
+      draggedDistance > threshold && newPage < items.length - 1
     );
 
-    const newPage = Math.max(
-      0,
-      Math.min(items.length - 1, page + direction * pagesToMove)
-    );
-
-    if (draggedDistance > threshold && newPage < items.length - 1) {
+    if (draggedDistance > threshold && newPage < items.length) {
       console.log(
         "page",
         page,
@@ -92,7 +95,7 @@ export const Carousel: React.FC<CarouselProps> = ({ items }) => {
       <motion.div className="cursor-grab overflow-hidden">
         <motion.div
           drag="x"
-          dragConstraints={{ right: 0, left: -250 }}
+          dragConstraints={{ right: 0, left: -10 }}
           className="flex gap-4"
           animate={controls}
           ref={carousel}
