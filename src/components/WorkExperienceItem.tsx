@@ -9,7 +9,13 @@ export interface WorkExperienceItemProps {
 import Image from "next/image";
 import { cn } from "@/utils";
 
-export function WorkExperienceItem({ logoSrc, logoAlt, company, role, period }: WorkExperienceItemProps) {
+export function WorkExperienceItem({
+  logoSrc,
+  logoAlt,
+  company,
+  role,
+  period,
+}: WorkExperienceItemProps) {
   const itemClassName = cn(
     "flex flex-col gap-4 flex-1 justify-between items-start max-w-72 bg-white/10 p-4 rounded-lg border border-imageBorder min-w-64",
     "md:max-w-full md:bg-transparent md:p-0 md:rounded-none md:border-none md:flex-row md:items-center md:justify-between"

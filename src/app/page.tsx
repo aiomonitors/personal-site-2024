@@ -9,6 +9,7 @@ import {
   SideProjectItem,
   SideProjectItemProps,
 } from "@/components/SideProjectItem";
+import { Carousel } from "@/components/Carousel";
 
 export default function Home() {
   const workExperiences: WorkExperienceItemProps[] = [
@@ -95,8 +96,15 @@ export default function Home() {
           <h2 className="text-xl font-medium font-jetBrainsMono text-secondary">
             ~/work
           </h2>
+          <div className="md:hidden">
+            <Carousel
+              items={workExperiences.map((experience, index) => (
+                <WorkExperienceItem key={index} {...experience} />
+              ))}
+            />
+          </div>
 
-          <div className="flex flex-row gap-4 overflow-x-auto md:flex-col">
+          <div className="hidden md:flex flex-col gap-4 overflow-x-auto">
             {workExperiences.map((experience, index) => (
               <WorkExperienceItem key={index} {...experience} />
             ))}
