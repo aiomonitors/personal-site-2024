@@ -117,7 +117,15 @@ export default function Home() {
             ~/side projects
           </h2>
 
-          <div className="flex flex-row gap-4 overflow-x-auto md:flex-col">
+          <div className="md:hidden">
+            <Carousel
+              items={sideProjects.map((project, index) => (
+                <SideProjectItem key={index} {...project} />
+              ))}
+            />
+          </div>
+
+          <div className="hidden md:flex flex-col gap-4 overflow-x-auto">
             {sideProjects.map((project, index) => (
               <SideProjectItem key={index} {...project} />
             ))}
