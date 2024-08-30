@@ -1,3 +1,7 @@
+import Image from "next/image";
+import { cn } from "@/utils";
+import { LayoutGroup, motion } from "framer-motion";
+
 export interface WorkExperienceItemProps {
   logoSrc: string;
   logoAlt: string;
@@ -5,11 +9,9 @@ export interface WorkExperienceItemProps {
   role: string;
   period: string;
   id: string;
+  description: string;
+  onClick: () => void;
 }
-
-import Image from "next/image";
-import { cn } from "@/utils";
-import { motion } from "framer-motion";
 
 export function WorkExperienceItem({
   logoSrc,
@@ -18,6 +20,7 @@ export function WorkExperienceItem({
   role,
   period,
   id,
+  onClick,
 }: WorkExperienceItemProps) {
   const itemClassName = cn(
     "flex flex-col gap-4 flex-1 justify-between items-start max-w-72 bg-white/10 p-4 rounded-lg border border-imageBorder min-w-64",
@@ -30,9 +33,9 @@ export function WorkExperienceItem({
   );
 
   return (
-    <div className={itemClassName}>
-      <div className={itemLeftClassName}>
-        <motion.div layoutId={`${id}-logo`}>
+    <div className={itemClassName} onClick={onClick}>
+      <motion.div className={itemLeftClassName} layoutId={id}>
+        <motion.div layoutId={`${id}-logo`} className="w-12 h-12">
           <Image
             src={logoSrc}
             alt={logoAlt}
@@ -45,16 +48,27 @@ export function WorkExperienceItem({
           <motion.h3
             className="text-lg font-medium text-header"
             layoutId={`${id}-company`}
+            transition={{ duration: 0.2 }}
           >
             {company}
           </motion.h3>
-          <motion.p className="text-md text-secondary" layoutId={`${id}-role`}>
+          <motion.p
+            className="text-md text-secondary"
+            layoutId={`${id}-role`}
+            transition={{ duration: 0.2 }}
+          >
             {role}
           </motion.p>
         </div>
-      </div>
+      </motion.div>
 
-      <p className="text-md text-secondary font-jetBrainsMono">{period}</p>
+      <motion.p
+        className="text-md text-secondary font-jetBrainsMono"
+        layoutId={`${id}-period`}
+        transition={{ duration: 0.2 }}
+      >
+        {period}
+      </motion.p>
     </div>
   );
 }

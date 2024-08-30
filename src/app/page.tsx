@@ -1,3 +1,4 @@
+"use client";
 import { cn } from "@/utils";
 import Image from "next/image";
 import { motion } from "framer-motion";
@@ -15,9 +16,13 @@ import Linkedin from "@/components/icons/linkedin";
 import Github from "@/components/icons/github";
 import Email from "@/components/icons/email";
 import X from "@/components/icons/x";
+import { useState } from "react";
+import { WorkDialog } from "@/components/work-dialog";
 
 export default function Home() {
-  const workExperiences: WorkExperienceItemProps[] = [
+  const [currentWorkExperience, setCurrentWorkExperience] =
+    useState<Omit<WorkExperienceItemProps, "onClick">>();
+  const workExperiences: Omit<WorkExperienceItemProps, "onClick">[] = [
     {
       logoSrc: "/pru.png",
       logoAlt: "Prudential",
@@ -25,6 +30,8 @@ export default function Home() {
       role: "Senior Software Engineer",
       period: "2022 - 20??",
       id: "pru",
+      description:
+        "Currently helping build better a web experience for our advisors and partners that sell our life insurance products.",
     },
     {
       logoSrc: "/prism.png",
@@ -33,6 +40,9 @@ export default function Home() {
       role: "Software Engineer",
       period: "2021 - 2022",
       id: "prism",
+      description: `
+        Lead frontend development of new desktop app, Refract. I planned and executed code refactors leading to a 64% decrease in update release time, significantly altering our CI process. I also lead a small team of engineers to lead an <strong>infrastructure abstraction project</strong>, which allowed us to build new apps at a faster rate. Lastly, I helped execute a refactor of the user dashboard into Next.js, which lead in massive load time improvements for users.
+      `,
     },
     {
       logoSrc: "/scout.png",
@@ -41,6 +51,12 @@ export default function Home() {
       role: "Software Engineer",
       period: "2020 - 2021",
       id: "scout",
+      description: `
+        Worked on a multitude of projects, notably converting the
+        current Ruby on Rails app to React. Worked on a small team
+        with 3 other engineers to conver the Ruby on Rails app to
+        React, increasing the performance of the app.
+      `,
     },
   ];
 
@@ -107,14 +123,22 @@ export default function Home() {
           <div className="md:hidden">
             <Carousel
               items={workExperiences.map((experience, index) => (
-                <WorkExperienceItem key={index} {...experience} />
+                <WorkExperienceItem
+                  key={index}
+                  {...experience}
+                  onClick={() => setCurrentWorkExperience(experience)}
+                />
               ))}
             />
           </div>
 
           <div className="hidden md:flex flex-col gap-4 overflow-x-auto">
             {workExperiences.map((experience, index) => (
-              <WorkExperienceItem key={index} {...experience} />
+              <WorkExperienceItem
+                key={index}
+                {...experience}
+                onClick={() => setCurrentWorkExperience(experience)}
+              />
             ))}
           </div>
         </div>
@@ -177,6 +201,12 @@ export default function Home() {
           <Github size={18} />
         </a>
       </div>
+
+      <WorkDialog
+        isOpen={!!currentWorkExperience}
+        onClose={() => setCurrentWorkExperience(undefined)}
+        workExperience={currentWorkExperience}
+      />
     </main>
   );
 }
