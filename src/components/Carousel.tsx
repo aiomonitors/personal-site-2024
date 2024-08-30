@@ -1,6 +1,8 @@
 "use client";
 import React, { useRef, useState, useEffect } from "react";
 import { motion, PanInfo, useAnimation } from "framer-motion";
+import { cn } from "@/utils";
+import { useIsMobile } from "@/hooks/use-is-mobile";
 
 interface CarouselProps {
   items: React.ReactNode[];
@@ -10,6 +12,7 @@ export const Carousel: React.FC<CarouselProps> = ({ items }) => {
   const carousel = useRef<HTMLDivElement>(null);
   const controls = useAnimation();
   const [page, setPage] = useState(0);
+  const isMobile = useIsMobile();
 
   const getChildWidths = () => {
     return items.map((_, index) => {
@@ -23,28 +26,6 @@ export const Carousel: React.FC<CarouselProps> = ({ items }) => {
       .reduce((acc, curr) => acc + curr, 0);
     console.log("totalWidth", totalWidth);
     return `calc(-${totalWidth}px)`;
-  };
-
-  const handleNext = () => {
-    if (page < items.length - 1) {
-      setPage((page) => {
-        controls.start({
-          translateX: getPageTranslateX(page + 1),
-          transition: { type: "spring", stiffness: 150, damping: 15 },
-        });
-        return page + 1;
-      });
-    }
-  };
-
-  const handlePrev = () => {
-    if (page > 0) {
-      setPage((page) => page - 1);
-      controls.start({
-        translateX: getPageTranslateX(page - 1),
-        transition: { type: "spring", stiffness: 150, damping: 15 },
-      });
-    }
   };
 
   const onDragEnd = (
@@ -108,6 +89,29 @@ export const Carousel: React.FC<CarouselProps> = ({ items }) => {
           ))}
         </motion.div>
       </motion.div>
+
+      {!isMobile ? (
+        <div className="flex flex-row gap-2">
+          {Array.from({ length: items.length }).map((_, index) => (
+            <button
+              key={index}
+              onClick={() => {
+                setPage(index);
+                controls.start({
+                  translateX: getPageTranslateX(index),
+                  transition: { type: "spring", stiffness: 150, damping: 15 },
+                });
+              }}
+              className={cn(
+                "bg-secondary/20 w-2 h-2 rounded-full transition-colors duration-150",
+                page === index
+                  ? "bg-secondary/80"
+                  : "bg-secondary/20 hover:bg-secondary/40"
+              )}
+            />
+          ))}
+        </div>
+      ) : null}
 
       {/* <div className="flex flex-row gap-4">
         <button onClick={handlePrev}>Prev</button>
