@@ -4,10 +4,12 @@ export interface WorkExperienceItemProps {
   company: string;
   role: string;
   period: string;
+  id: string;
 }
 
 import Image from "next/image";
 import { cn } from "@/utils";
+import { motion } from "framer-motion";
 
 export function WorkExperienceItem({
   logoSrc,
@@ -15,6 +17,7 @@ export function WorkExperienceItem({
   company,
   role,
   period,
+  id,
 }: WorkExperienceItemProps) {
   const itemClassName = cn(
     "flex flex-col gap-4 flex-1 justify-between items-start max-w-72 bg-white/10 p-4 rounded-lg border border-imageBorder min-w-64",
@@ -29,16 +32,25 @@ export function WorkExperienceItem({
   return (
     <div className={itemClassName}>
       <div className={itemLeftClassName}>
-        <Image
-          src={logoSrc}
-          alt={logoAlt}
-          width={36}
-          height={36}
-          className="rounded-lg w-12 h-12 border-2 border-imageBorder"
-        />
+        <motion.div layoutId={`${id}-logo`}>
+          <Image
+            src={logoSrc}
+            alt={logoAlt}
+            width={36}
+            height={36}
+            className="rounded-lg w-12 h-12 border-2 border-imageBorder"
+          />
+        </motion.div>
         <div className="flex flex-col gap-0.5">
-          <h3 className="text-lg font-medium text-header">{company}</h3>
-          <p className="text-md text-secondary">{role}</p>
+          <motion.h3
+            className="text-lg font-medium text-header"
+            layoutId={`${id}-company`}
+          >
+            {company}
+          </motion.h3>
+          <motion.p className="text-md text-secondary" layoutId={`${id}-role`}>
+            {role}
+          </motion.p>
         </div>
       </div>
 

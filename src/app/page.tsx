@@ -24,6 +24,7 @@ export default function Home() {
       company: "Prudential Financial",
       role: "Senior Software Engineer",
       period: "2022 - 20??",
+      id: "pru",
     },
     {
       logoSrc: "/prism.png",
@@ -31,6 +32,7 @@ export default function Home() {
       company: "Prism",
       role: "Software Engineer",
       period: "2021 - 2022",
+      id: "prism",
     },
     {
       logoSrc: "/scout.png",
@@ -38,6 +40,7 @@ export default function Home() {
       company: "Scout",
       role: "Software Engineer",
       period: "2020 - 2021",
+      id: "scout",
     },
   ];
 
