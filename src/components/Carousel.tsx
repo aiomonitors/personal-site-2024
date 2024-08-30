@@ -1,5 +1,5 @@
 "use client";
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef, useState } from "react";
 import { motion, PanInfo, useAnimation } from "framer-motion";
 import { cn } from "@/utils";
 import { useIsMobile } from "@/hooks/use-is-mobile";
@@ -24,50 +24,32 @@ export const Carousel: React.FC<CarouselProps> = ({ items }) => {
     const totalWidth = getChildWidths()
       .slice(0, page)
       .reduce((acc, curr) => acc + curr, 0);
-    console.log("totalWidth", totalWidth);
     return `calc(-${totalWidth}px)`;
+  };
+
+  const triggerPageChange = (page: number) => {
+    setPage(page);
+    controls.start({
+      translateX: getPageTranslateX(page),
+      transition: { type: "spring", stiffness: 150, damping: 15 },
+    });
   };
 
   const onDragEnd = (
     e: MouseEvent | TouchEvent | PointerEvent,
     info: PanInfo
   ) => {
-    const threshold = 10; // Adjust this value to change sensitivity
+    const threshold = 10;
     const draggedDistance = Math.abs(info.offset.x);
     const direction = info.offset.x > 0 ? -1 : 1;
     const pagesToMove = direction;
 
     const newPage = Math.max(0, Math.min(items.length - 1, page + pagesToMove));
-    console.log(
-      draggedDistance,
-      info,
-      direction,
-      pagesToMove,
-      items.length,
-      newPage,
-      draggedDistance > threshold && newPage < items.length - 1
-    );
 
     if (draggedDistance > threshold && newPage < items.length) {
-      console.log(
-        "page",
-        page,
-        newPage,
-        draggedDistance,
-        pagesToMove,
-        page + direction * pagesToMove
-      );
-      setPage(newPage);
-      controls.start({
-        translateX: getPageTranslateX(newPage),
-        transition: { type: "spring", stiffness: 150, damping: 15 },
-      });
+      triggerPageChange(newPage);
     } else {
-      // If the drag distance is less than the threshold, snap back to the current page
-      controls.start({
-        translateX: getPageTranslateX(page),
-        transition: { type: "spring", stiffness: 150, damping: 15 },
-      });
+      triggerPageChange(page);
     }
   };
 
@@ -96,11 +78,7 @@ export const Carousel: React.FC<CarouselProps> = ({ items }) => {
             <button
               key={index}
               onClick={() => {
-                setPage(index);
-                controls.start({
-                  translateX: getPageTranslateX(index),
-                  transition: { type: "spring", stiffness: 150, damping: 15 },
-                });
+                triggerPageChange(index);
               }}
               className={cn(
                 "bg-secondary/20 w-2 h-2 rounded-full transition-colors duration-150",
@@ -112,11 +90,6 @@ export const Carousel: React.FC<CarouselProps> = ({ items }) => {
           ))}
         </div>
       ) : null}
-
-      {/* <div className="flex flex-row gap-4">
-        <button onClick={handlePrev}>Prev</button>
-        <button onClick={handleNext}>Next</button>
-      </div> */}
     </div>
   );
 };
