@@ -75,7 +75,7 @@ export default function Home() {
           <p className="text-primary">
             Currently working at{" "}
             <a
-              href="https://prudential.com"
+              href="https://pru.com"
               target="_blank"
               className="underline decoration-dotted text-primary hover:text-blue-500 transition-colors duration-100 ease-in-out visited:text-primary"
             >
