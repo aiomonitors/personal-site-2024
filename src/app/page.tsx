@@ -10,6 +10,11 @@ import {
   SideProjectItemProps,
 } from "@/components/SideProjectItem";
 import { Carousel } from "@/components/Carousel";
+import Instagram from "@/components/icons/instagram";
+import Linkedin from "@/components/icons/linkedin";
+import Github from "@/components/icons/github";
+import Email from "@/components/icons/email";
+import X from "@/components/icons/x";
 
 export default function Home() {
   const workExperiences: WorkExperienceItemProps[] = [
@@ -60,7 +65,7 @@ export default function Home() {
   ];
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-6 bg-background md:p-24">
+    <main className="flex min-h-screen flex-col items-center justify-between p-6 bg-background pb-24 md:p-24">
       <div className="flex flex-col justify-center w-full max-w-3xl">
         {/* Header */}
         <div className="flex flex-col gap-4">
@@ -131,6 +136,43 @@ export default function Home() {
             ))}
           </div>
         </div>
+      </div>
+
+      <div className="flex gap-4 mt-8 bg-white/80 p-4 rounded-xl items-center justify-center border border-imageBorder flex-row fixed bottom-4 md:relative md:inset-0 md:bg-white/10">
+        <a
+          className="flex flex-1 items-center justify-center"
+          href="https://instagram.com/shihabch"
+          target="_blank"
+        >
+          <Instagram size={18} />
+        </a>
+        <a
+          className="flex flex-1 items-center justify-center"
+          href="https://linkedin.com/in/shihabch"
+          target="_blank"
+        >
+          <Linkedin size={18} />
+        </a>
+        <a
+          className="flex flex-1 items-center justify-center"
+          href="https://x.com/aiomonitors"
+          target="_blank"
+        >
+          <X size={18} />
+        </a>
+        <a
+          className="flex flex-1 items-center justify-center"
+          href="mailto:hi@shihab.dev"
+        >
+          <Email size={18} />
+        </a>
+        <a
+          className="flex flex-1 items-center justify-center"
+          href="https://github.com/aiomonitors"
+          target="_blank"
+        >
+          <Github size={18} />
+        </a>
       </div>
     </main>
   );
