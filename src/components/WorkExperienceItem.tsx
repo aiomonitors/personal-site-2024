@@ -33,8 +33,8 @@ export function WorkExperienceItem({
   );
 
   return (
-    <div className={itemClassName} onClick={onClick}>
-      <motion.div className={itemLeftClassName} layoutId={id}>
+    <motion.div className={itemClassName} onClick={onClick} layoutId={id}>
+      <motion.div className={itemLeftClassName} layoutId={`${id}-container`}>
         <motion.div layoutId={`${id}-logo`} className="w-12 h-12">
           <Image
             src={logoSrc}
@@ -69,6 +69,6 @@ export function WorkExperienceItem({
       >
         {period}
       </motion.p>
-    </div>
+    </motion.div>
   );
 }

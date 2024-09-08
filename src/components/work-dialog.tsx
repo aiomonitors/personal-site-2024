@@ -20,29 +20,37 @@ export function WorkDialog({ isOpen, onClose, workExperience }: MyDialogProps) {
       {isOpen && workExperience && (
         <Dialog
           as={motion.div}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0, transition: { duration: 0.2 } }}
           className="relative z-50"
           onClose={onClose}
           open={isOpen}
+          key={workExperience.id}
         >
-          <div className="fixed inset-0 bg-black/30" aria-hidden="true" />
+          <motion.div
+            className="fixed inset-0 bg-black/30"
+            aria-hidden="true"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1, transition: { duration: 0.2 } }}
+            exit={{ opacity: 0, transition: { duration: 0.1 } }}
+          />
 
           <div className="fixed inset-0 flex items-center justify-center p-4">
             <DialogPanel
               as={motion.div}
-              initial={{
-                scale: 0.9,
-                opacity: 0,
+              initial={{ opacity: 0 }}
+              animate={{
+                opacity: 1,
+                transition: { type: "spring", duration: 0.2, bounce: 0 },
               }}
-              animate={{ scale: 1, opacity: 1, transition: { duration: 0.2 } }}
-              exit={{ scale: 0.9, opacity: 0, transition: { duration: 0.05 } }}
-              className="w-full max-w-lg rounded bg-white p-6"
+              exit={{
+                opacity: 0,
+                transition: { type: "spring", duration: 0.1, bounce: 0 },
+              }}
+              className="w-full max-w-lg rounded bg-white border border-imageBorder p-6"
+              layoutId={workExperience.id}
             >
               <motion.div
                 className="flex flex-row justify-between gap-4"
-                layoutId={workExperience.id}
+                layoutId={`${workExperience.id}-container`}
               >
                 <div className="flex flex-row gap-4">
                   <motion.div

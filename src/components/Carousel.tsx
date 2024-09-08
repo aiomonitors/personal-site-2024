@@ -65,9 +65,7 @@ export const Carousel: React.FC<CarouselProps> = ({ items }) => {
           onDragEnd={onDragEnd}
         >
           {items.map((item, index) => (
-            <motion.div key={index} style={{ margin: "0" }}>
-              {item}
-            </motion.div>
+            <>{item}</>
           ))}
         </motion.div>
       </motion.div>
