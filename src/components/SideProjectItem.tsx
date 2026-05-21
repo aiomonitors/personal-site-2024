@@ -6,7 +6,7 @@ export interface SideProjectItemProps {
   logoAlt?: string;
   projectName: string;
   description: string;
-  status: "soon" | "acquired" | "past";
+  status: "soon" | "released" | "acquired" | "past";
 }
 
 export function SideProjectItem({
@@ -17,17 +17,18 @@ export function SideProjectItem({
   status,
 }: SideProjectItemProps) {
   const itemClassName = cn(
-    "flex flex-col gap-4 flex-1 justify-between items-start max-w-72 bg-white/10 p-4 rounded-lg border border-imageBorder min-w-64 h-full",
+    "flex flex-col gap-4 flex-1 justify-between items-start bg-white/10 p-4 rounded-lg border border-imageBorder",
     "md:max-w-full md:bg-transparent md:p-0 md:rounded-none md:border-none md:flex-row md:items-center md:justify-between"
   );
 
   const itemLeftClassName = cn(
-    "flex gap-4 items-start flex-col",
+    "flex gap-4 flex-row items-start",
     "md:flex-row md:items-center"
   );
 
   const statusColors = {
     soon: "bg-yellow shadow-yellow",
+    released: "bg-green shadow-green",
     acquired: "bg-green shadow-green",
     past: "bg-red shadow-red",
   };

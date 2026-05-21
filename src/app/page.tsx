@@ -9,7 +9,7 @@ import {
   SideProjectItem,
   SideProjectItemProps,
 } from "@/components/SideProjectItem";
-import { Carousel } from "@/components/Carousel";
+
 import Instagram from "@/components/icons/instagram";
 import Linkedin from "@/components/icons/linkedin";
 import Github from "@/components/icons/github";
@@ -43,9 +43,11 @@ export default function Home() {
 
   const sideProjects: SideProjectItemProps[] = [
     {
+      logoSrc: "/musicbridge.png",
+      logoAlt: "MusicBridge",
       projectName: "MusicBridge",
       description: "A mobile app to de-fragment music lovers",
-      status: "soon",
+      status: "released",
     },
     {
       logoSrc: "/vision.png",
@@ -101,15 +103,7 @@ export default function Home() {
           <h2 className="text-xl font-medium font-jetBrainsMono text-secondary">
             ~/work
           </h2>
-          <div className="md:hidden">
-            <Carousel
-              items={workExperiences.map((experience, index) => (
-                <WorkExperienceItem key={index} {...experience} />
-              ))}
-            />
-          </div>
-
-          <div className="hidden md:flex flex-col gap-4 overflow-x-auto">
+          <div className="flex flex-col gap-4">
             {workExperiences.map((experience, index) => (
               <WorkExperienceItem key={index} {...experience} />
             ))}
@@ -122,15 +116,7 @@ export default function Home() {
             ~/side projects
           </h2>
 
-          <div className="md:hidden">
-            <Carousel
-              items={sideProjects.map((project, index) => (
-                <SideProjectItem key={index} {...project} />
-              ))}
-            />
-          </div>
-
-          <div className="hidden md:flex flex-col gap-4 overflow-x-auto">
+          <div className="flex flex-col gap-4">
             {sideProjects.map((project, index) => (
               <SideProjectItem key={index} {...project} />
             ))}
