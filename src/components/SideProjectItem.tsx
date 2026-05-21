@@ -6,7 +6,7 @@ export interface SideProjectItemProps {
   logoAlt?: string;
   projectName: string;
   description: string;
-  status: "soon" | "acquired" | "past";
+  status: "soon" | "released" | "acquired" | "past";
 }
 
 export function SideProjectItem({
@@ -28,6 +28,7 @@ export function SideProjectItem({
 
   const statusColors = {
     soon: "bg-yellow shadow-yellow",
+    released: "bg-green shadow-green",
     acquired: "bg-green shadow-green",
     past: "bg-red shadow-red",
   };

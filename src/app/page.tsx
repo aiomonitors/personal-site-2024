@@ -43,9 +43,11 @@ export default function Home() {
 
   const sideProjects: SideProjectItemProps[] = [
     {
+      logoSrc: "/musicbridge.png",
+      logoAlt: "MusicBridge",
       projectName: "MusicBridge",
       description: "A mobile app to de-fragment music lovers",
-      status: "soon",
+      status: "released",
     },
     {
       logoSrc: "/vision.png",
