@@ -22,7 +22,7 @@ export function SideProjectItem({
   );
 
   const itemLeftClassName = cn(
-    "flex gap-4 items-start flex-row items-center",
+    "flex gap-4 flex-row items-start",
     "md:flex-row md:items-center"
   );
 
