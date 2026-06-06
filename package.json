@@ -11,12 +11,15 @@
   "dependencies": {
     "clsx": "^2.1.1",
     "framer-motion": "^11.3.31",
+    "gray-matter": "^4.0.3",
     "next": "14.2.7",
+    "next-mdx-remote": "^6.0.0",
     "react": "^18",
     "react-dom": "^18",
     "tailwind-merge": "^2.5.2"
   },
   "devDependencies": {
+    "@tailwindcss/typography": "^0.5.19",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
