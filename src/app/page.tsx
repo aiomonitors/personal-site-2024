@@ -64,6 +64,18 @@ export default function Home() {
         "web scraping and monitoring solution for sneaker communities",
       status: "past",
     },
+    {
+      projectName: "Baseball Exes Tracker",
+      description:
+        "A private project tracking MLB players who moved between teams, with current-season stats",
+      status: "in dev",
+    },
+    {
+      projectName: "Fantasy Football Research",
+      description:
+        "A private research dashboard that turns fantasy football podcast analysis into sourced player reports",
+      status: "in dev",
+    },
   ];
 
   return (
@@ -116,7 +128,7 @@ export default function Home() {
             ~/side projects
           </h2>
 
-          <div className="flex flex-col gap-4">
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
             {sideProjects.map((project, index) => (
               <SideProjectItem key={index} {...project} />
             ))}

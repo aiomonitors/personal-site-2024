@@ -5,32 +5,31 @@ export interface SideProjectItemProps {
   logoSrc?: string;
   logoAlt?: string;
   projectName: string;
+  projectUrl?: string;
   description: string;
-  status: "soon" | "released" | "acquired" | "past";
+  status: "soon" | "released" | "acquired" | "past" | "in dev";
 }
 
 export function SideProjectItem({
   logoSrc,
   logoAlt,
   projectName,
+  projectUrl,
   description,
   status,
 }: SideProjectItemProps) {
   const itemClassName = cn(
-    "flex flex-col gap-4 flex-1 justify-between items-start bg-white/10 p-4 rounded-lg border border-imageBorder",
-    "md:max-w-full md:bg-transparent md:p-0 md:rounded-none md:border-none md:flex-row md:items-center md:justify-between"
+    "flex h-full flex-col justify-between gap-6 rounded-xl border border-imageBorder bg-white/10 p-5"
   );
 
-  const itemLeftClassName = cn(
-    "flex gap-4 flex-row items-start",
-    "md:flex-row md:items-center"
-  );
+  const itemLeftClassName = "flex flex-col gap-4";
 
   const statusColors = {
     soon: "bg-yellow shadow-yellow",
     released: "bg-green shadow-green",
     acquired: "bg-green shadow-green",
     past: "bg-red shadow-red",
+    "in dev": "bg-yellow shadow-yellow",
   };
 
   return (
@@ -50,12 +49,20 @@ export function SideProjectItem({
           </div>
         )}
         <div className="flex flex-col gap-0.5">
-          <h3 className="text-lg font-medium text-header">{projectName}</h3>
+          <h3 className="text-lg font-medium text-header">
+            {projectUrl ? (
+              <a href={projectUrl} target="_blank" rel="noreferrer" className="hover:underline">
+                {projectName}
+              </a>
+            ) : (
+              projectName
+            )}
+          </h3>
           <p className="text-md text-secondary">{description}</p>
         </div>
       </div>
 
-      <div className="flex gap-2 rounded-lg px-2 py-1 bg-white/10 items-center border border-imageBorder">
+      <div className="flex w-fit shrink-0 gap-2 whitespace-nowrap rounded-lg px-2 py-1 bg-white/10 items-center border border-imageBorder">
         <span className={`rounded-full w-2 h-2 ${statusColors[status]}`}></span>
         <span className="text-secondary text-sm">{status}</span>
       </div>
