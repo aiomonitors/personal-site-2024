@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bargain Hunting Playbook</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* Plan: a field briefing styled after a graded-slab label and the back of a trading card.
+   Layout: single reading column with wide tables, a sticky part-nav, and "card-back" stat boxes. */
+:root{
+  --paper:#f3f4f0;
+  --panel:#ffffff;
+  --ink:#16202b;
+  --muted:#56616d;
+  --rule:#d4d8d2;
+  --accent:#b8102b;      /* slab-label red */
+  --accent-2:#1d4a73;    /* team navy */
+  --tint:#e8ecef;
+  --good:#1f7a4d; --warn:#a86a00; --bad:#b8102b;
+  --display:"Barlow Condensed","Arial Narrow",Arial,sans-serif;
+  --body:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#0f151c; --panel:#161e27; --ink:#e7eae5; --muted:#9aa5b0; --rule:#2a3542;
+    --accent:#ff5d72; --accent-2:#7fb2e0; --tint:#1c2631;
+    --good:#4cc38a; --warn:#e3a43a; --bad:#ff5d72; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#0f151c; --panel:#161e27; --ink:#e7eae5; --muted:#9aa5b0; --rule:#2a3542;
+  --accent:#ff5d72; --accent-2:#7fb2e0; --tint:#1c2631;
+  --good:#4cc38a; --warn:#e3a43a; --bad:#ff5d72; color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:64px}
+@media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--body);font-size:16.5px;line-height:1.6}
+a{color:var(--accent-2);text-underline-offset:2px}
+a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+h1,h2,h3,h4{font-family:var(--display);line-height:1.1;text-wrap:balance;margin:0;letter-spacing:.01em}
+h2{font-size:clamp(2rem,4.4vw,2.8rem);font-weight:700;text-transform:uppercase}
+h3{font-size:1.55rem;font-weight:600;text-transform:uppercase;margin-top:2.4rem}
+h4{font-size:1.2rem;font-weight:600;text-transform:uppercase;letter-spacing:.03em}
+p{margin:.7rem 0}
+.wrap{max-width:1080px;margin:0 auto;padding:0 20px}
+.read{max-width:68ch}
+.num,.mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
+
+/* Masthead styled like a slab label */
+.mast{border-bottom:1px solid var(--rule);background:var(--panel)}
+.label{display:grid;grid-template-columns:1fr auto;gap:12px 24px;align-items:end;padding:28px 0 22px}
+.label .kicker{font-family:var(--mono);font-size:.78rem;letter-spacing:.12em;text-transform:uppercase;color:var(--accent)}
+.label h1{font-size:clamp(2.6rem,7vw,4.6rem);font-weight:700;text-transform:uppercase;margin-top:6px}
+.label .cert{border:2px solid var(--accent);padding:10px 14px;text-align:right;font-family:var(--mono);font-size:.8rem;line-height:1.5}
+.label .cert b{display:block;font-family:var(--display);font-size:2rem;color:var(--accent);line-height:1}
+.dek{color:var(--muted);max-width:70ch;margin:0 0 22px}
+@media (max-width:560px){.label{grid-template-columns:1fr}.label .cert{text-align:left;justify-self:start}}
+
+nav.parts{position:sticky;top:0;z-index:5;background:var(--panel);border-bottom:1px solid var(--rule)}
+nav.parts ul{list-style:none;margin:0 auto;padding:0 20px;max-width:1080px;display:flex;gap:4px;overflow-x:auto;scrollbar-width:none}
+nav.parts ul::-webkit-scrollbar{display:none}
+nav.parts a{display:block;padding:12px 12px;font-family:var(--display);font-weight:600;font-size:1.05rem;text-transform:uppercase;letter-spacing:.04em;color:var(--ink);text-decoration:none;white-space:nowrap;border-bottom:3px solid transparent}
+nav.parts a:hover{border-bottom-color:var(--accent)}
+nav.parts a span{color:var(--accent);font-family:var(--mono);font-size:.8rem;margin-right:6px}
+
+section.part{padding:56px 0 24px;border-bottom:1px solid var(--rule)}
+.eyebrow{font-family:var(--mono);font-size:.8rem;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin-bottom:8px}
+.lede{font-size:1.12rem;color:var(--ink);max-width:68ch;margin-top:14px}
+
+/* Bottom line box */
+.bluf{background:var(--panel);border:1px solid var(--rule);border-left:6px solid var(--accent);padding:22px 24px;margin:36px 0 8px}
+.bluf ol{margin:10px 0 0;padding-left:1.3rem;display:grid;gap:8px}
+.bluf li::marker{font-family:var(--mono);color:var(--accent)}
+
+/* grids & cards */
+.grid{display:grid;gap:14px;margin-top:18px}
+.g2{grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+.g3{grid-template-columns:repeat(auto-fit,minmax(290px,1fr))}
+.card{background:var(--panel);border:1px solid var(--rule);padding:18px 18px 14px;display:flex;flex-direction:column;gap:6px}
+.card h4{color:var(--accent-2)}
+.card p{margin:.2rem 0;font-size:.96rem}
+.card .why{font-size:.9rem;color:var(--muted);border-top:1px dashed var(--rule);padding-top:8px;margin-top:auto}
+.tag{align-self:flex-start;display:inline-block;font-family:var(--mono);font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;padding:2px 7px;border:1px solid currentColor;border-radius:2px}
+.tag.good{color:var(--good)}.tag.warn{color:var(--warn)}.tag.bad{color:var(--bad)}.tag.info{color:var(--accent-2)}
+
+/* card-back stat box */
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));border:2px solid var(--ink);margin:22px 0;background:var(--panel)}
+.stats div{padding:12px 14px;border-right:1px solid var(--rule);border-bottom:1px solid var(--rule)}
+.stats b{display:block;font-family:var(--mono);font-size:1.45rem;font-weight:500;font-variant-numeric:tabular-nums;color:var(--accent)}
+.stats span{font-size:.86rem;color:var(--muted);line-height:1.35;display:block}
+
+/* tables */
+.tablewrap{overflow-x:auto;margin:18px 0;border:1px solid var(--rule);background:var(--panel)}
+table{border-collapse:collapse;width:100%;min-width:760px;font-size:.92rem}
+th,td{text-align:left;vertical-align:top;padding:10px 12px;border-bottom:1px solid var(--rule)}
+thead th{font-family:var(--display);text-transform:uppercase;letter-spacing:.05em;font-size:1rem;background:var(--tint);color:var(--ink);position:sticky;top:0}
+tbody tr:last-child td{border-bottom:0}
+td.k{font-weight:600;white-space:nowrap}
+
+/* funnel */
+.funnel{display:grid;gap:8px;margin:20px 0}
+.tier{display:grid;grid-template-columns:150px 1fr;gap:16px;background:var(--panel);border:1px solid var(--rule);padding:14px 16px;align-items:start}
+.tier .lvl{font-family:var(--display);text-transform:uppercase;font-weight:700;font-size:1.25rem;line-height:1.05}
+.tier .lvl small{display:block;font-family:var(--mono);font-size:.78rem;font-weight:400;color:var(--muted);text-transform:none;margin-top:4px}
+.tier p{margin:0 0 4px;font-size:.95rem}
+.tier:nth-child(1){border-left:6px solid var(--accent)}
+.tier:nth-child(2){border-left:6px solid var(--warn)}
+.tier:nth-child(3){border-left:6px solid var(--accent-2)}
+.tier:nth-child(4){border-left:6px solid var(--muted)}
+@media (max-width:560px){.tier{grid-template-columns:1fr;gap:6px}}
+
+/* checklist */
+.checklist{list-style:none;padding:0;margin:16px 0;display:grid;gap:10px}
+.checklist li{background:var(--panel);border:1px solid var(--rule);padding:12px 14px 12px 46px;position:relative}
+.checklist li::before{content:attr(data-n);position:absolute;left:12px;top:11px;font-family:var(--mono);font-size:.82rem;color:var(--accent);font-weight:500}
+.checklist b{font-weight:600}
+
+.quote{border-left:3px solid var(--accent-2);padding:4px 0 4px 16px;color:var(--muted);font-style:italic;margin:16px 0}
+.note{font-size:.88rem;color:var(--muted)}
+.callout{background:var(--tint);padding:14px 16px;margin:18px 0;border-radius:2px}
+
+/* calculator */
+.calc{background:var(--panel);border:2px solid var(--ink);padding:18px;margin:22px 0;display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px}
+.calc h4{grid-column:1/-1}
+.field{display:flex;flex-direction:column;gap:4px;margin-bottom:10px}
+.field label{font-size:.85rem;color:var(--muted)}
+.field input,.field select{font:inherit;font-family:var(--mono);padding:7px 9px;border:1px solid var(--rule);background:var(--paper);color:var(--ink);border-radius:2px}
+.out{font-family:var(--mono);font-variant-numeric:tabular-nums;font-size:.92rem}
+.out div{display:flex;justify-content:space-between;gap:10px;padding:5px 0;border-bottom:1px dotted var(--rule)}
+.out .net{font-size:1.25rem;font-weight:500;border-bottom:0;padding-top:10px}
+.out .net span:last-child{color:var(--good)}
+.out .net.neg span:last-child{color:var(--bad)}
+
+.sources ol{columns:2 340px;column-gap:32px;padding-left:1.4rem;font-size:.88rem}
+.sources li{break-inside:avoid;margin-bottom:6px}
+footer{padding:28px 0 60px;color:var(--muted);font-size:.85rem}
+sup+sup::before{content:",";font-size:.7rem;color:var(--muted)}
+sup a{font-family:var(--mono);font-size:.7rem;text-decoration:none;color:var(--accent)}
+</style>
+
+<style>
+.players{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px;margin-top:18px}
+.players ul{margin:6px 0 0;padding-left:1.1rem;font-size:.94rem}
+.players li{margin-bottom:5px}
+.codes td.num{white-space:nowrap}
+</style>
+</head>
+<body>
+
+<header class="mast">
+  <div class="wrap">
+    <div class="label">
+      <div>
+        <div class="kicker">Research briefing · Report 3 of the series</div>
+        <h1>Bargain Hunting Playbook</h1>
+      </div>
+      <div class="cert"><b>2</b>hunting grounds ·<br>value bins &amp;<br>online listings · Nov 2026</div>
+    </div>
+    <p class="dek">How flippers dig through dime, quarter and dollar boxes and comb eBay and other marketplaces for underpriced cards: what they look for, which players are in demand in 2026, how they decide what's worth buying, and how they negotiate with card shops and show dealers.</p>
+  </div>
+</header>
+
+<nav class="parts" aria-label="Sections">
+  <ul>
+    <li><a href="#summary"><span>00</span>Bottom line</a></li>
+    <li><a href="#bins"><span>01</span>Value bins</a></li>
+    <li><a href="#online"><span>02</span>eBay &amp; online</a></li>
+    <li><a href="#players"><span>03</span>Who's in demand</a></li>
+    <li><a href="#decide"><span>04</span>Deciding to buy</a></li>
+    <li><a href="#negotiate"><span>05</span>Negotiating</a></li>
+    <li><a href="#sources"><span>&#8599;</span>Sources</a></li>
+  </ul>
+</nav>
+
+<main class="wrap">
+
+<div class="bluf" id="summary">
+  <div class="eyebrow">Bottom line up front</div>
+  <ol>
+    <li><b>Bargains come from information gaps.</b> The seller didn't recognize a card (short prints, hidden serial numbers, rookies of breakout players), or the listing is hard to find (misspellings, bad photos, odd ending times). Flippers profit by spotting what others missed.</li>
+    <li><b>In bins, the targets are</b> serial-numbered cards, tough parallels, refractors, short-print image variations (confirmed by the code on the card back), cheap autographs, prospects' 1st Bowman cards, and hot rookies dealers haven't repriced.</li>
+    <li><b>Online, the targets are flawed listings:</b> misspelled names, auctions ending at 2 a.m., blurry photos, small late-night Whatnot rooms, and cross-platform price gaps (COMC or CollX vs. eBay).</li>
+    <li><b>2026 demand is concentrated.</b> Ohtani leads all athletes in eBay sales. Jordan, Wembanyama and Cooper Flagg lead basketball. Young QBs (Dart, Maye, Daniels) and No. 1 pick Fernando Mendoza drive football. Konnor Griffin, Roman Anthony and Jac Caglianone lead baseball's young names.</li>
+    <li><b>The buy decision is arithmetic:</b> real sold comps (including accepted Best Offers), minus fees and shipping, minus the margin you need. Flippers set a maximum price before they look, and they take profits rather than hold.</li>
+    <li><b>Yes, they negotiate, at shows and shops alike.</b> Bundle cards, pay cash, show comps, point out flaws politely, shop the last hour, and build a relationship with the shop owner. Don't haggle on a $3 card or open at half the asking price.</li>
+  </ol>
+</div>
+
+<!-- ============ PART 1 ============ -->
+<section class="part" id="bins">
+  <div class="eyebrow">Part 01</div>
+  <h2>Digging through value bins</h2>
+  <p class="lede read">Dealers bring monster boxes priced from a dime to around $20 because bins keep people at the table. Some openly prefer moving quantity over single high-end sales.<sup><a href="#s6">6</a></sup> Bins fill up fast: one long-time dime-box buyer says it barely surprises him anymore to find recent products, with parallels and inserts, already in dime bins.<sup><a href="#s7">7</a></sup></p>
+
+  <h3>What diggers pull out</h3>
+  <p class="read">One veteran's rules on The Bench forum make a good template: grab nearly every serial-numbered card and every tough parallel (not the one-per-pack kind) from dime boxes, plus set needs and short prints. Take refractors from quarter boxes. Take autographs from 50-cent and often $1 boxes. Grab $6–10 short prints (Topps Heritage, Turkey Red) whenever they show up in $1 boxes. Buy off-grade vintage on a sliding scale by era.<sup><a href="#s1">1</a></sup></p>
+  <div class="grid g3">
+    <div class="card"><span class="tag good">Top target</span><h4>Serial-numbered cards</h4><p>The numbers are printed on the card, but most people don't take the time to look.<sup><a href="#s2">2</a></sup> Some parallels hide their numbering in unexpected places, such as advanced-stat or vintage-stock parallels.<sup><a href="#s12">12</a></sup></p></div>
+    <div class="card"><span class="tag good">Top target</span><h4>Short prints &amp; image variations</h4><p>Hard to recognize by eye, which is why they end up in bins.<sup><a href="#s2">2</a></sup> One blogger's best dime-box find was a 2010 Topps Whitey Ford short-print variation.<sup><a href="#s3">3</a></sup> See the code table below.</p></div>
+    <div class="card"><span class="tag good">Top target</span><h4>Rookies &amp; prospects</h4><p>Rookies that become stars before a dealer reprices: one digger found a David Ortiz rookie in a dime box.<sup><a href="#s2">2</a></sup> At the National, Beckett found rookies, inserts, low-numbered parallels, short prints and variations all in bargain bins.<sup><a href="#s5">5</a></sup></p></div>
+    <div class="card"><span class="tag info">Cheap upside</span><h4>Autographs in $1 bins</h4><p>Low-demand autos still beat base cards on resale and are a standard 50-cent/$1 box pickup.<sup><a href="#s1">1</a></sup></p></div>
+    <div class="card"><span class="tag info">Cheap upside</span><h4>Stars' base cards</h4><p>One writer bought Mike Trout and Tom Brady base cards out of a quarter box at a recent show.<sup><a href="#s13">13</a></sup> They're cheap but liquid, and good lot filler.</p></div>
+    <div class="card"><span class="tag info">Regional</span><h4>Local-team players</h4><p>Show sellers say cards of local-team prospects and popular players attract buyers to a table.<sup><a href="#s54">56</a></sup> Diggers in other regions pick them up cheaply.</p></div>
+  </div>
+
+  <h3>How to confirm a short print in seconds</h3>
+  <p class="read">Since around 2018, Topps has printed a production code at the bottom of the card back. The last three digits tell base cards from variations, and they change every product and year, so diggers check the code chart for the set they're in.<sup><a href="#s8">8</a></sup> Some examples:</p>
+  <div class="tablewrap">
+    <table class="codes">
+      <thead><tr><th>Product</th><th>Base</th><th>SP / variation</th><th>SSP</th><th>Notes</th></tr></thead>
+      <tbody>
+        <tr><td class="k">2022 Topps Series 1</td><td class="num">…543</td><td class="num">…560</td><td class="num">…561</td><td>Ultra short prints also exist, odds published for jumbo packs only.<sup><a href="#s9">9</a></sup></td></tr>
+        <tr><td class="k">2020 Topps Chrome</td><td class="num">…595</td><td class="num">…635</td><td class="num">…641</td><td>Refractor variations follow the same codes.<sup><a href="#s10">10</a></sup></td></tr>
+        <tr><td class="k">2023+ Topps Golden Mirror SSPs</td><td colspan="3">Gold-foil card back with "SSP" printed on it, plus a gold Topps logo on the front</td><td>Easier to spot without a magnifier; every card in the checklist has one.<sup><a href="#s11">11</a></sup></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>Digging technique</h3>
+  <ul class="checklist">
+    <li data-n="01"><b>Sample before you commit.</b> One blogger grabs a couple of random handfuls to see whether a box has anything he needs.<sup><a href="#s3">3</a></sup></li>
+    <li data-n="02"><b>Watch for fake "dollar boxes".</b> Many 50-cent and $1 boxes are really dime-box material at a higher price, like '91 Upper Deck Nolan Ryans for a buck.<sup><a href="#s4">4</a></sup></li>
+    <li data-n="03"><b>Do the first lap fast.</b> The same card can sit at three tables with a 30% price spread, so compare before buying.<sup><a href="#s39">39</a></sup></li>
+    <li data-n="04"><b>Check condition.</b> Pull cards out of toploaders and check all four corners.<sup><a href="#s39">39</a></sup></li>
+    <li data-n="05"><b>Look beyond shows.</b> One guide finds local sources (estate sales, shop bulk bins, community trades) more reliably profitable for beginners than online marketplaces, where sellers have usually checked comps already.<sup><a href="#s52">53</a></sup></li>
+  </ul>
+</section>
+
+<!-- ============ PART 2 ============ -->
+<section class="part" id="online">
+  <div class="eyebrow">Part 02</div>
+  <h2>Combing eBay and other platforms</h2>
+  <p class="lede read">Online, the card is usually identified correctly. The bargain comes from a listing fewer buyers see or trust. One collector's approach is to buy auctions ending at inconvenient times, then relist with better photos and a better ending time.<sup><a href="#s15">15</a></sup></p>
+
+  <div class="tablewrap">
+    <table>
+      <thead><tr><th>Flaw</th><th>Why it's cheap</th><th>How flippers find it</th></tr></thead>
+      <tbody>
+        <tr><td class="k">Misspelled names</td><td>eBay search misses it, so fewer bidders show up. The player's name matters most, more than a wrong year or set name.<sup><a href="#s14">14</a></sup></td><td>Search common misspellings and use the minus sign to exclude noise.<sup><a href="#s14">14</a></sup> An author of a flipping book cites "Rembanyma" for Wembanyama as an example.<sup><a href="#s20">20</a></sup></td></tr>
+        <tr><td class="k">Bad ending times</td><td>Auctions ending at 2 a.m. see little last-minute bidding. CardLines compared identical cards: those ending at bad times totaled $154 vs. $210 for good times, almost 30% less.<sup><a href="#s16">16</a></sup></td><td>Filter auctions by "ending soonest" or "newly listed" at off-peak hours, and set snipes so you don't stay up.<sup><a href="#s16">16</a></sup></td></tr>
+        <tr><td class="k">Poor or missing photos</td><td>Bad photos can kill bids.<sup><a href="#s17">17</a></sup></td><td>Buy, rephotograph, relist.<sup><a href="#s15">15</a></sup></td></tr>
+        <tr><td class="k">Small live rooms</td><td>Whatnot auctions often end below eBay prices, especially off-peak or from small sellers.<sup><a href="#s21">21</a></sup></td><td>One guide targets sudden-death auctions in rooms under 20 viewers, such as Tuesdays after midnight.<sup><a href="#s18">18</a></sup></td></tr>
+        <tr><td class="k">Cross-platform gaps</td><td>Prices on CollX, COMC and BuySportsCards don't always match eBay.<sup><a href="#s22">22</a></sup></td><td>Check CollX regularly and sort COMC by "recently added" to catch fresh, underpriced listings.<sup><a href="#s19">19</a></sup> WaxPackHero buys COMC cards he can reprice at 2–3× and still be the lowest, and lists $0.02 COMC cards at $0.38 for eBay buyers, who pay at least $0.99 on COMC's eBay listings.<sup><a href="#s23">23</a></sup></td></tr>
+        <tr><td class="k">Moving to a bigger audience</td><td>A card sells cheaply in a small market and for more on a big one.</td><td>Ryan Sever describes buying on eBay and reselling to a larger audience as a core move.<sup><a href="#s20">20</a></sup></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>Tools that do the scanning</h3>
+  <div class="grid g3">
+    <div class="card"><h4>130Point</h4><p>Free aggregation of eBay sold data, including the price of accepted Best Offers, which eBay hides.<sup><a href="#s24">24</a></sup></p></div>
+    <div class="card"><h4>Card Ladder</h4><p>Price indexes and trend direction across many auction houses, useful for checking whether you're buying into a dip or a spike.<sup><a href="#s24">24</a></sup></p></div>
+    <div class="card"><h4>Market Movers Deals / Cards Under Comps</h4><p>Compares live Buy It Now listings to recent average sale prices and surfaces the gaps.<sup><a href="#s26">26</a></sup> The catch: it sometimes matches the wrong card, such as a Chrome Black auto compared against a regular Chrome auto, so verify every hit.<sup><a href="#s25">25</a></sup></p></div>
+  </div>
+</section>
+
+<!-- ============ PART 3 ============ -->
+<section class="part" id="players">
+  <div class="eyebrow">Part 03</div>
+  <h2>Who's in demand in 2026</h2>
+  <p class="lede read">Demand matters because a bargain is only profitable if it resells quickly. eBay sports-card singles sales hit $1.36 billion in the first half of 2026, with spending heavily concentrated at the top.<sup><a href="#s27">27</a></sup></p>
+  <div class="stats">
+    <div><b>$85.67M</b><span>Shohei Ohtani eBay card sales, H1 2026, up 125%<sup><a href="#s27">27</a></sup></span></div>
+    <div><b>$68.89M</b><span>Michael Jordan, H1 2026<sup><a href="#s27">27</a></sup></span></div>
+    <div><b>$50.57M</b><span>Victor Wembanyama, H1 2026, up 204%<sup><a href="#s27">27</a></sup></span></div>
+    <div><b>+321%</b><span>Cooper Flagg sales growth vs. previous period<sup><a href="#s27">27</a></sup></span></div>
+  </div>
+
+  <div class="players">
+    <div class="card">
+      <span class="tag info">Baseball</span>
+      <h4>Stars &amp; young names</h4>
+      <ul>
+        <li><b>Ohtani</b> is No. 1 across all sports. In March 2026 his card market was bigger than Judge, Mantle, Griffey and Skenes combined.<sup><a href="#s28">28</a></sup></li>
+        <li><b>Aaron Judge</b> is the No. 2 baseball seller.<sup><a href="#s28">28</a></sup> <b>Paul Skenes, Roman Anthony and Bobby Witt Jr.</b> were trending up.<sup><a href="#s29">29</a></sup></li>
+        <li><b>Konnor Griffin</b>, MLB's top prospect.<sup><a href="#s36">36</a></sup> One analyst flags his market as overheated: a PSA 10 card valued around $300–350 a year earlier was at $2,000+.<sup><a href="#s35">35</a></sup></li>
+        <li><b>Jac Caglianone</b> (power sells, per SI) and <b>Samuel Basallo</b> lead the 2026 rookie class alongside Anthony.<sup><a href="#s37">37</a></sup></li>
+      </ul>
+    </div>
+    <div class="card">
+      <span class="tag info">Basketball</span>
+      <h4>Icons &amp; the Flagg class</h4>
+      <ul>
+        <li><b>Jordan, LeBron, Kobe</b> remain top sellers; Flagg ranked No. 3 overall in February.<sup><a href="#s30">30</a></sup></li>
+        <li><b>Wembanyama</b> tops cllct's NBA 50. His most-traded graded card, a 2023 Prizm base PSA 10, was running $80–90.<sup><a href="#s38">38</a></sup></li>
+        <li><b>Kon Knueppel</b> sales rose 19% in February.<sup><a href="#s39b">40</a></sup></li>
+        <li>Flagg's Rookie Debut Patch Auto is the chase in Chrome Updates (see Report 2).</li>
+      </ul>
+    </div>
+    <div class="card">
+      <span class="tag info">Football</span>
+      <h4>Quarterbacks rule</h4>
+      <ul>
+        <li>Top-25 eBay sellers included <b>Jaxson Dart, Caleb Williams, Drake Maye and Josh Allen</b>. The most cards graded at PSA in July 2026 were Dart (12,255), Maye (9,805) and Cam Ward (5,519).<sup><a href="#s31">31</a></sup></li>
+        <li><b>Fernando Mendoza</b>, the No. 1 pick and Heisman winner, headlines 2026 rookies.<sup><a href="#s32">32</a></sup> CardLines also watches Jeremiyah Love, Carnell Tate, Jordyn Tyson and Jadarian Price.<sup><a href="#s33">33</a></sup></li>
+        <li>SI describes the 2026 class as less hyped than recent years and notes receivers sit a tier below QBs in the hobby.<sup><a href="#s34">34</a></sup></li>
+      </ul>
+    </div>
+  </div>
+  <p class="note read">For bin-diggers this means base and parallel cards of these names are the most liquid cheap pickups. Prospect and rookie names move fastest, but they also swing hardest in both directions.</p>
+</section>
+
+<!-- ============ PART 4 ============ -->
+<section class="part" id="decide">
+  <div class="eyebrow">Part 04</div>
+  <h2>How they decide what to pick up</h2>
+  <ol class="checklist">
+    <li data-n="01"><b>Know the buy price before you look.</b> One flipper says finding the card is half the battle and knowing the price you must buy at is the other half. Check eBay sold listings first.<sup><a href="#s40">41</a></sup></li>
+    <li data-n="02"><b>Comp properly.</b> Use 130Point for 30-day sold comps, Card Ladder for trend direction, and the PSA pop report for scarcity. Watch for shill bids and Best Offer sales showing the list price.<sup><a href="#s24">24</a></sup></li>
+    <li data-n="03"><b>Subtract every cost.</b> eBay takes 13.25% on cards,<sup><a href="#s55">57</a></sup> plus shipping (eBay Standard Envelope is $0.69–1.25 for cards under $20<sup><a href="#s56">58</a></sup>) and supplies. Use the calculator below.</li>
+    <li data-n="04"><b>Favor liquidity.</b> Stars and hot rookies sell fastest. Rookie patch autos of even mid-tier players tend to have strong floors.<sup><a href="#s41">42</a></sup></li>
+    <li data-n="05"><b>Buy at yesterday's prices.</b> Watch trends and buy cards that haven't caught up to a player's news.<sup><a href="#s22">22</a></sup> Sell into breakout games and spikes.<sup><a href="#s42">43</a></sup></li>
+    <li data-n="06"><b>Use the season.</b> Prices are usually highest in-season and lowest in the off-season.<sup><a href="#s43">44</a></sup></li>
+    <li data-n="07"><b>Don't concentrate.</b> Putting all your flip money into one player is gambling.<sup><a href="#s42">43</a></sup></li>
+    <li data-n="08"><b>Take profits.</b> Cary Williams of American Arbitrage, who sources low-end cards at shows, shops, flea markets and yard sales, advises taking profits when they're available rather than holding out for more.<sup><a href="#s44">45</a></sup></li>
+    <li data-n="09"><b>Track everything.</b> Log buy price, sale price, fees and profit for every card. Every buy needs a comp-based reason, not just "I think this guy is good."<sup><a href="#s41">42</a></sup></li>
+  </ol>
+
+  <div class="calc" role="group" aria-labelledby="mb-title">
+    <h4 id="mb-title">Maximum buy price calculator</h4>
+    <div>
+      <div class="field"><label for="m-sale">Expected sale price from sold comps ($)</label><input id="m-sale" type="number" min="0" step="0.01" value="20"></div>
+      <div class="field"><label for="m-fee">Marketplace fee (%)</label><input id="m-fee" type="number" min="0" step="0.1" value="13.25"></div>
+      <div class="field"><label for="m-order">Per-order fee ($)</label><input id="m-order" type="number" min="0" step="0.01" value="0.30"></div>
+      <div class="field"><label for="m-ship">Shipping + supplies you pay ($)</label><input id="m-ship" type="number" min="0" step="0.01" value="0.90"></div>
+      <div class="field"><label for="m-margin">Profit you want on this card ($)</label><input id="m-margin" type="number" min="0" step="0.01" value="5"></div>
+    </div>
+    <div class="out" aria-live="polite">
+      <div><span>Sale price</span><span id="m-o-sale">–</span></div>
+      <div><span>Fees</span><span id="m-o-fees">–</span></div>
+      <div><span>Shipping + supplies</span><span id="m-o-ship">–</span></div>
+      <div><span>Net if sold</span><span id="m-o-net">–</span></div>
+      <div><span>Target profit</span><span id="m-o-margin">–</span></div>
+      <div class="net" id="m-o-row"><span>Pay no more than</span><span id="m-o-max">–</span></div>
+      <div><span>As % of comp</span><span id="m-o-pct">–</span></div>
+      <p class="note" style="font-family:var(--body)">A $20 card with these defaults should be bought for about $11 or less. Dealers' 50–70% buy rates (Part 05) reflect the same math plus overhead and unsold-stock risk.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PART 5 ============ -->
+<section class="part" id="negotiate">
+  <div class="eyebrow">Part 05</div>
+  <h2>Negotiating with card shops and dealers</h2>
+  <p class="lede read">Haggling at shows is expected rather than rude, and vendors often price high because they know buyers will negotiate.<sup><a href="#s45">46</a></sup> Shops work the same way, with an added relationship angle.</p>
+
+  <h3>Tactics that work</h3>
+  <div class="grid g2">
+    <div class="card"><h4>Bundle</h4><p>The more cards you buy from one dealer, the better the chance of a percentage off everything.<sup><a href="#s46">47</a></sup> Combine a showcase card with some bin cards into one offer.<sup><a href="#s47">48</a></sup> A sample line: "These three come to $105, would you take $90 cash?"<sup><a href="#s48">49</a></sup></p></div>
+    <div class="card"><h4>Pay cash</h4><p>Many dealers knock 5–10% off for cash automatically.<sup><a href="#s39">39</a></sup> Card readers cost vendors 2.5–3.5%, so a number agreed in cash may go back up if you pull out a card.<sup><a href="#s49">50</a></sup></p></div>
+    <div class="card"><h4>Show comps</h4><p>If a dealer asks $150 for a card that sells for $90 on eBay, show the comp and negotiate down.<sup><a href="#s50">51</a></sup></p></div>
+    <div class="card"><h4>Point out flaws, politely</h4><p>Something like "this corner is a little soft, could you do [offer]?" is a standard move.<sup><a href="#s51">52</a></sup> A "cash plus card" offer can bridge a gap.<sup><a href="#s47">48</a></sup></p></div>
+    <div class="card"><h4>Shop the last hour</h4><p>The end of a show is when dealers want to avoid packing inventory back up, and when other dealers shop.<sup><a href="#s39">39</a></sup><sup><a href="#s53">55</a></sup></p></div>
+    <div class="card"><h4>Ask for their best</h4><p>"What's your best?" gets the dealer's bottom line without you naming a number first.<sup><a href="#s49">50</a></sup></p></div>
+  </div>
+
+  <h3>How far below the ask?</h3>
+  <p class="read">Guides disagree. One recommends opening 10–25% under the asking price, not 50%.<sup><a href="#s49">50</a></sup> Another suggests 30–40% below on cards you return to later in the show.<sup><a href="#s50">51</a></sup> Show etiquette guides agree on the limits: offering 50% of the sticker is insulting, negotiating over a $3 card isn't worth it because the margin isn't there, and you shouldn't hold a card for 20 minutes while you think.<sup><a href="#s52b">54</a></sup> One guide sets the threshold at negotiating anything over $20 and bundling cheaper cards.<sup><a href="#s39">39</a></sup></p>
+
+  <h3>Working your LCS</h3>
+  <div class="grid g3">
+    <div class="card"><h4>Become a regular</h4><p>Shop owners give regulars advance notice on hot products and deals,<sup><a href="#s57">59</a></sup> and relationships lead to preferred pricing.<sup><a href="#s58">60</a></sup> From the first debrief: tell the shop who you collect so they set cards aside.</p></div>
+    <div class="card"><h4>Know their buy side</h4><p>Shops pay roughly 50–60% of market value in cash, maybe 70% in store credit. eBay nets about 80–87% after fees and shipping.<sup><a href="#s59">61</a></sup> That spread is the shop's margin and the room you have when buying from them.</p></div>
+    <div class="card"><h4>Use store credit as leverage</h4><p>When you sell to a shop, credit offers typically run 25–50% higher than cash,<sup><a href="#s60">62</a></sup> so trading in duplicates for credit stretches your buying power at that shop.</p></div>
+  </div>
+  <div class="callout read"><b>Why dealers bend.</b> A dealer who pays too close to resale can't stay open,<sup><a href="#s61">63</a></sup> and unsold inventory ties up cash that could cover payroll or restocking.<sup><a href="#s62">64</a></sup> That's why the quickest sales are worth a discount to them, and why bundled cash offers work.</div>
+</section>
+
+<!-- ============ SOURCES ============ -->
+<section class="part sources" id="sources">
+  <div class="eyebrow">References</div>
+  <h2>Sources</h2>
+  <ol>
+    <li id="s1"><a href="https://thebenchtrading.com/threads/dime-box-player-buys-who-do-you-always-buy.386863/">The Bench — Dime box player buys</a></li>
+    <li id="s2"><a href="https://baseballdimebox.blogspot.com/2012/06/hidden-gems.html">Dime Boxes blog — Hidden gems</a></li>
+    <li id="s3"><a href="https://baseballdimebox.blogspot.com/2012/02/dime-box-heroes-1980s-nostalgia.html?m=0">Dime Boxes blog — 1980s nostalgia</a></li>
+    <li id="s4"><a href="https://baseballdimebox.blogspot.com/2022/11">Dime Boxes blog — Nov 2022 show</a></li>
+    <li id="s5"><a href="https://www.beckett.com/news/at-the-national-forget-me-not-tales-from-the-bargain-bins/trackback/">Beckett — Tales from the bargain bins</a></li>
+    <li id="s6"><a href="https://www.sportscollectorsdaily.com/dollar-boxes-are-priceless-at-card-shows/">Sports Collectors Daily — Dollar boxes are priceless</a></li>
+    <li id="s7"><a href="https://cardboardgreats.blogspot.com/2018/11/card-shows-comc-sales-card-show-recap-15.html?m=0">Cardboard Greats — Show recap</a></li>
+    <li id="s8"><a href="https://cardlines.com/topps-short-prints">CardLines — Identifying Topps short prints</a></li>
+    <li id="s9"><a href="https://www.beckett.com/news/2022-topps-series-1-baseball-variations-guide/">Beckett — 2022 Topps Series 1 variations</a></li>
+    <li id="s10"><a href="https://www.beckett.com/news/2020-topps-chrome-baseball-image-variations/">Beckett — 2020 Topps Chrome variations</a></li>
+    <li id="s11"><a href="https://cardlines.com/?p=10160">CardLines — Golden Mirror SSPs</a></li>
+    <li id="s12"><a href="https://dollarboxcards.com/blogs/news/3-types-of-valuable-baseball-cards-to-look-for-when-building-a-collection">Dollar Box Cards / Ballcard Genius — Valuable card types</a></li>
+    <li id="s13"><a href="https://www.onlinegambling.com/news/?p=71968">Card show buying tips (quarter box finds)</a></li>
+    <li id="s14"><a href="https://cardlines.com/misspelled-ebay-listings">CardLines — Misspelled eBay listings</a></li>
+    <li id="s15"><a href="https://www.sportscollectorsdaily.com/finding-sports-card-bargains-on-ebay/">Sports Collectors Daily — Finding bargains on eBay</a></li>
+    <li id="s16"><a href="https://cardlines.com/bad-ebay-ending-times/">CardLines — Bad eBay ending times</a></li>
+    <li id="s17"><a href="https://www.sportscollectorsdaily.com/dont-sabotage-your-ebay-sales/">Sports Collectors Daily — Don't sabotage your sales</a></li>
+    <li id="s18"><a href="https://www.thornberrymedia.com/post/how-to-sell-trading-cards-on-ebay">Thornberry Media — Late-night Whatnot sourcing</a></li>
+    <li id="s19"><a href="https://ballcardgenius.substack.com/p/the-flip-files-100-in-profit-and">Ballcard Genius — The Flip Files</a></li>
+    <li id="s20"><a href="https://www.beckett.com/news/buying-and-selling-sports-cards-with-cardboard-profit-author-ryan-sever/">Beckett — Cardboard Profit author Ryan Sever</a></li>
+    <li id="s21"><a href="https://compbuddylive.pages.dev/blog/sports-card-flipping-guide-for-beginners">CompBuddy — Flipping guide for beginners</a></li>
+    <li id="s22"><a href="https://ballcardgenius.substack.com/p/the-ballcard-genius-playbook-my-guide">Ballcard Genius — The Playbook</a></li>
+    <li id="s23"><a href="https://waxpackhero.com/blog/flipping-on-comc">WaxPackHero — Flipping on COMC</a></li>
+    <li id="s24"><a href="https://pregradecards.com/blog/card-price-data-sources-compared-2026">PreGrade — Price data sources compared</a></li>
+    <li id="s25"><a href="https://ballcardgenius.substack.com/p/something-ive-never-shared-here-how">Ballcard Genius — Market Movers Deals tool</a></li>
+    <li id="s26"><a href="https://www.sportscardinvestor.com/?p=44563">Sports Card Investor — Cards Under Comps</a></li>
+    <li id="s27"><a href="https://www.sportscollectorsdaily.com/sports-card-single-sales-on-ebay-hit-1-36-billion-in-first-half-of-2026/">Sports Collectors Daily — eBay singles hit $1.36B in H1 2026</a></li>
+    <li id="s28"><a href="https://www.si.com/collectibles/ebay-trading-card-sales-march-ohtani-nba-pokemon-massive-purchases">SI — eBay sales, March 2026</a></li>
+    <li id="s29"><a href="https://rbcwealthmanagement.bynder.com/asset/7e7ebb02-d7ef-472e-b1d9-43546395d3a1/Weatherill-Wealth_eBay-Card-Sales.pdf">GemRate data via Weatherill Wealth — Top 25, March 2026</a></li>
+    <li id="s30"><a href="https://www.sportscollectorsdaily.com/ebay-february-2026-sports-card-sales-volume-report/">Sports Collectors Daily — February 2026 top 25</a></li>
+    <li id="s31"><a href="https://sportscollectorsdigest.com/young-qbs-headline-football-card-market-as-collectors-go-prospecting-for-gold">Sports Collectors Digest — Young QBs headline football</a></li>
+    <li id="s32"><a href="https://sportscollectorsdigest.com/fernando-mendoza-top-nfl-rookies-headline-return-of-topps-flagship-football">Sports Collectors Digest — Mendoza headlines Flagship</a></li>
+    <li id="s33"><a href="https://cardlines.com/?p=309664">CardLines — 2026 NFL season preview</a></li>
+    <li id="s34"><a href="https://www.si.com/collectibles/top-5-2026-football-rookies-whose-cards-you-should-be-buying">SI — Top 5 2026 football rookies</a></li>
+    <li id="s35"><a href="https://allvintagecards.com/?p=1023764">All Vintage Cards — 2026 prospect card boom</a></li>
+    <li id="s36"><a href="https://sportscollectorsdigest.com/dealers-collectors-prospecting-for-gold-during-chase-for-mlb-prospects-2026-rookies-at-card-shows">Sports Collectors Digest — Prospecting at card shows</a></li>
+    <li id="s37"><a href="https://www.si.com/collectibles/caglianone-basallo-cards-lead-a-strong-2026-mlb-rookie-class">SI — Caglianone, Basallo lead 2026 class</a></li>
+    <li id="s38"><a href="https://www.cllct.com/sports-collectibles/sports-cards/the-nba-50-victor-wembanyama-tops-list-of-most-collectible-players">cllct — The NBA 50</a></li>
+    <li id="s39"><a href="https://thecardshopfinder.com/guides/card-shows/card-show-buying-tips/">Card Shop Finder — Card show buying tips</a></li>
+    <li id="s39b"><a href="https://www.si.com/collectibles/ebay-s-top-selling-athletes-pokemon-cards-for-february">SI — eBay top sellers, February 2026</a></li>
+    <li id="s40"><a href="https://ballcardgenius.substack.com/p/how-to-flip-5-or-sometimes-less-cards">Ballcard Genius — Flipping $5 cards</a></li>
+    <li id="s41"><a href="https://hobbyscout.pages.dev/sports-card-flipping-guide">Hobby Scout — Flipping guide 2026</a></li>
+    <li id="s42"><a href="https://thecardshopfinder.com/guides/sports-cards/card-flipping-guide/">Card Shop Finder — Card flipping guide</a></li>
+    <li id="s43"><a href="https://www.cllct.com/sports-collectibles/sports-cards/when-is-the-best-time-to-buy-sell-sports-cards-our-calendar-explains-the-seasonal-markets">cllct — Seasonal calendar</a></li>
+    <li id="s44"><a href="https://podcastrex.com/shows/collector-nation/how-flippers-turn-cheap-cards-into-real-money-with-american-arbitrage">Collector Nation — American Arbitrage episode</a></li>
+    <li id="s45"><a href="https://cardcodex.com/blog/read-this-before-you-go-to-your-first-card-convention/">CardCodex — Before your first convention</a></li>
+    <li id="s46"><a href="https://www.sportscollectorsdaily.com/dealing-with-baseball-card-dealers-the-art-of-haggling/">Sports Collectors Daily — The art of haggling</a></li>
+    <li id="s47"><a href="https://cardcodex.com/blog/how-to-negotiate-good-deals-at-card-shows/">CardCodex — Negotiating at card shows</a></li>
+    <li id="s48"><a href="https://tcghelp.pages.dev/card-shows">TCG Help — Collector's playbook for shows</a></li>
+    <li id="s49"><a href="https://hawaiicardshows.pages.dev/card-show-etiquette.html">Hawaii Card Shows — Etiquette &amp; negotiation</a></li>
+    <li id="s50"><a href="https://pregradecards.com/blog/card-show-buying-guide-2026-deals-negotiate-pre-grade">PreGrade — Card show buying guide 2026</a></li>
+    <li id="s51"><a href="https://card-codex.com/blog/how-to-negotiate-good-deals-at-card-shows">CardCodex — The combo attack</a></li>
+    <li id="s52"><a href="https://geekydomain.com/blogs/guides/how-to-start-flipping-cards-beginners-reselling-guide">Geeky Domain — Beginner's reselling guide</a></li>
+    <li id="s52b"><a href="https://thecardshopfinder.com/guides/card-shows/card-show-etiquette/">Card Shop Finder — Card show etiquette</a></li>
+    <li id="s53"><a href="https://thecardshopfinder.com/guides/card-shows/sell-at-card-shows/">Card Shop Finder — Selling at card shows</a></li>
+    <li id="s54"><a href="https://allvintagecards.com/?p=1019810">All Vintage Cards — Flipping at a local show</a></li>
+    <li id="s55"><a href="https://www.ebay.com/sellercenter/resources/seller-updates/2025-january/final-value-fee">eBay — Final value fees</a></li>
+    <li id="s56"><a href="https://www.ebay.com/help/shipping-items/selling/setting-shipping-options/ebay-standard-envelope?id=5308">eBay — Standard Envelope</a></li>
+    <li id="s57"><a href="https://www.voolist.com/blog/sports-cards-reselling-guide">Voolist — Sports card reselling guide</a></li>
+    <li id="s58"><a href="https://www.underpriced.app/blog/trading-cards-flipping-guide">Underpriced — Trading card flipping guide</a></li>
+    <li id="s59"><a href="https://thecardshopfinder.com/guides/selling-cards/price-your-collection/">Card Shop Finder — Price your collection</a></li>
+    <li id="s60"><a href="https://thecardshopfinder.com/guides/finding-card-shops/sell-cards-to-shop/">Card Shop Finder — Selling to a local shop</a></li>
+    <li id="s61"><a href="https://thecardshopfinder.com/faq/buying-selling-values/">Card Shop Finder — Buying &amp; selling FAQ</a></li>
+    <li id="s62"><a href="https://www.si.com/collectibles/why-dealers-rarely-pay-full-price-when-buying-cards">SI Collectibles — Why dealers rarely pay full price</a></li>
+  </ol>
+</section>
+</main>
+
+<footer class="wrap">Compiled November 2026 from public hobby sources. Player demand shifts weekly; check current comps before buying.</footer>
+
+<script>
+(function(){
+  var $=function(id){return document.getElementById(id);};
+  var fmt=function(n){return (n<0?'-$':'$')+Math.abs(n).toFixed(2);};
+  function calc(){
+    var sale=parseFloat($('m-sale').value)||0;
+    var fee=(parseFloat($('m-fee').value)||0)/100;
+    var order=parseFloat($('m-order').value)||0;
+    var ship=parseFloat($('m-ship').value)||0;
+    var margin=parseFloat($('m-margin').value)||0;
+    var fees=sale*fee+order, net=sale-fees-ship, max=net-margin;
+    $('m-o-sale').textContent=fmt(sale);
+    $('m-o-fees').textContent=fmt(-fees);
+    $('m-o-ship').textContent=fmt(-ship);
+    $('m-o-net').textContent=fmt(net);
+    $('m-o-margin').textContent=fmt(-margin);
+    $('m-o-max').textContent=max>0?fmt(max):'Pass';
+    $('m-o-row').classList.toggle('neg',max<=0);
+    $('m-o-pct').textContent=sale>0&&max>0?Math.round(max/sale*100)+'%':'–';
+  }
+  ['m-sale','m-fee','m-order','m-ship','m-margin'].forEach(function(id){$(id).addEventListener('input',calc);});
+  calc();
+})();
+</script>
+</body>
+</html>

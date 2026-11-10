@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ripping Playbook 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* Plan: a field briefing styled after a graded-slab label and the back of a trading card.
+   Layout: single reading column with wide tables, a sticky part-nav, and "card-back" stat boxes. */
+:root{
+  --paper:#f3f4f0;
+  --panel:#ffffff;
+  --ink:#16202b;
+  --muted:#56616d;
+  --rule:#d4d8d2;
+  --accent:#b8102b;      /* slab-label red */
+  --accent-2:#1d4a73;    /* team navy */
+  --tint:#e8ecef;
+  --good:#1f7a4d; --warn:#a86a00; --bad:#b8102b;
+  --display:"Barlow Condensed","Arial Narrow",Arial,sans-serif;
+  --body:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#0f151c; --panel:#161e27; --ink:#e7eae5; --muted:#9aa5b0; --rule:#2a3542;
+    --accent:#ff5d72; --accent-2:#7fb2e0; --tint:#1c2631;
+    --good:#4cc38a; --warn:#e3a43a; --bad:#ff5d72; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#0f151c; --panel:#161e27; --ink:#e7eae5; --muted:#9aa5b0; --rule:#2a3542;
+  --accent:#ff5d72; --accent-2:#7fb2e0; --tint:#1c2631;
+  --good:#4cc38a; --warn:#e3a43a; --bad:#ff5d72; color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:64px}
+@media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--body);font-size:16.5px;line-height:1.6}
+a{color:var(--accent-2);text-underline-offset:2px}
+a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+h1,h2,h3,h4{font-family:var(--display);line-height:1.1;text-wrap:balance;margin:0;letter-spacing:.01em}
+h2{font-size:clamp(2rem,4.4vw,2.8rem);font-weight:700;text-transform:uppercase}
+h3{font-size:1.55rem;font-weight:600;text-transform:uppercase;margin-top:2.4rem}
+h4{font-size:1.2rem;font-weight:600;text-transform:uppercase;letter-spacing:.03em}
+p{margin:.7rem 0}
+.wrap{max-width:1080px;margin:0 auto;padding:0 20px}
+.read{max-width:68ch}
+.num,.mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
+
+/* Masthead styled like a slab label */
+.mast{border-bottom:1px solid var(--rule);background:var(--panel)}
+.label{display:grid;grid-template-columns:1fr auto;gap:12px 24px;align-items:end;padding:28px 0 22px}
+.label .kicker{font-family:var(--mono);font-size:.78rem;letter-spacing:.12em;text-transform:uppercase;color:var(--accent)}
+.label h1{font-size:clamp(2.6rem,7vw,4.6rem);font-weight:700;text-transform:uppercase;margin-top:6px}
+.label .cert{border:2px solid var(--accent);padding:10px 14px;text-align:right;font-family:var(--mono);font-size:.8rem;line-height:1.5}
+.label .cert b{display:block;font-family:var(--display);font-size:2rem;color:var(--accent);line-height:1}
+.dek{color:var(--muted);max-width:70ch;margin:0 0 22px}
+@media (max-width:560px){.label{grid-template-columns:1fr}.label .cert{text-align:left;justify-self:start}}
+
+nav.parts{position:sticky;top:0;z-index:5;background:var(--panel);border-bottom:1px solid var(--rule)}
+nav.parts ul{list-style:none;margin:0 auto;padding:0 20px;max-width:1080px;display:flex;gap:4px;overflow-x:auto;scrollbar-width:none}
+nav.parts ul::-webkit-scrollbar{display:none}
+nav.parts a{display:block;padding:12px 12px;font-family:var(--display);font-weight:600;font-size:1.05rem;text-transform:uppercase;letter-spacing:.04em;color:var(--ink);text-decoration:none;white-space:nowrap;border-bottom:3px solid transparent}
+nav.parts a:hover{border-bottom-color:var(--accent)}
+nav.parts a span{color:var(--accent);font-family:var(--mono);font-size:.8rem;margin-right:6px}
+
+section.part{padding:56px 0 24px;border-bottom:1px solid var(--rule)}
+.eyebrow{font-family:var(--mono);font-size:.8rem;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin-bottom:8px}
+.lede{font-size:1.12rem;color:var(--ink);max-width:68ch;margin-top:14px}
+
+/* Bottom line box */
+.bluf{background:var(--panel);border:1px solid var(--rule);border-left:6px solid var(--accent);padding:22px 24px;margin:36px 0 8px}
+.bluf ol{margin:10px 0 0;padding-left:1.3rem;display:grid;gap:8px}
+.bluf li::marker{font-family:var(--mono);color:var(--accent)}
+
+/* grids & cards */
+.grid{display:grid;gap:14px;margin-top:18px}
+.g2{grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+.g3{grid-template-columns:repeat(auto-fit,minmax(290px,1fr))}
+.card{background:var(--panel);border:1px solid var(--rule);padding:18px 18px 14px;display:flex;flex-direction:column;gap:6px}
+.card h4{color:var(--accent-2)}
+.card p{margin:.2rem 0;font-size:.96rem}
+.card .why{font-size:.9rem;color:var(--muted);border-top:1px dashed var(--rule);padding-top:8px;margin-top:auto}
+.tag{align-self:flex-start;display:inline-block;font-family:var(--mono);font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;padding:2px 7px;border:1px solid currentColor;border-radius:2px}
+.tag.good{color:var(--good)}.tag.warn{color:var(--warn)}.tag.bad{color:var(--bad)}.tag.info{color:var(--accent-2)}
+
+/* card-back stat box */
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));border:2px solid var(--ink);margin:22px 0;background:var(--panel)}
+.stats div{padding:12px 14px;border-right:1px solid var(--rule);border-bottom:1px solid var(--rule)}
+.stats b{display:block;font-family:var(--mono);font-size:1.45rem;font-weight:500;font-variant-numeric:tabular-nums;color:var(--accent)}
+.stats span{font-size:.86rem;color:var(--muted);line-height:1.35;display:block}
+
+/* tables */
+.tablewrap{overflow-x:auto;margin:18px 0;border:1px solid var(--rule);background:var(--panel)}
+table{border-collapse:collapse;width:100%;min-width:760px;font-size:.92rem}
+th,td{text-align:left;vertical-align:top;padding:10px 12px;border-bottom:1px solid var(--rule)}
+thead th{font-family:var(--display);text-transform:uppercase;letter-spacing:.05em;font-size:1rem;background:var(--tint);color:var(--ink);position:sticky;top:0}
+tbody tr:last-child td{border-bottom:0}
+td.k{font-weight:600;white-space:nowrap}
+
+/* funnel */
+.funnel{display:grid;gap:8px;margin:20px 0}
+.tier{display:grid;grid-template-columns:150px 1fr;gap:16px;background:var(--panel);border:1px solid var(--rule);padding:14px 16px;align-items:start}
+.tier .lvl{font-family:var(--display);text-transform:uppercase;font-weight:700;font-size:1.25rem;line-height:1.05}
+.tier .lvl small{display:block;font-family:var(--mono);font-size:.78rem;font-weight:400;color:var(--muted);text-transform:none;margin-top:4px}
+.tier p{margin:0 0 4px;font-size:.95rem}
+.tier:nth-child(1){border-left:6px solid var(--accent)}
+.tier:nth-child(2){border-left:6px solid var(--warn)}
+.tier:nth-child(3){border-left:6px solid var(--accent-2)}
+.tier:nth-child(4){border-left:6px solid var(--muted)}
+@media (max-width:560px){.tier{grid-template-columns:1fr;gap:6px}}
+
+/* checklist */
+.checklist{list-style:none;padding:0;margin:16px 0;display:grid;gap:10px}
+.checklist li{background:var(--panel);border:1px solid var(--rule);padding:12px 14px 12px 46px;position:relative}
+.checklist li::before{content:attr(data-n);position:absolute;left:12px;top:11px;font-family:var(--mono);font-size:.82rem;color:var(--accent);font-weight:500}
+.checklist b{font-weight:600}
+
+.quote{border-left:3px solid var(--accent-2);padding:4px 0 4px 16px;color:var(--muted);font-style:italic;margin:16px 0}
+.note{font-size:.88rem;color:var(--muted)}
+.callout{background:var(--tint);padding:14px 16px;margin:18px 0;border-radius:2px}
+
+/* calculator */
+.calc{background:var(--panel);border:2px solid var(--ink);padding:18px;margin:22px 0;display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px}
+.calc h4{grid-column:1/-1}
+.field{display:flex;flex-direction:column;gap:4px;margin-bottom:10px}
+.field label{font-size:.85rem;color:var(--muted)}
+.field input,.field select{font:inherit;font-family:var(--mono);padding:7px 9px;border:1px solid var(--rule);background:var(--paper);color:var(--ink);border-radius:2px}
+.out{font-family:var(--mono);font-variant-numeric:tabular-nums;font-size:.92rem}
+.out div{display:flex;justify-content:space-between;gap:10px;padding:5px 0;border-bottom:1px dotted var(--rule)}
+.out .net{font-size:1.25rem;font-weight:500;border-bottom:0;padding-top:10px}
+.out .net span:last-child{color:var(--good)}
+.out .net.neg span:last-child{color:var(--bad)}
+
+.sources ol{columns:2 340px;column-gap:32px;padding-left:1.4rem;font-size:.88rem}
+.sources li{break-inside:avoid;margin-bottom:6px}
+footer{padding:28px 0 60px;color:var(--muted);font-size:.85rem}
+sup+sup::before{content:",";font-size:.7rem;color:var(--muted)}
+sup a{font-family:var(--mono);font-size:.7rem;text-decoration:none;color:var(--accent)}
+</style>
+
+<style>
+.prod td.k small{display:block;font-weight:400;color:var(--muted);font-size:.8rem}
+.gap{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px;margin:18px 0}
+.gap .card b.num{font-size:1.3rem;color:var(--accent)}
+.arrow{color:var(--muted)}
+</style>
+</head>
+<body>
+
+<header class="mast">
+  <div class="wrap">
+    <div class="label">
+      <div>
+        <div class="kicker">Research briefing · Report 2 of the series</div>
+        <h1>Ripping Playbook 2026</h1>
+      </div>
+      <div class="cert"><b>3</b>sports · baseball,<br>football, basketball<br>Nov 2026</div>
+    </div>
+    <p class="dek">How rippers try to get close to breaking even, which 2026 products give the most for the money in baseball, football and basketball, and how people buy hobby and jumbo boxes at the manufacturer's price instead of shop or scalper markup.</p>
+  </div>
+</header>
+
+<nav class="parts" aria-label="Sections">
+  <ul>
+    <li><a href="#summary"><span>00</span>Bottom line</a></li>
+    <li><a href="#math"><span>01</span>The math</a></li>
+    <li><a href="#breakeven"><span>02</span>Breaking even</a></li>
+    <li><a href="#products"><span>03</span>Best 2026 products</a></li>
+    <li><a href="#msrp"><span>04</span>Buying at MSRP</a></li>
+    <li><a href="#calc"><span>05</span>Rip vs flip calculator</a></li>
+    <li><a href="#sources"><span>&#8599;</span>Sources</a></li>
+  </ul>
+</nav>
+
+<main class="wrap">
+
+<div class="bluf" id="summary">
+  <div class="eyebrow">Bottom line up front</div>
+  <ol>
+    <li><b>The average box loses money, even at retail.</b> One analysis puts a $239.99 2026 Topps Chrome Baseball hobby box at about $115 in average resale value.<sup><a href="#s1">1</a></sup> Nobody breaks even on the average box. They get closer by changing what they buy, what they pay, and when they sell.</li>
+    <li><b>The biggest lever is the purchase price.</b> Hot hobby boxes routinely trade 30% to 150% or more above MSRP within days or weeks of release. Getting boxes at MSRP, then selling some sealed, is how many rippers fund the boxes they open.</li>
+    <li><b>Sell pulls in the first days of release.</b> Single-card prices are usually highest right at release and slide as more product is opened. Sellers who list fast recover the most.</li>
+    <li><b>Monetize the whole box, not just the hits.</b> Team sets, player lots and presold sets turn the "worthless" part of a box into a few extra dollars per box.</li>
+    <li><b>Value boxes are the best dollar-for-dollar rip for many products</b> (especially Bowman). Hobby boxes are the better chase for big autographs.</li>
+    <li><b>MSRP access comes from Topps.com EQL draws, timed online drops, big-box retail, MSRP-committed shops, and being a regular at a shop that allocates by purchase history.</b> Each has limits, and none beats scarcity.</li>
+  </ol>
+</div>
+
+<!-- ============ PART 1 ============ -->
+<section class="part" id="math">
+  <div class="eyebrow">Part 01</div>
+  <h2>The math every ripper is fighting</h2>
+  <p class="lede read">Most cards in a modern product, including some genuinely nice hits, sell for less than the box costs. Only a small share of boxes contain the hits that pay for themselves many times over.<sup><a href="#s53">51</a></sup> A long-time Sports Collectors Daily columnist notes that breaking even used to be almost automatic because collectors bought complete sets, and that is no longer true.<sup><a href="#s54">52</a></sup></p>
+
+  <div class="stats">
+    <div><b>$239.99</b><span>2026 Topps Chrome Baseball hobby box at Topps.com<sup><a href="#s1">1</a></sup></span></div>
+    <div><b>~$115</b><span>Estimated average resale value of that box's contents<sup><a href="#s1">1</a></sup></span></div>
+    <div><b>~$15</b><span>Typical secondary price of the box's one guaranteed rookie autograph<sup><a href="#s1">1</a></sup></span></div>
+    <div><b>13.25%</b><span>eBay's fee on what you sell from it<sup><a href="#s62">60</a></sup></span></div>
+  </div>
+
+  <div class="read">
+    <p>On those numbers, a box bought at MSRP returns about half its cost, before eBay takes its cut. The same analysis calls Chrome the hobby's most reliable fun-per-dollar rip, but frames the purchase as entertainment first and expected value a distant second.<sup><a href="#s1">1</a></sup> Investor-minded writers push the same point: if profit is the goal, ripping ranks very low on the list.<sup><a href="#s46">44</a></sup></p>
+    <p>That's the starting point for everything below. Getting "close to even" means attacking three variables:</p>
+  </div>
+  <div class="grid g3">
+    <div class="card"><span class="tag good">Lever 1</span><h4>Cost basis</h4><p>Pay MSRP instead of the secondary price. On hot products, that gap can be larger than the box's expected value.</p></div>
+    <div class="card"><span class="tag good">Lever 2</span><h4>Sale timing</h4><p>Sell hits and hot rookies while prices are at their release-week peak.</p></div>
+    <div class="card"><span class="tag good">Lever 3</span><h4>Box utilization</h4><p>Get something for every card: hits, rookies, parallels, team sets, base sets and bulk.</p></div>
+  </div>
+</section>
+
+<!-- ============ PART 2 ============ -->
+<section class="part" id="breakeven">
+  <div class="eyebrow">Part 02</div>
+  <h2>How rippers get close to breaking even</h2>
+
+  <h3>1 · Buy at MSRP, sell some sealed</h3>
+  <p class="read">This is the most powerful move in 2026. When Topps.com allocations sell out, the secondary market prices sealed boxes far above the drop price. Rippers who win a drop often sell part of their allocation sealed and open the rest, so the sealed profit pays for the boxes they open. Recent gaps between drop price and resale:</p>
+  <div class="gap">
+    <div class="card"><h4>2026 Bowman Baseball (hobby)</h4><p><b class="num">$239.99</b> <span class="arrow">→</span> <b class="num">~$310–360</b></p><p class="note">Within days of the May 13 release, depending on the source.<sup><a href="#s5">5</a></sup><sup><a href="#s6">6</a></sup> Jumbo went from $519.99 to around $720.<sup><a href="#s6">6</a></sup></p></div>
+    <div class="card"><h4>2026 Topps Chrome Baseball (hobby)</h4><p><b class="num">$239.99</b> <span class="arrow">→</span> <b class="num">$260–290</b> <span class="arrow">→</span> <b class="num">~$590–610</b></p><p class="note">10–20% over in release week,<sup><a href="#s1">1</a></sup> then a StockX sale at $590 and a distributor listing at $609.95 later.<sup><a href="#s3">3</a></sup><sup><a href="#s4">4</a></sup></p></div>
+    <div class="card"><h4>2026 Topps Chrome Sapphire</h4><p><b class="num">$649.99</b> <span class="arrow">→</span> <b class="num">2–3×</b></p><p class="note">The online exclusive sold out in minutes. CardLines suggests a quick flip if you get one at the drop price.<sup><a href="#s9">9</a></sup></p></div>
+    <div class="card"><h4>2025-26 Topps Chrome Updates Basketball</h4><p><b class="num">$529.99</b> <span class="arrow">→</span> <b class="num">$880–1,200</b></p><p class="note">EQL pre-order price vs. secondary range in August 2026.<sup><a href="#s28">28</a></sup></p></div>
+  </div>
+  <p class="note read">Not every product holds up this way. 2025 Topps Chrome Baseball hobby boxes retailed at $239.99 and were averaging about $213 on the secondary market months later.<sup><a href="#s25">25</a></sup> Sealed premiums are biggest on hyped products and in the first weeks.</p>
+
+  <h3>2 · Sell fast, at release</h3>
+  <div class="read">
+    <p>The advice from sellers is consistent:</p>
+    <ul>
+      <li>Card values are highest at release.<sup><a href="#s46">44</a></sup> Most of a product's peak pricing happens in the first month, and hits can slide once the next release drops.<sup><a href="#s44">42</a></sup></li>
+      <li>One newsletter's rule: sell big hits immediately, because early buyers want the first comps and supply hasn't flooded in yet. Wait 6–8 weeks after release to buy singles for grading, once prices stabilize.<sup><a href="#s43">41</a></sup></li>
+      <li>A pricing guide puts the selling window at roughly the first 10 days of a release, and says auctions ending Sunday evening tend to draw more bids.<sup><a href="#s45">43</a></sup></li>
+      <li>Base rookies of hyped players are the classic example. One flipper warned that Prizm base rookies would drop no matter how good the player was, simply because of the volume being opened.<sup><a href="#s47">45</a></sup></li>
+    </ul>
+  </div>
+
+  <h3>3 · Monetize the whole box</h3>
+  <div class="grid g2">
+    <div class="card"><h4>Team sets instead of base singles</h4><p>Forum advice is to sell base as team sets unless there's a hot rookie. Single base cards cost more to ship than they're worth, except in high-end sets.<sup><a href="#s48">46</a></sup></p></div>
+    <div class="card"><h4>Presell sets and player lots</h4><p>One seller lists complete sets 10–14 days before release, a few at a time, so they don't oversupply the market. Player-lot buyers keep coming back for weeks after a release.<sup><a href="#s49">47</a></sup></p></div>
+    <div class="card"><h4>Presell before you rip (case breakers)</h4><p>Case breakers often presell team lots, player lots or sets, grade the gradeable hits, and sell off the scraps afterward.<sup><a href="#s50">48</a></sup></p></div>
+    <div class="card"><h4>Run small breaks yourself</h4><p>In a random-team break, the box cost divided by the number of teams sets a fair spot price. A $400 NFL box works out to about $12.50 per team.<sup><a href="#s52">50</a></sup> Pick-your-team pricing is tiered by hit potential.<sup><a href="#s51">49</a></sup> See the legal caveats on breaks in the first debrief.</p></div>
+  </div>
+
+  <h3>4 · Read the odds sheet before you buy</h3>
+  <p class="read">Topps publishes official odds for each format, and tools like TCGTalk's pack-odds calculator convert them into the chance of pulling at least one of a given parallel over the packs you plan to open.<sup><a href="#s55">53</a></sup> One buyer's guide recommends deciding on the one or two rookies you're betting on before spending anything, and letting that decide how you buy.<sup><a href="#s61">59</a></sup> Pick the format that matches the chase:</p>
+  <div class="tablewrap">
+    <table>
+      <thead><tr><th>Format</th><th>What it's best for</th><th>Evidence</th></tr></thead>
+      <tbody>
+        <tr><td class="k">Value / blaster</td><td>Volume of parallels and rare inserts per dollar</td><td>A Topps odds analyst who ripped a full case of 2026 Bowman Value Boxes still rates them the best rip pound for pound. Rare inserts fall at about 1 in 30 boxes, at a $30 MSRP. His caveat: most of the parallels are unnumbered or high-numbered.<sup><a href="#s7">7</a></sup></td></tr>
+        <tr><td class="k">Hobby</td><td>Best chance at significant hits</td><td>The same analyst says Hobby gives you the best chance at significant hits.<sup><a href="#s7">7</a></sup> Hobby boxes also hold the best odds on short-printed parallels and image variations in flagship Topps.<sup><a href="#s12">12</a></sup></td></tr>
+        <tr><td class="k">Jumbo</td><td>Autograph volume and SSPs</td><td>Topps says Jumbo and Delight boxes are best for autographs in Chrome Football,<sup><a href="#s56">54</a></sup> and that Jumbo gives the best chance at SSPs in Topps Basketball.<sup><a href="#s57">55</a></sup></td></tr>
+        <tr><td class="k">Mega / retail exclusives</td><td>Exclusive parallels and inserts</td><td>2026 Chrome value boxes carry exclusive Raywave parallels (/199, /150) and retail-exclusive rookie autographs.<sup><a href="#s10">10</a></sup></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>5 · Time the season</h3>
+  <p class="read">Card prices are generally highest in-season and lowest in the off-season.<sup><a href="#s58">56</a></sup> In the NFL, prices often spike before Week 1. NBA prices often dip in December and January, then recover around the trade deadline and All-Star break.<sup><a href="#s59">57</a></sup> If you're ripping to sell, open and list in-season. If you're ripping baseball in winter, expect weaker prices on your pulls.</p>
+</section>
+
+<!-- ============ PART 3 ============ -->
+<section class="part" id="products">
+  <div class="eyebrow">Part 03</div>
+  <h2>Best products to rip in 2026</h2>
+  <p class="lede read">Topps now holds all three major licenses: MLB, the NBA from 2025-26,<sup><a href="#s23">23</a></sup> and the NFL, with Topps Chrome Football fully licensed for the first time since 2015.<sup><a href="#s16">16</a></sup> Panini products still exist but without league logos in these sports going forward. MSRPs below are drop prices from Topps.com or retail; current prices are from the cited listings.</p>
+
+  <h3>Baseball</h3>
+  <div class="tablewrap">
+    <table class="prod">
+      <thead><tr><th>Product</th><th>Price</th><th>What you get</th><th>Why rippers like it (or not)</th></tr></thead>
+      <tbody>
+        <tr><td class="k">2026 Bowman<small>Released May 13</small></td><td class="num">Hobby $239.99 MSRP; Value ~$30–35</td><td>1st Bowman prospects; Hobby is 20 packs × 8 with 1 auto<sup><a href="#s63">61</a></sup></td><td>The year's prospecting kickoff. Value boxes rated best pound for pound.<sup><a href="#s7">7</a></sup> Top names in the checklist include Konnor Griffin, Kevin McGonigle and Ethan Holliday.<sup><a href="#s64">62</a></sup> A Junior Caminero patch auto cleared $66K in the first days.<sup><a href="#s5">5</a></sup></td></tr>
+        <tr><td class="k">2026 Topps Chrome<small>Released Jul 22</small></td><td class="num">Hobby $239.99; Value $39.99; distributor now $609.95</td><td>20 packs × 4, 1 auto; 300-card base<sup><a href="#s2">2</a></sup></td><td>The most reliable fun-per-dollar rip, but with an average return near half the MSRP.<sup><a href="#s1">1</a></sup> Value boxes hold retail-only Raywave parallels and rookie autographs.<sup><a href="#s10">10</a></sup></td></tr>
+        <tr><td class="k">2026 Topps Series 1 &amp; 2</td><td class="num">S2 Jumbo $239.99; Mega $49.99; Value $24.99</td><td>Jumbo guarantees an auto and a relic<sup><a href="#s12">12</a></sup></td><td>The cheapest licensed rip, with lots of SP/SSP image variations. Fanatics listed S2 hobby at $127.99,<sup><a href="#s13">13</a></sup> while a distributor sells it at $149.95.<sup><a href="#s4">4</a></sup></td></tr>
+        <tr><td class="k">2026 Panini Prizm Baseball<small>Released Aug 12</small></td><td class="num">~$200 hobby</td><td>12 packs × 12, 3 autos on average<sup><a href="#s11">11</a></sup></td><td>Three autos gives it a better floor than one-auto products at the same price, though it carries no MLB logos.<sup><a href="#s11">11</a></sup></td></tr>
+        <tr><td class="k">2026 Topps Chrome Sapphire<small>Online exclusive, Aug 26</small></td><td class="num">$649.99</td><td>8 packs × 4, 1 on-card auto /199 or less<sup><a href="#s9">9</a></sup></td><td>Often better flipped sealed than ripped: resale ran 2–3× the drop price.<sup><a href="#s9">9</a></sup></td></tr>
+        <tr><td class="k">2026 Topps Chrome Black</td><td class="num">$340–500 secondary</td><td>2 packs × 6 plus 1 encased on-card auto<sup><a href="#s14">14</a></sup></td><td>A short, autograph-focused rip.</td></tr>
+        <tr><td class="k">Coming next</td><td colspan="3">2026 Topps Cosmic Chrome (October) and Topps Chrome Update (late 2026) were on the release calendar.<sup><a href="#s65">63</a></sup> Update usually carries a season's late call-ups.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>Football</h3>
+  <div class="tablewrap">
+    <table class="prod">
+      <thead><tr><th>Product</th><th>Price</th><th>What you get</th><th>Why rippers like it (or not)</th></tr></thead>
+      <tbody>
+        <tr><td class="k">2025 Topps Chrome Football<small>Released Apr 15, 2026</small></td><td class="num">Hobby ~$800 at shops; Value ~$40</td><td>20 packs × 4, 1 auto<sup><a href="#s56">54</a></sup>; 400-card base</td><td>Hobby and Jumbo went out first through an EQL lottery on Topps.com.<sup><a href="#s15">15</a></sup> CardLines found it better than Prizm for rookie autographs, especially top QBs, called the $40 value boxes the best retail rip, but thought both formats were overpriced for that rookie class.<sup><a href="#s17">17</a></sup></td></tr>
+        <tr><td class="k">2026 Topps Chrome Football<small>EQL pre-order</small></td><td class="num">Hobby $439.99 (max 2); case $5,279.99</td><td>20 packs × 4, 1 auto; 12 boxes per case<sup><a href="#s18">18</a></sup><sup><a href="#s19">19</a></sup></td><td>Rookie chase is Fernando Mendoza, Jeremiyah Love, Carnell Tate, Jordyn Tyson and Caleb Downs.<sup><a href="#s18">18</a></sup> Enter the draw rather than paying presale markup.</td></tr>
+        <tr><td class="k">2026 Topps Flagship Football<small>Released Aug 2026</small></td><td class="num">Retail value/mega/hobby/jumbo</td><td>First in-uniform autos of 2026 rookies<sup><a href="#s22">22</a></sup></td><td>The cheapest licensed football rip, headlined by No. 1 pick Mendoza.<sup><a href="#s22">22</a></sup></td></tr>
+        <tr><td class="k">2025 Panini Prizm Football</td><td class="num">Hobby ~$200–350</td><td>Classic Prizm parallels</td><td>Pristine calls it the best overall football box of 2026, because Panini's licensed era is ending.<sup><a href="#s20">20</a></sup></td></tr>
+        <tr><td class="k">2025 Topps Finest Football<small>Released May 15, 2026</small></td><td class="num">—</td><td>6 packs × 10, 2 autos per box<sup><a href="#s21">21</a></sup></td><td>A two-auto floor at a mid-tier price.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>Basketball</h3>
+  <div class="tablewrap">
+    <table class="prod">
+      <thead><tr><th>Product</th><th>Price</th><th>What you get</th><th>Why rippers like it (or not)</th></tr></thead>
+      <tbody>
+        <tr><td class="k">2025-26 Topps (flagship)</td><td class="num">Hobby $230–370 secondary; ~$420 distributor</td><td>20 packs × 12, 1 auto or relic</td><td>The cheapest licensed way into the Cooper Flagg rookie class.<sup><a href="#s23">23</a></sup> Presale boxes more than doubled on the secondary market within hours.<sup><a href="#s66">64</a></sup></td></tr>
+        <tr><td class="k">2025-26 Topps Chrome</td><td class="num">Value $49.99 MSRP; Hobby $1,169.95 at one distributor<sup><a href="#s24">24</a></sup></td><td>Hobby 20 × 4, 1 auto; Value 7 × 4 with Red, White &amp; Blue parallels<sup><a href="#s26">26</a></sup></td><td>Pre-orders sold out in two minutes and resold up to double.<sup><a href="#s25">25</a></sup> At MSRP, the value box is the rational rip; one Best Buy reviewer pulled a /50 rookie auto from a blaster.<sup><a href="#s27">27</a></sup></td></tr>
+        <tr><td class="k">2025-26 Topps Chrome Updates</td><td class="num">EQL $529.99–549.99; secondary $880–1,200</td><td>1 auto; debut of Rookie Debut Patch Autos in basketball<sup><a href="#s29">29</a></sup></td><td>The Flagg RDPA chase. Released August 6, 2026.<sup><a href="#s28">28</a></sup></td></tr>
+        <tr><td class="k">2025-26 Bowman Basketball</td><td class="num">Value box at retail</td><td>1st Bowman prospects</td><td>The prospecting product for the 2026 draft class.<sup><a href="#s67">65</a></sup></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="note read">Quick rule from the evidence: in all three sports, value boxes bought at MSRP are the closest thing to a fair rip. Hobby boxes only make sense at drop price or for a specific autograph chase.</p>
+</section>
+
+<!-- ============ PART 4 ============ -->
+<section class="part" id="msrp">
+  <div class="eyebrow">Part 04</div>
+  <h2>Getting hobby &amp; jumbo boxes at MSRP</h2>
+  <p class="lede read">Most hobby shops price to what the market will bear, so hot releases get marked up. The founder of CardVault says a hot release can push a $20 blaster to $50 overnight at some shops.<sup><a href="#s35">34</a></sup> These are the routes rippers use to pay the drop price instead.</p>
+
+  <h3>Route 1 · Topps.com and its EQL draws</h3>
+  <div class="grid g2">
+    <div class="card">
+      <span class="tag good">Primary channel</span>
+      <h4>How EQL launches work</h4>
+      <p>Topps runs its most in-demand hobby releases through EQL draws. Entry is free, limited to one per person, with bots screened out and per-customer caps, such as 2 boxes on 2026 Chrome Football.<sup><a href="#s18">18</a></sup> Lower-demand products are sold first-come on Topps.com with higher caps (10 per customer on 2026 Chrome Baseball).<sup><a href="#s2">2</a></sup></p>
+    </div>
+    <div class="card">
+      <span class="tag warn">Know the limits</span>
+      <h4>The EQLizer score</h4>
+      <p>EQL uses a score that rewards persistence, and a win resets it toward the start. There is no guaranteed-win threshold, so missing five draws doesn't mean you're due.<sup><a href="#s30">30</a></sup> You enter and wait for results instead of racing a checkout. A draw can make access fairer, but it can't create more boxes.<sup><a href="#s31">31</a></sup></p>
+    </div>
+  </div>
+  <ul class="checklist">
+    <li data-n="01"><b>Enter every draw you'd actually rip or flip,</b> including sealed-case launches, which run as separate draws.<sup><a href="#s19">19</a></sup></li>
+    <li data-n="02"><b>For first-come drops, prepare checkout in advance.</b> Save payment details and keep the exact product URL ready. One writer lost a Bowman hobby box mid-checkout while typing a card number.<sup><a href="#s33">32</a></sup></li>
+    <li data-n="03"><b>Follow drop alerts</b> on Discord servers and hobby X/Twitter for real-time stock updates.<sup><a href="#s34">33</a></sup> Stock-tracking sites like TrackaLacker alert on Fanatics restocks.<sup><a href="#s13">13</a></sup></li>
+    <li data-n="04"><b>Use Fanatics.com as a second channel.</b> It carries Topps product plus exclusives, and CardLines suggests building a rapport with a Fanatics customer rep.<sup><a href="#s33">32</a></sup> Fanatics-exclusive retail boxes sometimes add bonus packs or exclusive parallels.<sup><a href="#s68">66</a></sup></li>
+    <li data-n="05"><b>Buy presales early.</b> Topps opens presales ahead of release, and the gap shows up immediately. 2025 Series 1 presold at $89.99 hobby vs. ~$125 on the secondary market, and megas at $49.99 vs. $75–90.<sup><a href="#s60">58</a></sup></li>
+    <li data-n="06"><b>Event exclusives</b> such as Fanatics Fest boxes are sold to ticket holders by lottery, then picked up at the booth.<sup><a href="#s39">38</a></sup></li>
+  </ul>
+
+  <h3>Route 2 · Big-box retail (blasters, megas, value boxes)</h3>
+  <div class="read">
+    <p>Retail formats are sold at MSRP at Target, Walmart, Best Buy, GameStop, Dick's and Academy (for example, 2026 Bowman value at $34.99 at Academy<sup><a href="#s8">8</a></sup>; 2026 Chrome value at $39.99 at GameStop<sup><a href="#s10">10</a></sup>).</p>
+    <ul>
+      <li>Target, Walmart and Meijer are stocked by vendor MJ Holding, generally Monday to Friday between 9 a.m. and 3 p.m., varying by store.<sup><a href="#s37">36</a></sup> The simplest way to learn a store's schedule is to ask a manager.<sup><a href="#s38">37</a></sup></li>
+      <li>Walmart set a limit of 5 trading-card packs or boxes per visit in November 2025.<sup><a href="#s36">35</a></sup> Store-level policies change, and limits apply per visit.</li>
+      <li>Retail rarely carries hobby or jumbo boxes. It's the MSRP route for value boxes, which Part 02 shows are often the best rip anyway.</li>
+    </ul>
+  </div>
+
+  <h3>Route 3 · Shops that sell at or near MSRP</h3>
+  <div class="grid g3">
+    <div class="card"><h4>MSRP-committed chains</h4><p>CardVault by Tom Brady committed to MSRP on all Topps retail formats, holding the price even when the secondary market climbs. The pledge doesn't cover sealed hobby boxes or other brands.<sup><a href="#s35">34</a></sup></p></div>
+    <div class="card"><h4>Allocation shops</h4><p>Some shops skip pre-orders and release new product based on your purchase history, at or near MSRP.<sup><a href="#s40">39</a></sup> Being a regular is the ticket.</p></div>
+    <div class="card"><h4>Why your LCS marks up</h4><p>Shops sitting on cases bought at allocation pricing can charge over MSRP when the market supports it,<sup><a href="#s5">5</a></sup> and some say they're forced to buy through secondary sources.<sup><a href="#s41">40</a></sup> Historically a $5–20 premium over MSRP was considered normal, at least in the Pokémon world.<sup><a href="#s41">40</a></sup></p></div>
+  </div>
+
+  <h3>Route 4 · Wait</h3>
+  <p class="read">Not every product holds its premium. The 2025 Chrome Baseball example shows hobby boxes drifting below MSRP months later.<sup><a href="#s25">25</a></sup> Coverage of basketball Chrome says patience has paid all year in that category.<sup><a href="#s28">28</a></sup> If you miss the draw, waiting for the post-release cooldown often beats paying the release-week premium.</p>
+</section>
+
+<!-- ============ PART 5 ============ -->
+<section class="part" id="calc">
+  <div class="eyebrow">Part 05</div>
+  <h2>Rip vs. flip calculator</h2>
+  <p class="read">Model the strategy from Part 02: buy several boxes at MSRP, sell some sealed, and open the rest. Defaults use the 2026 Topps Chrome Baseball numbers from release week ($239.99 MSRP, ~$275 secondary, ~$115 average contents). Change the secondary price to ~$590 to see what happens when the premium grows.</p>
+
+  <div class="calc" role="group" aria-labelledby="rv-title">
+    <h4 id="rv-title">Box allocation model</h4>
+    <div>
+      <div class="field"><label for="r-n">Boxes bought at MSRP</label><input id="r-n" type="number" min="1" step="1" value="2"></div>
+      <div class="field"><label for="r-msrp">MSRP per box ($)</label><input id="r-msrp" type="number" min="0" step="0.01" value="239.99"></div>
+      <div class="field"><label for="r-flip">Boxes sold sealed</label><input id="r-flip" type="number" min="0" step="1" value="1"></div>
+      <div class="field"><label for="r-sec">Sealed resale price ($)</label><input id="r-sec" type="number" min="0" step="0.01" value="275"></div>
+      <div class="field"><label for="r-ev">Average resale value of an opened box ($)</label><input id="r-ev" type="number" min="0" step="0.01" value="115"></div>
+      <div class="field"><label for="r-fee">Selling fees (%)</label><input id="r-fee" type="number" min="0" step="0.1" value="13.25"></div>
+    </div>
+    <div class="out" aria-live="polite">
+      <div><span>Total spent</span><span id="r-cost">–</span></div>
+      <div><span>Sealed sales, after fees</span><span id="r-sealed">–</span></div>
+      <div><span>Opened boxes, after fees</span><span id="r-opened">–</span></div>
+      <div class="net" id="r-netrow"><span>Net result</span><span id="r-net">–</span></div>
+      <div><span>Opened all boxes instead</span><span id="r-all">–</span></div>
+      <div><span>Sold all sealed instead</span><span id="r-allflip">–</span></div>
+      <p class="note" style="font-family:var(--body)">"Average resale value" is an average across many boxes. A single box can land far above or below it. Fees use eBay's trading-card rate and ignore shipping and supplies.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SOURCES ============ -->
+<section class="part sources" id="sources">
+  <div class="eyebrow">References</div>
+  <h2>Sources</h2>
+  <p class="note read">Prices change daily. Drop prices are from Topps/EQL pages or retailer listings; secondary prices are from the dated reports cited and may have moved since.</p>
+  <ol>
+    <li id="s1"><a href="https://thecardshopfinder.com/blog/topps-chrome-baseball-first-look/">Card Shop Finder — 2026 Topps Chrome, 48 hours in ($115 EV)</a></li>
+    <li id="s2"><a href="https://www.topps.com/products/2026-topps-chrome®-baseball-hobby-box">Topps.com — 2026 Topps Chrome Baseball Hobby Box</a></li>
+    <li id="s3"><a href="https://stockx.com/2026-topps-chrome-baseball-hobby-box">StockX — 2026 Topps Chrome Baseball Hobby Box</a></li>
+    <li id="s4"><a href="https://www.midwestcards.com/categories/shop-baseball-cards-2026">Midwest Cards — 2026 baseball boxes</a></li>
+    <li id="s5"><a href="https://thecardshopfinder.com/blog/2026-bowman-baseball-week-one-pricing-caminero-20260519/">Card Shop Finder — 2026 Bowman three days in</a></li>
+    <li id="s6"><a href="https://insidethevault.beehiiv.com/p/inside-the-vault-issue-3-may-14-2026">Inside the Vault — Bowman release day pricing</a></li>
+    <li id="s7"><a href="https://slabsquatch.substack.com/p/2026-bowman-value-boxes-analysis">SlabSquatch — 2026 Bowman Value Boxes Analysis</a></li>
+    <li id="s8"><a href="https://www.academy.com/p/topps-2026-bowman-baseball-value-box">Academy — 2026 Bowman Value Box</a></li>
+    <li id="s9"><a href="https://cardlines.com/2026-topps-chrome-sapphire-baseball/">CardLines — 2026 Topps Chrome Sapphire</a></li>
+    <li id="s10"><a href="https://www.gamestop.com/toys-games/trading-cards/products/2026-topps-chrome-mlb-baseball-value-box/447867.html">GameStop — 2026 Topps Chrome Value Box</a></li>
+    <li id="s11"><a href="https://cardlines.com/2026-panini-prizm-baseball-checklist-review/">CardLines — 2026 Panini Prizm Baseball review</a></li>
+    <li id="s12"><a href="https://www.ludex.com/blog/trading-card-university/the-best-cards-to-look-for-in-2026-topps-series-2-baseball/">Ludex — 2026 Topps Series 2 formats</a></li>
+    <li id="s13"><a href="https://www.trackalacker.com/products/showcase/2025-topps-baseball-series-2-hobby-box/listings/300246/2026-topps-baseball-series-2-hobby-box">TrackaLacker — Series 2 Hobby at Fanatics</a></li>
+    <li id="s14"><a href="https://www.yardbarker.com/mlb/articles/new_product_review_2026_topps_chrome_black_baseball/s1_17615_43791698">Yardbarker — 2026 Topps Chrome Black review</a></li>
+    <li id="s15"><a href="https://www.cardboardconnection.com/2025-topps-chrome-football-set-review-and-checklist/amp">Cardboard Connection — 2025 Topps Chrome Football</a></li>
+    <li id="s16"><a href="https://monmouthcards.com/products/2025-topps-chrome-football-hobby-box">Monmouth Cards — 2025 Topps Chrome Football Hobby</a></li>
+    <li id="s17"><a href="https://cardlines.com/2025-topps-chrome-football-nfl-checklist-review/">CardLines — 2025 Topps Chrome Football review</a></li>
+    <li id="s18"><a href="https://launches.topps.com/en-US/launch/2026-topps-chromer-football-hobby-box-pre-order">Topps EQL — 2026 Chrome Football Hobby pre-order</a></li>
+    <li id="s19"><a href="https://launches.topps.com/en-US/launch/2026-topps-chromer-football-hobby-box-sealed-case-pre-order">Topps EQL — 2026 Chrome Football sealed case</a></li>
+    <li id="s20"><a href="https://blog.pristineauction.com/blog/from-final-prizms-to-new-chrome-the-best-football-card-sets-amp-boxes-to-rip-in-2026">Pristine Auction — Best football boxes 2026</a></li>
+    <li id="s21"><a href="https://cardsmithsbreaks.com/product/2025-topps-finest-football-hobby/">Cardsmiths — 2025 Topps Finest Football</a></li>
+    <li id="s22"><a href="https://sportscollectorsdigest.com/fernando-mendoza-top-nfl-rookies-headline-return-of-topps-flagship-football">Sports Collectors Digest — Topps Flagship Football returns</a></li>
+    <li id="s23"><a href="https://thecardshopfinder.com/shop/nba/sealed/topps-basketball/">Card Shop Finder — Topps Basketball sealed</a></li>
+    <li id="s24"><a href="https://www.midwestcards.com/products/2025-26-topps-chrome-basketball-hobby-box">Midwest Cards — 2025-26 Topps Chrome Basketball Hobby</a></li>
+    <li id="s25"><a href="https://www.cllct.com/sports-collectibles/sports-cards/as-some-collectors-complain-about-prices-topps-chrome-basketball-sells-out-immediately">cllct — Topps Chrome Basketball sells out</a></li>
+    <li id="s26"><a href="https://www.gamestop.com/toys-games/trading-cards/products/2025-26-topps-nba-chrome-basketball-value-box/20030681.html">GameStop — 2025-26 Topps Chrome Basketball Value Box</a></li>
+    <li id="s27"><a href="https://www.bestbuy.com/product/2025-2026-topps-chrome-basketball-blaster-box/J3ZPGX2RRT">Best Buy — Chrome Basketball blaster reviews</a></li>
+    <li id="s28"><a href="https://thecardshopfinder.com/shop/nba/sealed/topps-chrome-updates/">Card Shop Finder — Topps Chrome Updates Basketball</a></li>
+    <li id="s29"><a href="https://launches.topps.com/en-US/launch/2025-26-topps-chromer-updates-basketball-hobby-box">Topps EQL — 2025-26 Chrome Updates Basketball</a></li>
+    <li id="s30"><a href="https://cardlines.com/why-topps-is-using-eql-for-more-high-demand-topps-com-releases-and-does-it-work/">CardLines — Why Topps uses EQL</a></li>
+    <li id="s31"><a href="https://cardlines.com/?p=318598">CardLines — The EQLizer score</a></li>
+    <li id="s33"><a href="https://cardlines.com/hit-online-sports-card-retail-drops/">CardLines — Hitting online retail drops</a></li>
+    <li id="s34"><a href="https://cardlines.com/?p=818">CardLines — Drop information on Discord &amp; X</a></li>
+    <li id="s35"><a href="https://cardvaultbytombrady.com/blogs/resources/why-cardvault-prices-topps-retail-cards-at-msrp">CardVault — Why we price Topps retail at MSRP</a></li>
+    <li id="s36"><a href="https://folio.fyi/blog/where-to-buy-pokemon-cards">Folio — Retailer purchase limits</a></li>
+    <li id="s37"><a href="https://bsportscards.com/?p=1434">B Sports Cards — When Walmart and Target restock</a></li>
+    <li id="s38"><a href="https://cardlines.com/walmart-sports-cards/">CardLines — Guide to Walmart sports cards</a></li>
+    <li id="s39"><a href="https://www.fanaticsfest.com/exclusive-topps">Fanatics Fest — Exclusive Topps products</a></li>
+    <li id="s40"><a href="https://www.rocketcitytoys.com/pages/how-we-handle-trading-card-releases-no-pre-orders">Rocket City Toys — Allocation-based access</a></li>
+    <li id="s41"><a href="https://reddit.birdcat.cafe/r/PokemonTCG/comments/1hz2xo5/local_card_store_aint_about_the_cash_grab/m6my5oq">r/PokemonTCG (mirror) — shop markup discussion</a></li>
+    <li id="s43"><a href="https://raw2riches.beehiiv.com/p/2025-26-optic-football-huge-red-flag-alerted">Raw2Riches — Sell early, don't grade early</a></li>
+    <li id="s44"><a href="https://cardlines.com/are-collectors-being-squeezed-and-does-it-threaten-the-hobby/">CardLines — Are collectors being squeezed?</a></li>
+    <li id="s45"><a href="https://www.cardpulse.club/blog/best-time-to-sell-trading-cards">CardPulse — Best time to sell</a></li>
+    <li id="s46"><a href="https://ballcardgenius.substack.com/p/3-profit-tips-and-key-reminders-for">Ballcard Genius — Release-week profit tips</a></li>
+    <li id="s47"><a href="https://camerons-newsletter-dd9fe0.beehiiv.com/p/newsletter-1-30">Hobby Card Life — Sell Prizm rookies</a></li>
+    <li id="s48"><a href="https://thebenchtrading.com/threads/when-breaking-cases-and-or-sets-is-it-better-too.382976">The Bench — Team sets vs. singles</a></li>
+    <li id="s49"><a href="https://www.cardboardconnection.com/what-everyone-know-sports-card-presales?amp=1">Cardboard Connection — Sports card presales</a></li>
+    <li id="s50"><a href="https://www.sportscollectorsdaily.com/four-basic-types-ungraded-strategies/">Sports Collectors Daily — Case breaker strategies</a></li>
+    <li id="s51"><a href="https://thehobbywire.substack.com/p/before-you-break">The Hobby Wire — Before You Break</a></li>
+    <li id="s52"><a href="https://allvintagecards.com/?p=1021246">All Vintage Cards — Card breaks experience</a></li>
+    <li id="s53"><a href="https://cardlines.com/?p=45819">CardLines — The case for singles</a></li>
+    <li id="s54"><a href="https://www.sportscollectorsdaily.com/richs-ramblings-consumers-right-expect-secondary-market-value/">Sports Collectors Daily — Secondary market value</a></li>
+    <li id="s55"><a href="https://tcgtalk.com/guides/topps/2026-topps-chrome-baseball">TCGTalk — 2026 Topps Chrome pack odds calculator</a></li>
+    <li id="s56"><a href="https://ripped.topps.com/uk/what-2025-topps-chrome-football-box-is-best-for-you/">Topps Ripped — Which Chrome Football box</a></li>
+    <li id="s57"><a href="https://ripped.topps.com/uk/what-2025-26-topps-basketball-box-is-best-for-you">Topps Ripped — Which Topps Basketball box</a></li>
+    <li id="s58"><a href="https://www.cllct.com/sports-collectibles/sports-cards/when-is-the-best-time-to-buy-sell-sports-cards-our-calendar-explains-the-seasonal-markets">cllct — Seasonal buying calendar</a></li>
+    <li id="s59"><a href="https://camerons-newsletter-dd9fe0.beehiiv.com/p/newsletter-8-7">Hobby Card Life — Why prices fluctuate</a></li>
+    <li id="s60"><a href="https://cardlines.com/2025-topps-series-1/">CardLines — 2025 Topps Series 1 presale vs. secondary</a></li>
+    <li id="s61"><a href="https://thecardshopfinder.com/blog/2026-topps-chrome-baseball-rookie-chases/">Card Shop Finder — 2026 Chrome buyer's guide</a></li>
+    <li id="s62"><a href="https://www.ebay.com/sellercenter/resources/seller-updates/2025-january/final-value-fee">eBay — Final value fees</a></li>
+    <li id="s63"><a href="https://fanter.co.uk/topps/bowman-baseball-2025-2026">Fanter — Bowman box configurations</a></li>
+    <li id="s64"><a href="https://cardsmithsbreaks.com/full-checklist/2026-bowman-baseball-hobby">Cardsmiths — 2026 Bowman Hobby checklist</a></li>
+    <li id="s65"><a href="https://www.waxstat.com/boxes/2026-topps-cosmic-chrome-baseball-hobby-box">Waxstat — 2026 Topps Cosmic Chrome</a></li>
+    <li id="s66"><a href="https://www.cllct.com/sports-collectibles/sports-cards/prices-for-2025-26-topps-basketball-surge-on-secondary-market">cllct — 2025-26 Topps Basketball prices surge</a></li>
+    <li id="s67"><a href="https://ripped.topps.com/2025-26-bowman-basketball-ways-to-collect/">Topps Ripped — 2025-26 Bowman Basketball</a></li>
+    <li id="s68"><a href="https://www.sportscollectorsdaily.com/topps-offering-autographed-memorabilia-redemptions-in-blaster-boxes/">Sports Collectors Daily — Fanatics-exclusive blasters</a></li>
+  </ol>
+</section>
+</main>
+
+<footer class="wrap">Compiled November 2026 from public hobby sources. Not financial advice: box values are averages and individual results vary widely.</footer>
+
+<script>
+(function(){
+  var $=function(id){return document.getElementById(id);};
+  var fmt=function(n){return (n<0?'-$':'$')+Math.abs(n).toFixed(2);};
+  function calc(){
+    var n=Math.max(1,Math.floor(parseFloat($('r-n').value)||1));
+    var msrp=parseFloat($('r-msrp').value)||0;
+    var flip=Math.min(n,Math.max(0,Math.floor(parseFloat($('r-flip').value)||0)));
+    var sec=parseFloat($('r-sec').value)||0;
+    var ev=parseFloat($('r-ev').value)||0;
+    var fee=(parseFloat($('r-fee').value)||0)/100;
+    var cost=n*msrp, sealed=flip*sec*(1-fee), opened=(n-flip)*ev*(1-fee);
+    var net=sealed+opened-cost;
+    $('r-cost').textContent=fmt(-cost);
+    $('r-sealed').textContent=fmt(sealed);
+    $('r-opened').textContent=fmt(opened);
+    $('r-net').textContent=fmt(net);
+    $('r-netrow').classList.toggle('neg',net<0);
+    $('r-all').textContent=fmt(n*ev*(1-fee)-cost);
+    $('r-allflip').textContent=fmt(n*sec*(1-fee)-cost);
+  }
+  ['r-n','r-msrp','r-flip','r-sec','r-ev','r-fee'].forEach(function(id){$(id).addEventListener('input',calc);});
+  calc();
+})();
+</script>
+</body>
+</html>
