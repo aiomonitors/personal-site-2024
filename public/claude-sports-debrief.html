@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sports Card Hobby Debrief</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* Plan: a field briefing styled after a graded-slab label and the back of a trading card.
+   Layout: single reading column with wide tables, a sticky part-nav, and "card-back" stat boxes. */
+:root{
+  --paper:#f3f4f0;
+  --panel:#ffffff;
+  --ink:#16202b;
+  --muted:#56616d;
+  --rule:#d4d8d2;
+  --accent:#b8102b;      /* slab-label red */
+  --accent-2:#1d4a73;    /* team navy */
+  --tint:#e8ecef;
+  --good:#1f7a4d; --warn:#a86a00; --bad:#b8102b;
+  --display:"Barlow Condensed","Arial Narrow",Arial,sans-serif;
+  --body:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#0f151c; --panel:#161e27; --ink:#e7eae5; --muted:#9aa5b0; --rule:#2a3542;
+    --accent:#ff5d72; --accent-2:#7fb2e0; --tint:#1c2631;
+    --good:#4cc38a; --warn:#e3a43a; --bad:#ff5d72; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#0f151c; --panel:#161e27; --ink:#e7eae5; --muted:#9aa5b0; --rule:#2a3542;
+  --accent:#ff5d72; --accent-2:#7fb2e0; --tint:#1c2631;
+  --good:#4cc38a; --warn:#e3a43a; --bad:#ff5d72; color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:64px}
+@media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--body);font-size:16.5px;line-height:1.6}
+a{color:var(--accent-2);text-underline-offset:2px}
+a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+h1,h2,h3,h4{font-family:var(--display);line-height:1.1;text-wrap:balance;margin:0;letter-spacing:.01em}
+h2{font-size:clamp(2rem,4.4vw,2.8rem);font-weight:700;text-transform:uppercase}
+h3{font-size:1.55rem;font-weight:600;text-transform:uppercase;margin-top:2.4rem}
+h4{font-size:1.2rem;font-weight:600;text-transform:uppercase;letter-spacing:.03em}
+p{margin:.7rem 0}
+.wrap{max-width:1080px;margin:0 auto;padding:0 20px}
+.read{max-width:68ch}
+.num,.mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
+
+/* Masthead styled like a slab label */
+.mast{border-bottom:1px solid var(--rule);background:var(--panel)}
+.label{display:grid;grid-template-columns:1fr auto;gap:12px 24px;align-items:end;padding:28px 0 22px}
+.label .kicker{font-family:var(--mono);font-size:.78rem;letter-spacing:.12em;text-transform:uppercase;color:var(--accent)}
+.label h1{font-size:clamp(2.6rem,7vw,4.6rem);font-weight:700;text-transform:uppercase;margin-top:6px}
+.label .cert{border:2px solid var(--accent);padding:10px 14px;text-align:right;font-family:var(--mono);font-size:.8rem;line-height:1.5}
+.label .cert b{display:block;font-family:var(--display);font-size:2rem;color:var(--accent);line-height:1}
+.dek{color:var(--muted);max-width:70ch;margin:0 0 22px}
+@media (max-width:560px){.label{grid-template-columns:1fr}.label .cert{text-align:left;justify-self:start}}
+
+nav.parts{position:sticky;top:0;z-index:5;background:var(--panel);border-bottom:1px solid var(--rule)}
+nav.parts ul{list-style:none;margin:0 auto;padding:0 20px;max-width:1080px;display:flex;gap:4px;overflow-x:auto;scrollbar-width:none}
+nav.parts ul::-webkit-scrollbar{display:none}
+nav.parts a{display:block;padding:12px 12px;font-family:var(--display);font-weight:600;font-size:1.05rem;text-transform:uppercase;letter-spacing:.04em;color:var(--ink);text-decoration:none;white-space:nowrap;border-bottom:3px solid transparent}
+nav.parts a:hover{border-bottom-color:var(--accent)}
+nav.parts a span{color:var(--accent);font-family:var(--mono);font-size:.8rem;margin-right:6px}
+
+section.part{padding:56px 0 24px;border-bottom:1px solid var(--rule)}
+.eyebrow{font-family:var(--mono);font-size:.8rem;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin-bottom:8px}
+.lede{font-size:1.12rem;color:var(--ink);max-width:68ch;margin-top:14px}
+
+/* Bottom line box */
+.bluf{background:var(--panel);border:1px solid var(--rule);border-left:6px solid var(--accent);padding:22px 24px;margin:36px 0 8px}
+.bluf ol{margin:10px 0 0;padding-left:1.3rem;display:grid;gap:8px}
+.bluf li::marker{font-family:var(--mono);color:var(--accent)}
+
+/* grids & cards */
+.grid{display:grid;gap:14px;margin-top:18px}
+.g2{grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+.g3{grid-template-columns:repeat(auto-fit,minmax(290px,1fr))}
+.card{background:var(--panel);border:1px solid var(--rule);padding:18px 18px 14px;display:flex;flex-direction:column;gap:6px}
+.card h4{color:var(--accent-2)}
+.card p{margin:.2rem 0;font-size:.96rem}
+.card .why{font-size:.9rem;color:var(--muted);border-top:1px dashed var(--rule);padding-top:8px;margin-top:auto}
+.tag{align-self:flex-start;display:inline-block;font-family:var(--mono);font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;padding:2px 7px;border:1px solid currentColor;border-radius:2px}
+.tag.good{color:var(--good)}.tag.warn{color:var(--warn)}.tag.bad{color:var(--bad)}.tag.info{color:var(--accent-2)}
+
+/* card-back stat box */
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));border:2px solid var(--ink);margin:22px 0;background:var(--panel)}
+.stats div{padding:12px 14px;border-right:1px solid var(--rule);border-bottom:1px solid var(--rule)}
+.stats b{display:block;font-family:var(--mono);font-size:1.45rem;font-weight:500;font-variant-numeric:tabular-nums;color:var(--accent)}
+.stats span{font-size:.86rem;color:var(--muted);line-height:1.35;display:block}
+
+/* tables */
+.tablewrap{overflow-x:auto;margin:18px 0;border:1px solid var(--rule);background:var(--panel)}
+table{border-collapse:collapse;width:100%;min-width:760px;font-size:.92rem}
+th,td{text-align:left;vertical-align:top;padding:10px 12px;border-bottom:1px solid var(--rule)}
+thead th{font-family:var(--display);text-transform:uppercase;letter-spacing:.05em;font-size:1rem;background:var(--tint);color:var(--ink);position:sticky;top:0}
+tbody tr:last-child td{border-bottom:0}
+td.k{font-weight:600;white-space:nowrap}
+
+/* funnel */
+.funnel{display:grid;gap:8px;margin:20px 0}
+.tier{display:grid;grid-template-columns:150px 1fr;gap:16px;background:var(--panel);border:1px solid var(--rule);padding:14px 16px;align-items:start}
+.tier .lvl{font-family:var(--display);text-transform:uppercase;font-weight:700;font-size:1.25rem;line-height:1.05}
+.tier .lvl small{display:block;font-family:var(--mono);font-size:.78rem;font-weight:400;color:var(--muted);text-transform:none;margin-top:4px}
+.tier p{margin:0 0 4px;font-size:.95rem}
+.tier:nth-child(1){border-left:6px solid var(--accent)}
+.tier:nth-child(2){border-left:6px solid var(--warn)}
+.tier:nth-child(3){border-left:6px solid var(--accent-2)}
+.tier:nth-child(4){border-left:6px solid var(--muted)}
+@media (max-width:560px){.tier{grid-template-columns:1fr;gap:6px}}
+
+/* checklist */
+.checklist{list-style:none;padding:0;margin:16px 0;display:grid;gap:10px}
+.checklist li{background:var(--panel);border:1px solid var(--rule);padding:12px 14px 12px 46px;position:relative}
+.checklist li::before{content:attr(data-n);position:absolute;left:12px;top:11px;font-family:var(--mono);font-size:.82rem;color:var(--accent);font-weight:500}
+.checklist b{font-weight:600}
+
+.quote{border-left:3px solid var(--accent-2);padding:4px 0 4px 16px;color:var(--muted);font-style:italic;margin:16px 0}
+.note{font-size:.88rem;color:var(--muted)}
+.callout{background:var(--tint);padding:14px 16px;margin:18px 0;border-radius:2px}
+
+/* calculator */
+.calc{background:var(--panel);border:2px solid var(--ink);padding:18px;margin:22px 0;display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px}
+.calc h4{grid-column:1/-1}
+.field{display:flex;flex-direction:column;gap:4px;margin-bottom:10px}
+.field label{font-size:.85rem;color:var(--muted)}
+.field input,.field select{font:inherit;font-family:var(--mono);padding:7px 9px;border:1px solid var(--rule);background:var(--paper);color:var(--ink);border-radius:2px}
+.out{font-family:var(--mono);font-variant-numeric:tabular-nums;font-size:.92rem}
+.out div{display:flex;justify-content:space-between;gap:10px;padding:5px 0;border-bottom:1px dotted var(--rule)}
+.out .net{font-size:1.25rem;font-weight:500;border-bottom:0;padding-top:10px}
+.out .net span:last-child{color:var(--good)}
+.out .net.neg span:last-child{color:var(--bad)}
+
+.sources ol{columns:2 340px;column-gap:32px;padding-left:1.4rem;font-size:.88rem}
+.sources li{break-inside:avoid;margin-bottom:6px}
+footer{padding:28px 0 60px;color:var(--muted);font-size:.85rem}
+sup a{font-family:var(--mono);font-size:.7rem;text-decoration:none;color:var(--accent)}
+</style>
+</head>
+<body>
+
+<header class="mast">
+  <div class="wrap">
+    <div class="label">
+      <div>
+        <div class="kicker">Research briefing · Baseball &amp; football cards</div>
+        <h1>Sports Card Hobby Debrief</h1>
+      </div>
+      <div class="cert"><b>3</b>parts · collectors,<br>rippers, profit-seekers<br>Nov 2026</div>
+    </div>
+    <p class="dek">How hobbyists build collections, what pack rippers do with the cards they pull (especially the cheap ones), how they sell across eBay, Reddit and other platforms, and how people who are in it for money actually turn a profit. Compiled from hobby publications, platform fee pages, seller forums and Reddit communities.</p>
+  </div>
+</header>
+
+<nav class="parts" aria-label="Sections">
+  <ul>
+    <li><a href="#summary"><span>00</span>Bottom line</a></li>
+    <li><a href="#collectors"><span>01</span>Collectors</a></li>
+    <li><a href="#rippers"><span>02</span>Rippers &amp; selling</a></li>
+    <li><a href="#ebay"><span>02b</span>eBay store setup</a></li>
+    <li><a href="#profit"><span>03</span>Making money</a></li>
+    <li><a href="#friction"><span>04</span>Pain points</a></li>
+    <li><a href="#sources"><span>&#8599;</span>Sources</a></li>
+  </ul>
+</nav>
+
+<main class="wrap">
+
+<div class="bluf" id="summary">
+  <div class="eyebrow">Bottom line up front</div>
+  <ol>
+    <li><b>Collectors build around identity, not value.</b> The dominant approach is the player collection (PC) or team collection; set building is still loved but has faded because modern base cards are nearly worthless. The chase cards are rookie cards, rookie patch autographs, low serial numbers and 1/1s, and "case hits" like Kaboom and Downtown.</li>
+    <li><b>Ripping is a losing game on average.</b> Sealed product is priced above the expected value of what is inside. Rippers who come out ahead do it by opening right at release, selling hits fast, and grinding out the rest of the box through cheap channels.</li>
+    <li><b>Low-value cards are a logistics problem.</b> Once eBay's 13.25% fee, the per-order fee and postage come out, a card under about $2 nets almost nothing as a single. So rippers sort into tiers: hits go to eBay, mid-tier singles go out in eBay Standard Envelope, cheap singles go to Sportlots/COMC or "pick your card" variation listings, and the rest becomes team lots, player lots or bulk.</li>
+    <li><b>Team and player lots are the standard move for leftovers,</b> sold as $0.99-start auctions or small fixed-price lots. Bulk buyers pay a fraction of the cards' individual value, often around a quarter.</li>
+    <li><b>eBay is still the liquidity pool.</b> Reddit and Facebook groups save on fees (about 3% PayPal G&amp;S) but have smaller audiences and more scam risk. Whatnot moves volume quickly at roughly 80% of comps. Sportlots and COMC exist for the cheap stuff.</li>
+    <li><b>Money-makers mostly earn on buying, not selling:</b> buying collections and cards under comps (shows, estate sales, mislisted eBay items, off-peak Whatnot auctions), grading arbitrage, prospecting baseball's 1st Bowman cards before call-ups, timing the season, running breaks, and high-volume stores.</li>
+  </ol>
+</div>
+
+<!-- ================= PART 1 ================= -->
+<section class="part" id="collectors">
+  <div class="eyebrow">Part 01</div>
+  <h2>How collectors build their collections</h2>
+  <p class="lede read">Most people enter the hobby through love of a sport, team or player, and their collection reflects those allegiances more than any price chart.<sup><a href="#s1">1</a></sup> Collectors usually pick a "structure" for their collection, and the structure they choose decides what they buy, where they look, and how they feel about it.</p>
+
+  <h3>The main ways people collect</h3>
+  <div class="grid g3">
+    <div class="card">
+      <span class="tag info">Most common</span>
+      <h4>Player collection (PC)</h4>
+      <p>Every card, or a defined slice of cards, of one player. Collectors set their own scope: every rookie-year card, only first-year cards across all products, or graded-only PCs in PSA 10 / BGS 9.5.<sup><a href="#s2">2</a></sup></p>
+      <p>PC collectors tend to know every product their player appears in and hunt rare parallels and 1/1s.<sup><a href="#s3">3</a></sup></p>
+      <p class="why">Why: it's personal, and it can start with a single card and still count as a real project.<sup><a href="#s4">4</a></sup></p>
+    </div>
+    <div class="card">
+      <span class="tag info">Fandom-driven</span>
+      <h4>Team sets / team collections</h4>
+      <p>Every player from a favorite team within a given release, instead of the whole set. Cheaper and faster than a full set.<sup><a href="#s1">1</a></sup></p>
+      <p>Some collect even narrower themes, like alumni of one college across all sports, or local athletes.<sup><a href="#s5">5</a></sup></p>
+      <p class="why">Why: family and regional loyalty, often passed down through generations. These buyers are the natural market for team lots.</p>
+    </div>
+    <div class="card">
+      <span class="tag warn">Fading, still loved</span>
+      <h4>Set building</h4>
+      <p>Completing an entire base set. It has fallen out of fashion because modern base cards have so little individual value, but completionists still enjoy it.<sup><a href="#s3">3</a></sup></p>
+      <p>Builders fill gaps cheaply on Sportlots, where many base cards sit at the $0.18 minimum.<sup><a href="#s20">20</a></sup></p>
+      <p class="why">Why: a set has a finish line someone else defined. One guide frames it as set building giving closure while PCs give control.<sup><a href="#s4">4</a></sup></p>
+    </div>
+    <div class="card">
+      <span class="tag info">Depth over breadth</span>
+      <h4>Rainbows</h4>
+      <p>Every parallel color of one card (base, refractor, gold, orange, red, superfractor), sometimes autos included. Some chase only paper or only chrome rainbows.<sup><a href="#s6">6</a></sup></p>
+      <p class="why">Why: it's a finite but brutal hunt. The last few low-numbered parallels become trophies.</p>
+    </div>
+    <div class="card">
+      <span class="tag warn">Speculative</span>
+      <h4>Prospecting</h4>
+      <p>Buying early cards, especially "1st Bowman" cards, of minor leaguers before they reach the majors. Topps' own guidance is to start affordable and research players.<sup><a href="#s7">7</a></sup></p>
+      <p class="why">Why: the "got there first" feeling. Collectors who back their own team's prospects describe a sense of ownership in being early.<sup><a href="#s8">8</a></sup></p>
+    </div>
+    <div class="card">
+      <span class="tag bad">High-end</span>
+      <h4>Case-hit and 1/1 chasing</h4>
+      <p>Hunting the rarest inserts and serial-numbered cards: Kaboom and Downtown inserts, 1/1 superfractors, NFL Shield patch autos.</p>
+      <p class="why">Why: rarity plus visual design, amplified by social media. When someone pulls one on a stream, it becomes an event.<sup><a href="#s9">9</a></sup></p>
+    </div>
+  </div>
+
+  <h3>What they like to collect, and why</h3>
+  <div class="tablewrap">
+    <table>
+      <thead><tr><th>Card type</th><th>What it is</th><th>Why collectors want it</th></tr></thead>
+      <tbody>
+        <tr><td class="k">Rookie cards (RC)</td><td>A player's first officially licensed card.</td><td>Almost always a player's most valuable base card<sup><a href="#s3">3</a></sup>. It's the "starting point" of a career, and the card everyone benchmarks.</td></tr>
+        <tr><td class="k">1st Bowman (baseball)</td><td>A prospect's first Bowman-branded card, usually before his rookie card.</td><td>The earliest mainstream chase for a player. The Bowman Chrome autograph has been the prospecting gold standard since the early 2000s, and if the player becomes a star it is usually his most valuable card.<sup><a href="#s10">10</a></sup></td></tr>
+        <tr><td class="k">RPA (Rookie Patch Auto)</td><td>Rookie card with a jersey patch and an autograph. Football's flagship chase.</td><td>Combines three value drivers in one card. At the top, NFL Shield patch 1/1s have sold for millions (a 2017 National Treasures Mahomes Shield 1/1 sold for $4.3M)<sup><a href="#s11">11</a></sup>.</td></tr>
+        <tr><td class="k">Rookie Debut Patch Auto (baseball)</td><td>Topps card with a patch worn in the player's MLB debut, plus autograph.</td><td>Has reshaped the baseball rookie market since 2023. One sold for $1.11M at Fanatics Collect in March 2025, and the cheapest eBay listings sat around $3,000 to $4,000.<sup><a href="#s12">12</a></sup></td></tr>
+        <tr><td class="k">Case hits (Kaboom, Downtown, Color Blast)</td><td>Ultra-short-printed inserts, roughly one per case.</td><td>Kaboom comes from Panini Absolute, where a case is usually 10 to 12 boxes, so most collectors buy singles rather than chase them.<sup><a href="#s13">13</a></sup> Some collectors now chase the design itself regardless of the player, and some try to complete full Kaboom sets.<sup><a href="#s13">13</a></sup></td></tr>
+        <tr><td class="k">Serial-numbered parallels &amp; 1/1s</td><td>Color variants stamped /99, /25, /5, 1/1.</td><td>Scarcity that is verifiable on the card. Essential for rainbow builders and PC completists.</td></tr>
+        <tr><td class="k">Game-used / jersey cards</td><td>Cards with a swatch of uniform.</td><td>Collectors describe an emotional bond with owning a piece of the player's uniform. Patch size and design matter, not just the player.<sup><a href="#s14">14</a></sup></td></tr>
+        <tr><td class="k">Graded slabs</td><td>Cards authenticated and condition-graded by PSA, BGS, SGC or CGC.</td><td>Protection, authentication and a standard condition grade. Some PCs are built graded-only.<sup><a href="#s2">2</a></sup></td></tr>
+        <tr><td class="k">Vintage</td><td>Pre-1980 cards (Mantle, Clemente, '52 Topps etc.).</td><td>Scarcity of high-grade survivors and nostalgia. Here even base cards hold value because so few survived in good condition.<sup><a href="#s15">15</a></sup></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>Football-specific notes</h3>
+  <div class="read">
+    <p>Quarterbacks and rookies dominate football collecting. PSA submission data shows which players collectors are chasing, and young QBs lead that list, with Mahomes still the top active player to collect.<sup><a href="#s16">16</a></sup> Licensing has also shifted between Panini and Topps, which matters more to set builders than to player collectors, since PC collectors care less about which brand a card comes from.<sup><a href="#s4">4</a></sup></p>
+    <p>Younger collectors in particular are driven by social media, pop culture and big case hits, and some are spending five figures on single cards.<sup><a href="#s17">17</a></sup></p>
+  </div>
+
+  <h3>Where collectors find cards</h3>
+  <div class="grid g3">
+    <div class="card"><h4>Checklists</h4><p>Beckett's checklists and Trading Card Database (TCDB) generate a full checklist for any player across products. These become "hunting lists."<sup><a href="#s2">2</a></sup></p></div>
+    <div class="card"><h4>Facebook groups</h4><p>Player-specific and team-specific groups are described as goldmines for PC trades and purchases.<sup><a href="#s2">2</a></sup></p></div>
+    <div class="card"><h4>Local card shop</h4><p>Regulars tell the owner who they collect, and the shop sets cards aside for them.<sup><a href="#s2">2</a></sup></p></div>
+    <div class="card"><h4>Shows &amp; trade nights</h4><p>Trade nights run after show hours and are mini-shows of collectors trading table to table.<sup><a href="#s18">18</a></sup></p></div>
+    <div class="card"><h4>Sportlots</h4><p>Set builders buy base cards there cheaply, but have to minimize the number of sellers to keep shipping down.<sup><a href="#s20">20</a></sup></p></div>
+    <div class="card"><h4>eBay</h4><p>The default for specific singles. Team collectors often search by team name, which is why sellers are told to put the team in the title.<sup><a href="#s19">19</a></sup></p></div>
+  </div>
+</section>
+
+<!-- ================= PART 2 ================= -->
+<section class="part" id="rippers">
+  <div class="eyebrow">Part 02</div>
+  <h2>Pack rippers: what happens to all those cards</h2>
+  <p class="lede read">Ripping means opening packs or boxes, whether to feed a personal collection or to pull cards to resell.<sup><a href="#s1">1</a></sup> Every ripper ends up with the same problem: a few cards worth real money, and hundreds or thousands that aren't.</p>
+
+  <h3>First, the economics of ripping</h3>
+  <div class="read">
+    <p>The consensus across hobby forums is blunt. Long-time collectors compare ripping modern product to slot machines: fun, a few win, most lose.<sup><a href="#s21">21</a></sup> Sealed product is priced so that the expected value (EV) of the contents is usually below the box price, and EV is an average that a single box rarely matches.</p>
+    <p>There are exceptions people point to. Some forum members say a handful of people make a living ripping, and that opening certain sets in volume right at release can be hard to lose money on. Timing matters too: one collector noticed football product now tends to peak in weeks 1 to 3 of the season.<sup><a href="#s22">22</a></sup> Even a mainstream hobby piece on pack odds works out that a SpongeBob superfractor sat at roughly 1 in 70,900 hobby boxes.<sup><a href="#s23">23</a></sup></p>
+  </div>
+  <div class="stats">
+    <div><b>~1 per case</b><span>Typical odds for a Kaboom-style case hit (10–12 boxes)<sup><a href="#s13">13</a></sup></span></div>
+    <div><b>13.25%</b><span>eBay final value fee on sports cards, up to $7,500 per item<sup><a href="#s24">24</a></sup></span></div>
+    <div><b>$0.69</b><span>eBay Standard Envelope, 1 oz, with tracking<sup><a href="#s25">25</a></sup></span></div>
+    <div><b>$0.18</b><span>Minimum price per card on Sportlots<sup><a href="#s26">26</a></sup></span></div>
+  </div>
+
+  <h3>The triage: how rippers sort a box</h3>
+  <p class="read">Across seller guides and forum advice, the same four-tier sort shows up. Sell high-value cards on their own first: if half a pile's value sits in one or two cards, selling those fast means the rest only has to recover the remainder.<sup><a href="#s27">27</a></sup></p>
+  <div class="funnel">
+    <div class="tier">
+      <div class="lvl">Hits<small>$20+ cards</small></div>
+      <div><p>Autos, numbered parallels, star rookies, case hits. Listed as individual eBay singles (auction if demand is uncertain, Buy It Now if comps are clear), considered for grading if raw value and condition justify it, or sold live on Whatnot.</p><p class="note">Ship with tracking: one guide says always add tracking for cards over $15, because eBay's seller protection needs it.<sup><a href="#s28">28</a></sup></p></div>
+    </div>
+    <div class="tier">
+      <div class="lvl">Mid-tier<small>~$3–$20</small></div>
+      <div><p>Rookies, inserts, lower parallels, popular players. Individual eBay listings shipped in eBay Standard Envelope (cards under $20, up to 15 raw cards, 3 oz max), or consigned to COMC.<sup><a href="#s25">25</a></sup></p></div>
+    </div>
+    <div class="tier">
+      <div class="lvl">Low-value<small>~$0.18–$3</small></div>
+      <div><p>Star base cards, common inserts, team-relevant base. Sportlots fixed-price stores (no listing fees, $0.18 floor), COMC, or eBay "pick your card" variation listings (up to 250 cards in one listing).<sup><a href="#s26">26</a></sup><sup><a href="#s29">29</a></sup></p></div>
+    </div>
+    <div class="tier">
+      <div class="lvl">Bulk<small>commons</small></div>
+      <div><p>Team lots, player lots, set lots, large flat-rate bulk boxes, nickel boxes at shows, Craigslist/local sales, or donations and giveaways to kids.<sup><a href="#s30">30</a></sup><sup><a href="#s31">31</a></sup></p></div>
+    </div>
+  </div>
+
+  <h3>Why low-value singles barely pay on eBay</h3>
+  <p class="read">The fixed costs on a small sale add up fast. One analysis quoted a Reddit seller finding that combined fees eat nearly a quarter of a $2 sale.<sup><a href="#s32">32</a></sup> A Sports Collectors Daily piece put it plainly: on items under $10, profit gets hard unless you do massive volume.<sup><a href="#s33">33</a></sup> Try the numbers below.</p>
+
+  <div class="calc" role="group" aria-labelledby="calc-title">
+    <h4 id="calc-title">Net-per-card estimator (eBay single)</h4>
+    <div>
+      <div class="field"><label for="c-price">Sale price ($)</label><input id="c-price" type="number" step="0.01" min="0" value="2.00"></div>
+      <div class="field"><label for="c-ship">Shipping charged to buyer ($)</label><input id="c-ship" type="number" step="0.01" min="0" value="0.00"></div>
+      <div class="field"><label for="c-post">Postage you pay</label>
+        <select id="c-post">
+          <option value="0.69" selected>eBay Standard Envelope 1 oz ($0.69)</option>
+          <option value="0.97">eBay Standard Envelope 2 oz ($0.97)</option>
+          <option value="1.25">eBay Standard Envelope 3 oz ($1.25)</option>
+          <option value="0.78">Plain envelope + stamp, no tracking (~$0.78)</option>
+          <option value="4.50">Bubble mailer, Ground Advantage (~$4.50, estimate)</option>
+        </select></div>
+      <div class="field"><label for="c-sup">Supplies: sleeve, toploader, envelope ($)</label><input id="c-sup" type="number" step="0.01" min="0" value="0.20"></div>
+      <div class="field"><label for="c-tax">Buyer sales tax (%) — eBay's fee applies to it too</label><input id="c-tax" type="number" step="0.1" min="0" value="7"></div>
+    </div>
+    <div class="out" aria-live="polite">
+      <div><span>Item + shipping collected</span><span id="o-gross">–</span></div>
+      <div><span>Final value fee (13.25%)</span><span id="o-fvf">–</span></div>
+      <div><span>Per-order fee</span><span id="o-order">–</span></div>
+      <div><span>Postage</span><span id="o-post">–</span></div>
+      <div><span>Supplies</span><span id="o-sup">–</span></div>
+      <div class="net" id="o-netrow"><span>You keep</span><span id="o-net">–</span></div>
+      <p class="note" style="font-family:var(--body)">Fee rates from eBay's published trading-card schedule and Standard Envelope page. The $0.30 per-order fee is the rate guides cite for smaller orders; supplies and the Ground Advantage figure are estimates. Excludes Promoted Listings and any store-subscription discount.</p>
+    </div>
+  </div>
+
+  <h3>Do they sell team lots? Yes, constantly</h3>
+  <div class="read">
+    <p>Team lots and player lots are the default answer forum veterans give to "what do I do with my base cards." A common reply: team lots, player lots, or donate to charity. You won't make much any way you go, but it beats the trash.<sup><a href="#s30">30</a></sup> An eBay community post gives the same advice: bundle unwanted base into themed lots, lower prices, or target specific buyers.<sup><a href="#s34">34</a></sup></p>
+    <p>A Sports Collectors Daily columnist suggests a sequence: sell player-specific lots of names people still collect first, then lots by year, team set or brand. In his view an all-or-nothing bulk deal tends to end up as nothing.<sup><a href="#s35">35</a></sup> Another piece lists the possible cuts, including player lots, team lots, singles and themed lots (Venezuelan-born players, for example). The advice: try different tactics, and once a niche works, you have a built-in customer base for next time.<sup><a href="#s27">27</a></sup></p>
+  </div>
+
+  <h4 style="margin-top:22px">What team and bulk lots look like on eBay right now</h4>
+  <div class="tablewrap">
+    <table>
+      <thead><tr><th>Format</th><th>Real examples seen</th><th>Notes</th></tr></thead>
+      <tbody>
+        <tr><td class="k">Small team player lots</td><td>"Phillies 6 Card Player Lot", "Carolina Panthers 6 Card Player Lot" etc., all starting at $0.99 auction<sup><a href="#s36">36</a></sup></td><td>A low-start auction for every team: one listing per franchise means 30+ listings per sport from one sort.</td></tr>
+        <tr><td class="k">Player rookie lots</td><td>12-card Najee Harris rookie lot at $8; 3-card Drew Brees lot at $3<sup><a href="#s37">37</a></sup></td><td>Fixed-price lots built around one name. Works for players with active PC collectors.</td></tr>
+        <tr><td class="k">Themed lots</td><td>"11 Card MLB Parallel Lot", "51 Card Baseball Rookie Lot", "21 Card 1992 Pinnacle Team 2000 Lot", all at $0.99 starts<sup><a href="#s38">38</a></sup></td><td>Lots grouped by card type or insert set rather than team.</td></tr>
+        <tr><td class="k">Large team lots</td><td>"1000+ Baseball Card Team Lots" with stars, RCs and numbered cards for every MLB team, $27.99 each<sup><a href="#s39">39</a></sup></td><td>High-volume dealer product: 30 teams × repeatable SKU.</td></tr>
+        <tr><td class="k">Flat-rate bulk boxes</td><td>"LARGE Flat Rate Sports Card Bulk Box 5000+" at $49.99<sup><a href="#s40">40</a></sup></td><td>About a penny a card. Pure clearance.</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="callout read">
+    <b>How bulk is priced.</b> One reseller guide estimates that mostly-base commons go in lots of 50 to 100 for $5 to $15 total, or get used as filler alongside a better single.<sup><a href="#s41">41</a></sup> On the buy side, a forum veteran doubts any bulk buyer will pay more than about 25% of sale value, since they're buying to flip.<sup><a href="#s42">42</a></sup> And for true junk-era cards, one guide warns you may get a fraction of a penny per card.<sup><a href="#s43">43</a></sup>
+  </div>
+
+  <h3>Where they sell, and the results they report</h3>
+  <div class="tablewrap">
+    <table>
+      <thead><tr><th>Channel</th><th>Fees</th><th>Best for</th><th>What sellers report</th></tr></thead>
+      <tbody>
+        <tr>
+          <td class="k">eBay</td>
+          <td class="num">13.25% FVF (to $7,500) + per-order fee<sup><a href="#s24">24</a></sup></td>
+          <td>Hits, graded cards, anything $20+, and lots</td>
+          <td>Still the liquidity pool. One veteran seller argues active buyer count matters far more than fees for speed and price.<sup><a href="#s44">44</a></sup> Collectors there are more sophisticated than in early eBay days and usually search for specific cards, so mixed commons boxes no longer sell well.<sup><a href="#s45">45</a></sup></td>
+        </tr>
+        <tr>
+          <td class="k">Sportlots</td>
+          <td class="num">No listing fee; monthly % falls from 75% (under $5 sales) to 50% ($5–25) down to 15% ($1,500+)<sup><a href="#s46">46</a></sup></td>
+          <td>Base cards, commons, cheap inserts</td>
+          <td>Sellers load whole sets with a default price and adjust only the stars. Buyers combine orders in a "box" to save shipping.<sup><a href="#s26">26</a></sup> Fees look brutal at low volume, which some would-be sellers note,<sup><a href="#s47">47</a></sup> but it's built around commitment and volume. A $1.50 buyer fee now applies to orders under $5.<sup><a href="#s48">48</a></sup> WaxPackHero, a podcaster and seller, uses it to move much of his base and insert inventory.<sup><a href="#s49">49</a></sup></td>
+        </tr>
+        <tr>
+          <td class="k">COMC</td>
+          <td class="num">Per-card processing fee (reported around $0.50–$0.65), ~5% sale fee, fee to cash out<sup><a href="#s50">50</a></sup></td>
+          <td>Low-to-mid singles you don't want to list yourself</td>
+          <td>Hands-off consignment: they photograph, list, store and ship. One long-time user calls it by far the best option for thousands of low-end inserts and SPs.<sup><a href="#s51">51</a></sup> Another reviewer warns not to send very low-value cards because the per-card fee eats them.<sup><a href="#s52">52</a></sup> Expect to undercut heavily where a card has many listings.<sup><a href="#s53">53</a></sup></td>
+        </tr>
+        <tr>
+          <td class="k">Whatnot (live)</td>
+          <td class="num">~8% commission + payment processing<sup><a href="#s54">54</a></sup></td>
+          <td>Fast clearance, hype cards, sealed product, breaks</td>
+          <td>A YouTuber who moved singles from eBay says he sells at about 80% of comps and still profits on speed and volume.<sup><a href="#s55">55</a></sup> Requires being live on camera; not for passive sellers.<sup><a href="#s56">56</a></sup> Whatnot says sellers who stream 3–4 times a week average more than $13,000 in monthly sales.<sup><a href="#s54">54</a></sup></td>
+        </tr>
+        <tr>
+          <td class="k">Reddit</td>
+          <td class="num">No platform fee; PayPal G&amp;S ~3%<sup><a href="#s57">57</a></sup></td>
+          <td>Mid-value singles to enthusiasts</td>
+          <td>Main communities are r/sportscards (around 118k members), r/baseballcards and r/footballcards, plus small buy/sell subs.<sup><a href="#s58">58</a></sup> Guides list scam risk and flaky buyers as the downsides.<sup><a href="#s59">59</a></sup> Experiences are mixed: some report solid deals via PayPal G&amp;S, others gave up after repeated flops. Collectors also bag up spare $1–$5 cards into team packs and give them to kids at games.<sup><a href="#s60">60</a></sup></td>
+        </tr>
+        <tr>
+          <td class="k">Facebook groups</td>
+          <td class="num">No platform fee; ~3% G&amp;S</td>
+          <td>Low-mid singles to PC and team collectors</td>
+          <td>A popular way to dodge eBay's fees,<sup><a href="#s61">61</a></sup> but with high scam risk, time-wasting inquiries and no seller protection.<sup><a href="#s62">62</a></sup></td>
+        </tr>
+        <tr>
+          <td class="k">Card shops &amp; shows</td>
+          <td class="num">No fee; you take a discount</td>
+          <td>Fast cash, big lots</td>
+          <td>Shops generally pay 60–70% of value in cash, 70–80% in trade credit.<sup><a href="#s63">63</a></sup> Dealers at the National often pay 50–60%; trade nights can get 80–90%.<sup><a href="#s18">18</a></sup><sup><a href="#s64">64</a></sup> Setting up with a nickel box of base cards can surprise you.<sup><a href="#s30">30</a></sup></td>
+        </tr>
+        <tr>
+          <td class="k">Mercari</td>
+          <td class="num">~10% seller fee</td>
+          <td>Casual sales</td>
+          <td>One forum member found too many limitations and roughly 11% total fees.<sup><a href="#s65">65</a></sup></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ================= PART 2b: eBay ================= -->
+<section class="part" id="ebay">
+  <div class="eyebrow">Part 02b</div>
+  <h2>How sellers set up eBay stores to maximize sales</h2>
+  <p class="lede read">The playbook that comes up again and again from high-volume card sellers and eBay itself. The common thread is volume: one Georgia dealer with more than 600,000 items listed says eBay gives back whatever you put into it.<sup><a href="#s66">66</a></sup></p>
+
+  <ol class="checklist">
+    <li data-n="01"><b>Get a store subscription once volume justifies it.</b> Basic or Premium stores give more free listings, lower selling fees and sales data.<sup><a href="#s67">67</a></sup> Promotions tools (sale events, order discounts, coupons, offers to buyers) are only free for store subscribers.<sup><a href="#s68">68</a></sup></li>
+    <li data-n="02"><b>Write titles for search, not for style.</b> Use all 80 characters in a fixed order: year, brand, player, card number, parallel or insert, grade.<sup><a href="#s69">69</a></sup> Add the team name, because team collectors search that way.<sup><a href="#s19">19</a></sup> Put the card in the correct category, since buyers browse one or two categories and mis-categorized cards sell below market.<sup><a href="#s19">19</a></sup></li>
+    <li data-n="03"><b>Fill in item specifics</b> (team, graded or not, grader) so cards appear in filtered searches.<sup><a href="#s70">70</a></sup></li>
+    <li data-n="04"><b>Use variation listings for cheap singles.</b> One listing can hold up to 250 cards in a dropdown, and the photo switches as buyers pick a card.<sup><a href="#s29">29</a></sup> eBay community mentors say "you pick" listings must use the official variation format to stay within the rules.<sup><a href="#s71">71</a></sup> Set builders search for exactly these listings.</li>
+    <li data-n="05"><b>Ship cheap cards in eBay Standard Envelope.</b> $0.69 / $0.97 / $1.25 for 1–3 oz, max 15 raw cards and no more than 2 toploaders per envelope.<sup><a href="#s25">25</a></sup> Covered for single cards up to $20 and combined orders up to $50.<sup><a href="#s72">72</a></sup></li>
+    <li data-n="06"><b>Keep shipping low, because it drives conversion.</b> eBay's top wrestling card seller says that when he cut shipping to the cost of a stamp and envelope, sales jumped 8× the next day.<sup><a href="#s73">73</a></sup></li>
+    <li data-n="07"><b>Price from sold comps.</b> Search eBay sold listings, not active ones.<sup><a href="#s74">74</a></sup> One seller's rule is Buy It Now at 85–90% of the recent comp average.<sup><a href="#s69">69</a></sup> Many simply start $0.99 auctions to guarantee movement.<sup><a href="#s75">75</a></sup></li>
+    <li data-n="08"><b>Encourage multi-card orders.</b> Volume pricing, order-size discounts and shipping discounts above a threshold all reward buyers who add more cards.<sup><a href="#s76">76</a></sup> Sports cards are a natural multi-buy category.<sup><a href="#s77">77</a></sup></li>
+    <li data-n="09"><b>Convert watchers.</b> Turn on Best Offer, and use "offer to watchers" on fixed-price listings. You can only send one offer per watcher.<sup><a href="#s78">78</a></sup> Run markdown sale events on store categories to clear stale stock.<sup><a href="#s79">79</a></sup></li>
+    <li data-n="10"><b>Use Promoted Listings selectively.</b> Standard promotion only charges when a promoted listing sells; a common suggestion is an ad rate around 5–8%.<sup><a href="#s80">80</a></sup> On $1 cards that rate comes straight out of a thin margin, so most sellers reserve it for higher-priced items.</li>
+    <li data-n="11"><b>Photograph well and describe honestly.</b> Shoot the card outside the toploader to avoid glare, and show front, back and the cert label on slabs.<sup><a href="#s81">81</a></sup> Don't overstate condition.<sup><a href="#s19">19</a></sup></li>
+    <li data-n="12"><b>Protect your account metrics.</b> Ship within one business day.<sup><a href="#s28">28</a></sup> Keep feedback high, because a strong rating is what tells buyers you're a professional store.<sup><a href="#s82">82</a></sup> Use a system to track inventory once volume grows: row boxes plus a spreadsheet at minimum.<sup><a href="#s67">67</a></sup></li>
+  </ol>
+  <p class="note read">Avoid lotting valuable cards: most buyers want one or two specific cards and won't pay much extra for the rest of a lot.<sup><a href="#s19">19</a></sup></p>
+</section>
+
+<!-- ================= PART 3 ================= -->
+<section class="part" id="profit">
+  <div class="eyebrow">Part 03</div>
+  <h2>People in it to make money</h2>
+  <p class="lede read">Investors approach the hobby with cold numbers rather than fandom: player performance, scarcity and price trends.<sup><a href="#s83">83</a></sup> The working methods fall into eight groups. Almost all of them make their money at the buy, not the sale.</p>
+
+  <div class="grid g2">
+    <div class="card">
+      <span class="tag good">Core skill</span>
+      <h4>1 · Flipping (buy under comps)</h4>
+      <p>The quickest way to profit: buy low, sell higher.<sup><a href="#s84">84</a></sup> Where flippers find underpriced cards:</p>
+      <p>• Checking CollX regularly for big names and sleeper sets, and sorting COMC by "recently added" to catch deals first.<sup><a href="#s85">85</a></sup><br>• Misspelled eBay listings ("Rembanyma" for Wembanyama) and moving cards from a small audience to a bigger one.<sup><a href="#s86">86</a></sup><br>• Whatnot auctions that end below eBay prices, especially off-peak.<sup><a href="#s87">87</a></sup><br>• Estate and garage sales, where sellers don't know values.<sup><a href="#s88">88</a></sup></p>
+      <p class="why">Half the battle is finding the card; the other half is knowing the price you must buy at to profit.<sup><a href="#s89">89</a></sup></p>
+    </div>
+    <div class="card">
+      <span class="tag good">Most reliable</span>
+      <h4>2 · Dealer / show vendor</h4>
+      <p>Set up a table, sell inventory, and buy from walk-ups. One of the best buying chances at a show is when customers come to your table to sell.<sup><a href="#s90">90</a></sup> Dealers typically pay 50–70% of comps, which is where the margin comes from.<sup><a href="#s18">18</a></sup><sup><a href="#s63">63</a></sup> Collections bought in bulk have to be evaluated card by card.<sup><a href="#s91">91</a></sup></p>
+      <p class="why">The margin is thin, and dealers carry real risk: unsold inventory ties up money that could cover payroll or restocking.<sup><a href="#s92">92</a></sup></p>
+    </div>
+    <div class="card">
+      <span class="tag warn">Skill + capital</span>
+      <h4>3 · Grading arbitrage</h4>
+      <p>Buy raw cards cheaply, submit the best, sell the slabs. The spread between raw and PSA 10 is the whole profit.</p>
+      <p>Rules of thumb from grading guides: skip cards under about $40–50 raw, look for a PSA 10 value at least 4× raw,<sup><a href="#s93">93</a></sup> and buy raw at no more than 30–50% of PSA 10 value.<sup><a href="#s94">94</a></sup> A PSA 9 often only breaks even or loses; one PSA 8 can wipe out a PSA 10's profit.<sup><a href="#s95">95</a></sup></p>
+      <p class="why">Fees have risen sharply. Third-party guides quote PSA tiers from roughly $28 to $80 per card in 2025–26, so check current pricing before modeling.<sup><a href="#s96">96</a></sup></p>
+    </div>
+    <div class="card">
+      <span class="tag warn">Baseball-specific</span>
+      <h4>4 · Prospecting</h4>
+      <p>Buy 1st Bowman cards (ideally Chrome autos) of prospects, and sell into the hype around their MLB call-up. Base 1st Bowman Chromes of most prospects start around $1–$10 at release.<sup><a href="#s97">97</a></sup> Sports Card Investor found that anyone who bought Elly De La Cruz's Sapphire 1st PSA 10 before his call-up and sold during call-up week made money.<sup><a href="#s98">98</a></sup></p>
+      <p class="why">Guides advise buying during cold streaks or the off-season rather than after a hot week,<sup><a href="#s99">99</a></sup> and staying narrow instead of spraying money across many names.<sup><a href="#s98">98</a></sup></p>
+    </div>
+    <div class="card">
+      <span class="tag info">Timing</span>
+      <h4>5 · Seasonality</h4>
+      <p>Baseball prices tend to peak during the season (March to October) and dip in the off-season, so winter is buying season.<sup><a href="#s100">100</a></sup> Football product tends to peak in weeks 1–3 of the NFL season.<sup><a href="#s22">22</a></sup> Holding until a player is in the spotlight (playoffs, milestones) can raise the sale price.<sup><a href="#s101">101</a></sup></p>
+    </div>
+    <div class="card">
+      <span class="tag bad">Legal risk</span>
+      <h4>6 · Breaking</h4>
+      <p>Open sealed boxes live and sell "spots" (teams, players, random draws) on Whatnot, Fanatics Live, eBay Live, YouTube, TikTok.<sup><a href="#s102">102</a></sup> The breaker's profit is spot revenue minus product, fees and shipping. Valuable pulls belong to buyers.<sup><a href="#s54">54</a></sup></p>
+      <p class="why">In March 2026 a law firm filed arbitration claims arguing randomized breaks and repacks on Whatnot are illegal gambling under California law.<sup><a href="#s103">103</a></sup> If upheld, platforms may have to restructure breaks.<sup><a href="#s104">104</a></sup></p>
+    </div>
+    <div class="card">
+      <span class="tag info">Grind</span>
+      <h4>7 · High-volume store / bulk processor</h4>
+      <p>Buy collections and bulk, sort, and push everything through eBay, COMC and Sportlots. WaxPackHero describes using Sportlots for base and inserts and flipping on COMC when its lowest prices sit below eBay's going rate.<sup><a href="#s105">105</a></sup> The 600,000-listing Georgia dealer is the extreme version.<sup><a href="#s66">66</a></sup></p>
+      <p class="why">Biggest leak: leaving raw cards unsorted and unlisted for months while players lose relevance.<sup><a href="#s106">106</a></sup></p>
+    </div>
+    <div class="card">
+      <span class="tag bad">Mostly dead</span>
+      <h4>8 · Sealed retail flipping</h4>
+      <p>Buying retail boxes at store price to resell sealed. CardLines found recent releases far from profitable: a basketball Mosaic retail box was going for about $45 on the secondary market, which priced out flipping.<sup><a href="#s107">107</a></sup></p>
+    </div>
+  </div>
+
+  <h3>Profit models side by side</h3>
+  <div class="tablewrap">
+    <table>
+      <thead><tr><th>Model</th><th>Where the margin comes from</th><th>Capital needed</th><th>Time cost</th><th>Main risk</th></tr></thead>
+      <tbody>
+        <tr><td class="k">Flipping</td><td>Buying below comps; moving cards to a bigger audience</td><td>Low–medium</td><td>Constant searching</td><td>Market moves before you sell</td></tr>
+        <tr><td class="k">Show dealer</td><td>Buying at 50–70% of comps, selling near comps</td><td>Medium–high (inventory + tables)</td><td>Weekends, travel</td><td>Dead inventory, thin margins</td></tr>
+        <tr><td class="k">Grading arbitrage</td><td>Raw-to-gem spread</td><td>Medium (cards + fees locked for months)</td><td>Inspection, submission waits</td><td>Card grades 9 or lower</td></tr>
+        <tr><td class="k">Prospecting</td><td>Price lifecycle around call-ups</td><td>Low–medium</td><td>Research</td><td>Prospect busts</td></tr>
+        <tr><td class="k">Breaking</td><td>Spot sales above box cost</td><td>High (cases)</td><td>Streaming many hours a week</td><td>Unsold spots; legal changes</td></tr>
+        <tr><td class="k">Volume store</td><td>Many small margins, cheap acquisition</td><td>Medium</td><td>Very high (sorting, listing, shipping)</td><td>Labor eats margin on cheap cards</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="read">Even the people selling courses on this say it isn't easy: successful flipping takes market knowledge, discipline, and some luck, and the market can swing quickly.<sup><a href="#s101">101</a></sup> One flipping newsletter is explicit that its author's past wins don't mean readers will repeat them.<sup><a href="#s108">108</a></sup></p>
+</section>
+
+<!-- ================= PART 4 ================= -->
+<section class="part" id="friction">
+  <div class="eyebrow">Part 04</div>
+  <h2>Recurring pain points</h2>
+  <p class="lede read">Across all three groups, the same frictions came up repeatedly in the research. These are where sellers say they lose the most time or money.</p>
+  <div class="grid g3">
+    <div class="card"><h4>Listing labor</h4><p>Photographing, identifying and titling each card. eBay's high-volume sellers describe it as an hours-per-week job, and the scan-to-list feature in eBay's app exists because of it.<sup><a href="#s109">109</a></sup></p></div>
+    <div class="card"><h4>Pricing &amp; comps</h4><p>Sold comps vary widely for the same card (one example ranged from $0.99 to $72), so a "fair price" is a judgment call.<sup><a href="#s110">110</a></sup></p></div>
+    <div class="card"><h4>Fees on cheap cards</h4><p>Fixed per-order fees and postage swamp $1–$2 sales, pushing sellers toward lots and niche platforms.<sup><a href="#s32">32</a></sup></p></div>
+    <div class="card"><h4>Unsellable bulk</h4><p>Commons have almost no market; the realistic options are lots at a fraction of value, giveaways, or donation.<sup><a href="#s31">31</a></sup></p></div>
+    <div class="card"><h4>Inventory tracking</h4><p>Knowing what you have across boxes, platforms and grading submissions. Guides point to spreadsheets as the default.<sup><a href="#s67">67</a></sup></p></div>
+    <div class="card"><h4>Trust off eBay</h4><p>Reddit, Facebook and Instagram save fees but bring scams and no seller protection; eBay's authenticity program is why some sellers stay.<sup><a href="#s111">111</a></sup></p></div>
+  </div>
+</section>
+
+<!-- ================= SOURCES ================= -->
+<section class="part sources" id="sources">
+  <div class="eyebrow">References</div>
+  <h2>Sources</h2>
+  <p class="note read">Reddit itself could not be fetched directly during research. Reddit perspectives come from archived thread snapshots, mirrors, community stats and articles that quote Reddit users. Fee figures were current on the cited pages as of November 2026; platforms change them often.</p>
+  <ol>
+    <li id="s1"><a href="https://www.cgccards.com/news/article/12430/hobbyist-investor-strategies-1/">CGC Cards — Strategies for Hobbyists and Investors, Part 1</a></li>
+    <li id="s2"><a href="https://thecardshopfinder.com/guides/sports-cards/build-player-collection/">Card Shop Finder — How to Build a Player Collection</a></li>
+    <li id="s3"><a href="https://thecardshopfinder.com/guides/sports-cards/">Card Shop Finder — Sports Cards Guide</a></li>
+    <li id="s4"><a href="https://otia.com/news/player-pc-or-full-set-a-practical-football-card-collector-s-guide-to-choosing-the-right-path">OTIA — Player PC or Full Set? (football)</a></li>
+    <li id="s5"><a href="https://www.si.com/collectibles/inside-the-hobby/how-do-you-organize-your-card-collection">SI Collectibles — How do you organize your card collection?</a></li>
+    <li id="s6"><a href="https://ripped.topps.com/uk/what-type-of-collector-am-i-topps-collecting">Topps Ripped — What type of collector am I?</a></li>
+    <li id="s7"><a href="https://ripped.topps.com/bowman-baseball-prospecting-tips-expert-collector-eric-mandelkern/">Topps Ripped — Prospecting with Bowman</a></li>
+    <li id="s8"><a href="https://ripped.topps.com/2025-bowman-draft-baseball-prospecting-primer">Topps Ripped — Bowman Draft Prospecting Primer</a></li>
+    <li id="s9"><a href="https://powerssportsmemorabilia.com/blogs/news/case-hits-in-sports-cards-a-beginner-s-guide-to-kaboom-downtown-and-the-hobby-s-biggest-chases">Powers Sports Memorabilia — Case Hits Guide</a></li>
+    <li id="s10"><a href="https://allvintagecards.com/boom-or-bust-the-pros-cons-of-investing-in-baseball-prospect-cards/">All Vintage Cards — Pros &amp; Cons of Prospect Cards</a></li>
+    <li id="s11"><a href="https://www.sothebys.com/en/articles/super-bowl-liv-philadelphia-eagles-jalen-hurts-vs-kansas-city-chiefs-patrick-mahomes-trading-cards">Sotheby's — Hurts vs. Mahomes card market</a></li>
+    <li id="s12"><a href="https://frontofficesports.com/the-tiny-jersey-patch-at-the-center-of-the-mlb-rookie-card-hunt/">Front Office Sports — The Tiny Jersey Patch (RDPA)</a></li>
+    <li id="s13"><a href="https://cronkitenews.azpbs.org/2026/04/01/josh-rosen-kaboom-sale-trading-card/">Cronkite News — Kaboom card sale</a></li>
+    <li id="s14"><a href="https://www.tradingcardsmarketplace.com/blogs/trading-cards-marketplace-blog/football-jersey-cards">Trading Cards Marketplace — Football Jersey Cards</a></li>
+    <li id="s15"><a href="https://collectibles.com/blog/how-to-selling-sports-cards-for-top-dollar">Collectibles.com — Selling Sports Cards for Top Dollar</a></li>
+    <li id="s16"><a href="https://sportscollectorsdigest.com/young-qbs-headline-football-card-market-as-collectors-go-prospecting-for-gold">Sports Collectors Digest — Young QBs headline football card market</a></li>
+    <li id="s17"><a href="https://frontofficesports.com/young-collectors-are-on-a-high-stakes-chase-for-ultra-rare-trading-cards/">Front Office Sports — Young Collectors' High-Stakes Chase</a></li>
+    <li id="s18"><a href="https://allvintagecards.com/ultimate-guide-to-attending-the-national-sports-card-convention/">All Vintage Cards — Guide to the National</a></li>
+    <li id="s19"><a href="https://www.sportscollectorsdaily.com/selling-sports-cards-on-ebay-for-cash/">Sports Collectors Daily — Selling Sports Cards on eBay</a></li>
+    <li id="s20"><a href="https://thebenchtrading.com/goto/post?id=3951329">The Bench — Nice things about Sportlots</a></li>
+    <li id="s21"><a href="https://forums.collectors.com/discussion/comment/11305921">Collectors Universe forum — Is ripping wax a money loser?</a></li>
+    <li id="s22"><a href="https://forums.collectors.com/discussion/comment/11306114">Collectors Universe forum — ripping profitability replies</a></li>
+    <li id="s23"><a href="https://www.si.com/collectibles/what-are-the-odds-a-collector-s-guide-to-ripping-packs">SI Collectibles — A Collector's Guide to Ripping Packs</a></li>
+    <li id="s24"><a href="https://www.ebay.com/sellercenter/resources/seller-updates/2025-january/final-value-fee">eBay — Final value fee changes</a></li>
+    <li id="s25"><a href="https://www.ebay.com/help/shipping-items/selling/setting-shipping-options/ebay-standard-envelope?id=5308">eBay Help — eBay standard envelope</a></li>
+    <li id="s26"><a href="https://www.sportlots.com/guide/guidehelp/sstores.htm">Sportlots — Stores guide</a></li>
+    <li id="s27"><a href="https://www.sportscollectorsdaily.com/creative-ways-to-sell-modern-era-cards-2/">Sports Collectors Daily — Creative Ways to Sell Modern Cards</a></li>
+    <li id="s28"><a href="https://www.cardpulse.club/blog/sell-sports-cards-on-ebay">CardPulse — How to sell sports cards on eBay</a></li>
+    <li id="s29"><a href="https://waxpackhero.com/blog/simple-guide-to-creating-an-ebay-variation-listing">WaxPackHero — eBay Variation Listing guide</a></li>
+    <li id="s30"><a href="https://www.freedomcardboard.com/forum/threads/best-way-to-sell-base-cards-have-another-question.43332/">Freedom Cardboard forum — Best way to sell base cards</a></li>
+    <li id="s31"><a href="https://www.cardboardconnection.com/what-to-do-with-sports-card-commons">Cardboard Connection — What to do with commons</a></li>
+    <li id="s32"><a href="https://cardcodex.com/blog/where-to-sell-pokemon-cards/">CardCodex — Where to sell cards (fee analysis)</a></li>
+    <li id="s33"><a href="https://www.sportscollectorsdaily.com/the-real-cost-of-selling-on-ebay/">Sports Collectors Daily — The Real Cost of Selling on eBay</a></li>
+    <li id="s34"><a href="https://community.ebay.com/t5/user/viewprofilepage/user-id/31855864">eBay Community — selling unwanted base cards</a></li>
+    <li id="s35"><a href="https://www.sportscollectorsdaily.com/ramblings-bulk-selling-follow-up/">Sports Collectors Daily — Bulk Selling Follow-Up</a></li>
+    <li id="s36"><a href="https://www.ebay.com/usr/deeze11">eBay seller deeze11 — team player lots</a></li>
+    <li id="s37"><a href="https://www.ebay.com/str/jeffscardshack">eBay store jeffscardshack</a></li>
+    <li id="s38"><a href="https://www.ebay.com/str/resalerac/Men/_i.html">eBay store resalerac</a></li>
+    <li id="s39"><a href="https://ebay.com/itm/205384386735">eBay listing — 1000+ baseball card team lots</a></li>
+    <li id="s40"><a href="https://www.ebay.com/usr/beachbreaksandconsignment">eBay seller beachbreaksandconsignment</a></li>
+    <li id="s41"><a href="https://closo.co/blogs/inventory-liquidation/giant-sports-cards">Closo — What lots really pay (2026)</a></li>
+    <li id="s42"><a href="https://www.sportscardforum.com/threads/1958238-How-to-move-bulk-lots-without-losing-too-much">Sports Card Forum — Moving bulk lots</a></li>
+    <li id="s43"><a href="https://waxpackgods.com/how-to-sell-baseball-cards/">Wax Pack Gods — How to sell baseball cards</a></li>
+    <li id="s44"><a href="https://reddit.sentinel-team.org/posts/1rfv5xi/snapshots/2026-02-28T01%3A12%3A55.146938Z">Reddit snapshot — eBay fee discussion</a> (via archive)</li>
+    <li id="s45"><a href="https://www.cardboardconnection.com/what-to-do-with-sports-card-commons?amp=1">Cardboard Connection — commons on eBay</a></li>
+    <li id="s46"><a href="https://www.sportlots.com/help/fees.htm">Sportlots — Fee structure</a></li>
+    <li id="s47"><a href="https://forums.collectors.com/discussion/comment/8588438/">Collectors Universe forum — Sportlots fees</a></li>
+    <li id="s48"><a href="https://sportlots.com/g/ui/sellers_guide_page2.tpl">Sportlots Seller's Guide p.2 (Dec 2025)</a></li>
+    <li id="s49"><a href="https://waxpackhero.com/podcast/sportlots-revisited-waxpackhero-podcast-episode-145">WaxPackHero — Sportlots Revisited</a></li>
+    <li id="s50"><a href="https://www.nifty.ai/post/best-site-to-sell-sports-cards">Nifty — Best site to sell sports cards</a></li>
+    <li id="s51"><a href="https://thebenchtrading.com/goto/post?id=3077182">The Bench — Experience with COMC</a></li>
+    <li id="s52"><a href="https://nz.trustpilot.com/review/comc.com?page=3">Trustpilot — COMC reviews</a></li>
+    <li id="s53"><a href="https://www.hobbyinsider.net/forum/goto/post?id=2628420">Hobby Insider forum — My COMC selling experience</a></li>
+    <li id="s54"><a href="https://www.eneba.com/hub/?p=121313">Eneba Hub — What is Whatnot (fees, breaks)</a></li>
+    <li id="s55"><a href="https://recapio.com/digest/what-i-wish-i-knew-before-selling-sports-card-singles-on-whatnot-by-afford-the-hobby">Afford The Hobby — Selling singles on Whatnot (summary)</a></li>
+    <li id="s56"><a href="https://allvintagecards.com/best-places-sell-sports-cards/">All Vintage Cards — Where to sell sports cards</a></li>
+    <li id="s57"><a href="https://www.cardpulse.club/blog/where-to-sell-sports-trading-cards">CardPulse — Where to sell sports trading cards</a></li>
+    <li id="s58"><a href="https://gummysearch.com/r/BuyNSell_Sports_Cards">GummySearch — r/BuyNSell_Sports_Cards (and r/sportscards stats)</a></li>
+    <li id="s59"><a href="https://atticcapital.com/sell-baseball-cards/">Attic Capital — Selling baseball cards (Reddit section)</a></li>
+    <li id="s60"><a href="https://twt.omada.cafe/r/baseballcards">r/baseballcards (mirror)</a></li>
+    <li id="s61"><a href="https://cardlines.com/sell-low-mid-value-sports-cards">CardLines — How to Sell Low-Mid Value Cards</a></li>
+    <li id="s62"><a href="https://allvintagecards.com/?p=1015636">All Vintage Cards — Facebook selling pros/cons</a></li>
+    <li id="s63"><a href="https://www.si.com/collectibles/why-dealers-rarely-pay-full-price-when-buying-cards">SI Collectibles — Why dealers rarely pay full price</a></li>
+    <li id="s64"><a href="https://sportscollectorsdigest.com/news/trade-nights-card-shows-national-sports-collectors-convention-schedule">Sports Collectors Digest — Trade nights</a></li>
+    <li id="s65"><a href="https://forums.collectors.com/discussion/comment/12694261">Collectors Universe forum — Mercari experience</a></li>
+    <li id="s66"><a href="https://ebayinc.com/stories/news/lifelong-sports-fan-hits-a-home-run-with-sports-card-shop">eBay Inc. — gotbaseballcards seller story</a></li>
+    <li id="s67"><a href="https://www.sportscardinvestor.com/?p=29396">Sports Card Investor — 7 Tips for New eBay Sellers</a></li>
+    <li id="s68"><a href="https://slayva.com/how-to-use-ebay-markdown-manager/">Slayva — eBay promotions &amp; Markdown Manager</a></li>
+    <li id="s69"><a href="https://fusion94.org/2025/07/17/sports-card-ebay-listing-comps-guide">fusion94 — Sports card eBay listing &amp; comps guide</a></li>
+    <li id="s70"><a href="https://www.cardboardconnection.com/sell-sports-cards-ebay-money">Cardboard Connection — Sell Sports Cards on eBay</a></li>
+    <li id="s71"><a href="https://community.ebay.com/forum/ask-a-mentor-57913/topic/selling-individual-cards-of-a-set-with-you-pick-the-card-391716/">eBay Community — "You pick the card" listings</a></li>
+    <li id="s72"><a href="https://pages.ebay.com/trading-cards">eBay — Trading cards seller page</a></li>
+    <li id="s73"><a href="https://www.sportscardinvestor.com/?p=3108">Sports Card Investor — #1 wrestling card seller interview</a></li>
+    <li id="s74"><a href="https://www.zikanalytics.com/blog/how-to-sell-cards-on-ebay/">ZIK Analytics — How to sell cards on eBay</a></li>
+    <li id="s75"><a href="https://www.sportscardinvestor.com/?p=29127">Sports Card Investor — eBay listing tips</a></li>
+    <li id="s76"><a href="https://slayva.com/how-to-use-ebay-markdown-manager/">Slayva — discount types</a></li>
+    <li id="s77"><a href="https://underpricedai.com/blog/dynamic-pricing-promotions-accelerate-ebay-sales-with-smart-discounting">Underpriced AI — Markdown Manager</a></li>
+    <li id="s78"><a href="https://www.godaddy.com/garage/ebay-watchers-into-buyers/">GoDaddy — Turn eBay watchers into buyers</a></li>
+    <li id="s79"><a href="https://pages.ebay.com/businessmarketplace/index.html">eBay — Promotion strategies</a></li>
+    <li id="s80"><a href="https://www.zikanalytics.com/blog/how-to-sell-baseball-cards-on-ebay/">ZIK Analytics — How to sell baseball cards on eBay</a></li>
+    <li id="s81"><a href="https://www.underpriced.app/blog/where-to-sell-sports-cards">Underpriced — Where to sell sports cards fast</a></li>
+    <li id="s82"><a href="https://www.sportscardinvestor.com/?p=29396">Sports Card Investor — feedback &amp; store tips</a></li>
+    <li id="s83"><a href="https://www.cgccards.uk/news/article/12898">CGC Cards — Strategies Part 2</a></li>
+    <li id="s84"><a href="https://collectors-playbook.beehiiv.com/p/5">Collectors Playbook — 3 Ways to Make Money</a></li>
+    <li id="s85"><a href="https://ballcardgenius.substack.com/p/the-flip-files-100-in-profit-and">Ballcard Genius — The Flip Files</a></li>
+    <li id="s86"><a href="https://www.beckett.com/news/buying-and-selling-sports-cards-with-cardboard-profit-author-ryan-sever/">Beckett — Cardboard Profit author Ryan Sever</a></li>
+    <li id="s87"><a href="https://compbuddylive.pages.dev/blog/sports-card-flipping-guide-for-beginners">CompBuddy — Flipping guide for beginners</a></li>
+    <li id="s88"><a href="https://www.cardpulse.club/blog/make-money-trading-sports-cards">CardPulse — Make money trading sports cards</a></li>
+    <li id="s89"><a href="https://ballcardgenius.substack.com/p/how-to-flip-5-or-sometimes-less-cards">Ballcard Genius — Flip $5 cards into $40 profit</a></li>
+    <li id="s90"><a href="https://allvintagecards.com/?p=1019810">All Vintage Cards — Flipping at a local card show</a></li>
+    <li id="s91"><a href="https://allvintagecards.com/flipping-card-shows/">All Vintage Cards — Strategizing buys</a></li>
+    <li id="s92"><a href="https://www.si.com/collectibles/why-dealers-rarely-pay-full-price-when-buying-cards">SI Collectibles — dealer overhead</a></li>
+    <li id="s93"><a href="https://income-stack.pages.dev/card-grading/">Card Grading in 2026 playbook</a></li>
+    <li id="s94"><a href="https://pregradecards.com/blog/card-grading-for-profit-business-guide-2026">PreGrade — Card grading for profit (2026)</a></li>
+    <li id="s95"><a href="https://pregradecards.com/blog/costly-card-grading-mistakes-avoid-2026">PreGrade — Costly grading mistakes (2026)</a></li>
+    <li id="s96"><a href="https://cardgrade.io/blog/psa-grading-price-increase-2025">CardGrade — PSA price increase</a></li>
+    <li id="s97"><a href="https://thecardshopfinder.com/guides/mlb-trading-cards/mlb-prospect-card-investing/">Card Shop Finder — MLB prospect card investing</a></li>
+    <li id="s98"><a href="https://www.sportscardinvestor.com/?p=55694">Sports Card Investor — Prospecting pattern (Chourio)</a></li>
+    <li id="s99"><a href="https://thecardshopfinder.com/blog/bowman-baseball-cards-complete-guide/">Card Shop Finder — Bowman complete guide</a></li>
+    <li id="s100"><a href="https://giantsportscards.com/blogs/blog/flipping-baseball-cards-for-profit-strategies-for-maximizing-roi">Giant Sports Cards — Flipping baseball cards for profit</a></li>
+    <li id="s101"><a href="https://cardreviewclub.com/flipping-sports-cards">Card Review Club — Flipping sports cards</a></li>
+    <li id="s102"><a href="https://www.espn.ph/mlb/story/_/id/49098946/could-box-breaking-considered-gambling-lottery">ESPN — Could box breaking be gambling?</a></li>
+    <li id="s103"><a href="https://www.sportscollectorsdaily.com/whatnot-arbitration-filing-lesko/">Sports Collectors Daily — Whatnot arbitration filing</a></li>
+    <li id="s104"><a href="https://www.sportscollectorsdaily.com/what-happens-if-some-sports-card-breaks-are-ruled-gambling/">Sports Collectors Daily — If breaks are ruled gambling</a></li>
+    <li id="s105"><a href="https://waxpackhero.com/blog/flipping-on-comc">WaxPackHero — Flipping on COMC</a></li>
+    <li id="s106"><a href="https://closo.co/blogs/inventory-liquidation/giant-sports-cards">Closo — margin leaks</a></li>
+    <li id="s107"><a href="https://cardlines.com/flipping-sports-cards-retail-boxes/">CardLines — Flipping retail boxes</a></li>
+    <li id="s108"><a href="https://ballcardgenius.substack.com/about">Ballcard Genius — About</a></li>
+    <li id="s109"><a href="https://www.zikanalytics.com/blog/how-to-sell-baseball-cards-on-ebay/">ZIK Analytics — Scan to List</a></li>
+    <li id="s110"><a href="https://ballcardgeniusbeginner.substack.com/p/how-to-sell-baseball-cards-on-ebay">Ballcard Genius Beginner — How to sell on eBay</a></li>
+    <li id="s111"><a href="https://www.elitefourum.com/t/when-potential-buyers-request-to-go-off-ebay/48249">Elite Fourum — Buyers asking to go off eBay</a></li>
+  </ol>
+</section>
+</main>
+
+<footer class="wrap">Compiled November 2026 from public hobby sources. Prices, fees and platform rules change frequently; verify before acting on any number.</footer>
+
+<script>
+(function(){
+  var $ = function(id){return document.getElementById(id);};
+  var fmt = function(n){ return (n<0?'-$':'$') + Math.abs(n).toFixed(2); };
+  function calc(){
+    var price = parseFloat($('c-price').value)||0;
+    var ship = parseFloat($('c-ship').value)||0;
+    var post = parseFloat($('c-post').value)||0;
+    var sup = parseFloat($('c-sup').value)||0;
+    var tax = (parseFloat($('c-tax').value)||0)/100;
+    var gross = price + ship;
+    var fvf = gross * (1 + tax) * 0.1325;
+    var order = gross > 0 ? 0.30 : 0;
+    var net = gross - fvf - order - post - sup;
+    $('o-gross').textContent = fmt(gross);
+    $('o-fvf').textContent = fmt(-fvf);
+    $('o-order').textContent = fmt(-order);
+    $('o-post').textContent = fmt(-post);
+    $('o-sup').textContent = fmt(-sup);
+    $('o-net').textContent = fmt(net);
+    $('o-netrow').classList.toggle('neg', net < 0);
+  }
+  ['c-price','c-ship','c-post','c-sup','c-tax'].forEach(function(id){
+    $(id).addEventListener('input', calc);
+    $(id).addEventListener('change', calc);
+  });
+  calc();
+})();
+</script>
+</body>
+</html>
