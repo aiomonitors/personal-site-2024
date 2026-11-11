@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Home Bulking Guide for Skinny Builds</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* Plan: a field briefing styled after a graded-slab label and the back of a trading card.
+   Layout: single reading column with wide tables, a sticky part-nav, and "card-back" stat boxes. */
+:root{
+  --paper:#f3f4f0;
+  --panel:#ffffff;
+  --ink:#16202b;
+  --muted:#56616d;
+  --rule:#d4d8d2;
+  --accent:#b8102b;      /* slab-label red */
+  --accent-2:#1d4a73;    /* team navy */
+  --tint:#e8ecef;
+  --good:#1f7a4d; --warn:#a86a00; --bad:#b8102b;
+  --display:"Barlow Condensed","Arial Narrow",Arial,sans-serif;
+  --body:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#0f151c; --panel:#161e27; --ink:#e7eae5; --muted:#9aa5b0; --rule:#2a3542;
+    --accent:#ff5d72; --accent-2:#7fb2e0; --tint:#1c2631;
+    --good:#4cc38a; --warn:#e3a43a; --bad:#ff5d72; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#0f151c; --panel:#161e27; --ink:#e7eae5; --muted:#9aa5b0; --rule:#2a3542;
+  --accent:#ff5d72; --accent-2:#7fb2e0; --tint:#1c2631;
+  --good:#4cc38a; --warn:#e3a43a; --bad:#ff5d72; color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:64px}
+@media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--body);font-size:16.5px;line-height:1.6}
+a{color:var(--accent-2);text-underline-offset:2px}
+a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+h1,h2,h3,h4{font-family:var(--display);line-height:1.1;text-wrap:balance;margin:0;letter-spacing:.01em}
+h2{font-size:clamp(2rem,4.4vw,2.8rem);font-weight:700;text-transform:uppercase}
+h3{font-size:1.55rem;font-weight:600;text-transform:uppercase;margin-top:2.4rem}
+h4{font-size:1.2rem;font-weight:600;text-transform:uppercase;letter-spacing:.03em}
+p{margin:.7rem 0}
+.wrap{max-width:1080px;margin:0 auto;padding:0 20px}
+.read{max-width:68ch}
+.num,.mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
+
+/* Masthead styled like a slab label */
+.mast{border-bottom:1px solid var(--rule);background:var(--panel)}
+.label{display:grid;grid-template-columns:1fr auto;gap:12px 24px;align-items:end;padding:28px 0 22px}
+.label .kicker{font-family:var(--mono);font-size:.78rem;letter-spacing:.12em;text-transform:uppercase;color:var(--accent)}
+.label h1{font-size:clamp(2.6rem,7vw,4.6rem);font-weight:700;text-transform:uppercase;margin-top:6px}
+.label .cert{border:2px solid var(--accent);padding:10px 14px;text-align:right;font-family:var(--mono);font-size:.8rem;line-height:1.5}
+.label .cert b{display:block;font-family:var(--display);font-size:2rem;color:var(--accent);line-height:1}
+.dek{color:var(--muted);max-width:70ch;margin:0 0 22px}
+@media (max-width:560px){.label{grid-template-columns:1fr}.label .cert{text-align:left;justify-self:start}}
+
+nav.parts{position:sticky;top:0;z-index:5;background:var(--panel);border-bottom:1px solid var(--rule)}
+nav.parts ul{list-style:none;margin:0 auto;padding:0 20px;max-width:1080px;display:flex;gap:4px;overflow-x:auto;scrollbar-width:none}
+nav.parts ul::-webkit-scrollbar{display:none}
+nav.parts a{display:block;padding:12px 12px;font-family:var(--display);font-weight:600;font-size:1.05rem;text-transform:uppercase;letter-spacing:.04em;color:var(--ink);text-decoration:none;white-space:nowrap;border-bottom:3px solid transparent}
+nav.parts a:hover{border-bottom-color:var(--accent)}
+nav.parts a span{color:var(--accent);font-family:var(--mono);font-size:.8rem;margin-right:6px}
+
+section.part{padding:56px 0 24px;border-bottom:1px solid var(--rule)}
+.eyebrow{font-family:var(--mono);font-size:.8rem;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin-bottom:8px}
+.lede{font-size:1.12rem;color:var(--ink);max-width:68ch;margin-top:14px}
+
+/* Bottom line box */
+.bluf{background:var(--panel);border:1px solid var(--rule);border-left:6px solid var(--accent);padding:22px 24px;margin:36px 0 8px}
+.bluf ol{margin:10px 0 0;padding-left:1.3rem;display:grid;gap:8px}
+.bluf li::marker{font-family:var(--mono);color:var(--accent)}
+
+/* grids & cards */
+.grid{display:grid;gap:14px;margin-top:18px}
+.g2{grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+.g3{grid-template-columns:repeat(auto-fit,minmax(290px,1fr))}
+.card{background:var(--panel);border:1px solid var(--rule);padding:18px 18px 14px;display:flex;flex-direction:column;gap:6px}
+.card h4{color:var(--accent-2)}
+.card p{margin:.2rem 0;font-size:.96rem}
+.card .why{font-size:.9rem;color:var(--muted);border-top:1px dashed var(--rule);padding-top:8px;margin-top:auto}
+.tag{align-self:flex-start;display:inline-block;font-family:var(--mono);font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;padding:2px 7px;border:1px solid currentColor;border-radius:2px}
+.tag.good{color:var(--good)}.tag.warn{color:var(--warn)}.tag.bad{color:var(--bad)}.tag.info{color:var(--accent-2)}
+
+/* card-back stat box */
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));border:2px solid var(--ink);margin:22px 0;background:var(--panel)}
+.stats div{padding:12px 14px;border-right:1px solid var(--rule);border-bottom:1px solid var(--rule)}
+.stats b{display:block;font-family:var(--mono);font-size:1.45rem;font-weight:500;font-variant-numeric:tabular-nums;color:var(--accent)}
+.stats span{font-size:.86rem;color:var(--muted);line-height:1.35;display:block}
+
+/* tables */
+.tablewrap{overflow-x:auto;margin:18px 0;border:1px solid var(--rule);background:var(--panel)}
+table{border-collapse:collapse;width:100%;min-width:760px;font-size:.92rem}
+th,td{text-align:left;vertical-align:top;padding:10px 12px;border-bottom:1px solid var(--rule)}
+thead th{font-family:var(--display);text-transform:uppercase;letter-spacing:.05em;font-size:1rem;background:var(--tint);color:var(--ink);position:sticky;top:0}
+tbody tr:last-child td{border-bottom:0}
+td.k{font-weight:600;white-space:nowrap}
+
+/* funnel */
+.funnel{display:grid;gap:8px;margin:20px 0}
+.tier{display:grid;grid-template-columns:150px 1fr;gap:16px;background:var(--panel);border:1px solid var(--rule);padding:14px 16px;align-items:start}
+.tier .lvl{font-family:var(--display);text-transform:uppercase;font-weight:700;font-size:1.25rem;line-height:1.05}
+.tier .lvl small{display:block;font-family:var(--mono);font-size:.78rem;font-weight:400;color:var(--muted);text-transform:none;margin-top:4px}
+.tier p{margin:0 0 4px;font-size:.95rem}
+.tier:nth-child(1){border-left:6px solid var(--accent)}
+.tier:nth-child(2){border-left:6px solid var(--warn)}
+.tier:nth-child(3){border-left:6px solid var(--accent-2)}
+.tier:nth-child(4){border-left:6px solid var(--muted)}
+@media (max-width:560px){.tier{grid-template-columns:1fr;gap:6px}}
+
+/* checklist */
+.checklist{list-style:none;padding:0;margin:16px 0;display:grid;gap:10px}
+.checklist li{background:var(--panel);border:1px solid var(--rule);padding:12px 14px 12px 46px;position:relative}
+.checklist li::before{content:attr(data-n);position:absolute;left:12px;top:11px;font-family:var(--mono);font-size:.82rem;color:var(--accent);font-weight:500}
+.checklist b{font-weight:600}
+
+.quote{border-left:3px solid var(--accent-2);padding:4px 0 4px 16px;color:var(--muted);font-style:italic;margin:16px 0}
+.note{font-size:.88rem;color:var(--muted)}
+.callout{background:var(--tint);padding:14px 16px;margin:18px 0;border-radius:2px}
+
+/* calculator */
+.calc{background:var(--panel);border:2px solid var(--ink);padding:18px;margin:22px 0;display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px}
+.calc h4{grid-column:1/-1}
+.field{display:flex;flex-direction:column;gap:4px;margin-bottom:10px}
+.field label{font-size:.85rem;color:var(--muted)}
+.field input,.field select{font:inherit;font-family:var(--mono);padding:7px 9px;border:1px solid var(--rule);background:var(--paper);color:var(--ink);border-radius:2px}
+.out{font-family:var(--mono);font-variant-numeric:tabular-nums;font-size:.92rem}
+.out div{display:flex;justify-content:space-between;gap:10px;padding:5px 0;border-bottom:1px dotted var(--rule)}
+.out .net{font-size:1.25rem;font-weight:500;border-bottom:0;padding-top:10px}
+.out .net span:last-child{color:var(--good)}
+.out .net.neg span:last-child{color:var(--bad)}
+
+.sources ol{columns:2 340px;column-gap:32px;padding-left:1.4rem;font-size:.88rem}
+.sources li{break-inside:avoid;margin-bottom:6px}
+footer{padding:28px 0 60px;color:var(--muted);font-size:.85rem}
+sup a{font-family:var(--mono);font-size:.7rem;text-decoration:none;color:var(--accent)}
+</style>
+
+<style>
+sup.c::before{content:",";font-size:.7rem;color:var(--muted)}
+.ladder td.num{white-space:nowrap}
+.day{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px;margin-top:16px}
+.day .card ol{margin:6px 0 0;padding-left:1.2rem;font-size:.95rem}
+.day .card li{margin-bottom:4px}
+</style>
+</head>
+<body>
+
+<header class="mast">
+  <div class="wrap">
+    <div class="label">
+      <div>
+        <div class="kicker">Research briefing · Training &amp; nutrition</div>
+        <h1>Home Bulking Guide</h1>
+      </div>
+      <div class="cert"><b>3</b>pillars · eat more,<br>train hard at home,<br>track &amp; adjust · Nov 2026</div>
+    </div>
+    <p class="dek">How a naturally skinny person can gain muscle without a gym: how much to eat, how much protein, how to get the calories in when your appetite is small, a bodyweight and minimal-equipment program that actually builds muscle, and how to track progress and adjust.</p>
+  </div>
+</header>
+
+<nav class="parts" aria-label="Sections">
+  <ul>
+    <li><a href="#summary"><span>00</span>Bottom line</a></li>
+    <li><a href="#calories"><span>01</span>Calories</a></li>
+    <li><a href="#protein"><span>02</span>Protein</a></li>
+    <li><a href="#eatmore"><span>03</span>Eating more</a></li>
+    <li><a href="#training"><span>04</span>Training at home</a></li>
+    <li><a href="#program"><span>05</span>The program</a></li>
+    <li><a href="#tracking"><span>06</span>Track &amp; adjust</a></li>
+    <li><a href="#sources"><span>&#8599;</span>Sources</a></li>
+  </ul>
+</nav>
+
+<main class="wrap">
+
+<div class="bluf" id="summary">
+  <div class="eyebrow">Bottom line up front</div>
+  <ol>
+    <li><b>You have to eat more than you burn, consistently.</b> Skinny people usually overestimate how much they eat. Track your food for a few weeks so you know.</li>
+    <li><b>Aim for a modest surplus:</b> roughly 300–500 extra calories a day for a beginner, targeting about 0.25–0.5% of bodyweight gained per week. Very skinny beginners can often go a little faster (around 0.5–1 lb a week).</li>
+    <li><b>Hit about 1.6 g of protein per kg of bodyweight per day</b> (about 0.7 g per lb). Benefits flatten out above that, though some people benefit up to about 2.2 g/kg.</li>
+    <li><b>Nut-free throughout.</b> Food suggestions avoid peanuts and tree nuts. Check labels on powders and packaged foods for cross-contact.</li>
+    <li><b>Drink some of your calories.</b> Shakes, milk and calorie-dense nut-free foods (sunflower seed butter, oats, olive oil) are the standard fix for a small appetite. So are more frequent meals and not overdoing cardio.</li>
+    <li><b>Bodyweight training builds muscle if sets are hard.</b> Taken close to failure, push-ups produced muscle growth comparable to bench press in studies. The key is progressing to harder variations over time. A pull-up bar and a pair of adjustable dumbbells cover the gaps, especially for legs.</li>
+    <li><b>Weigh yourself daily and compare weekly averages.</b> If the average isn't rising, add about 100–150 calories a day and recheck in two weeks.</li>
+  </ol>
+</div>
+
+<!-- ============ 1 ============ -->
+<section class="part" id="calories">
+  <div class="eyebrow">Part 01</div>
+  <h2>How much to eat</h2>
+  <div class="read">
+    <p>The principle is simple: eat more calories than your body burns, consistently, and you'll gain weight, however fast your metabolism feels.<sup><a href="#s1">1</a></sup> The catch is that skinny people tend to overestimate how much they eat, so tracking what you actually eat matters more than going by feel.<sup><a href="#s1">1</a></sup><sup class="c"><a href="#s2">2</a></sup></p>
+    <p>How big a surplus? The evidence points to "modest":</p>
+    <ul>
+      <li>In one study of trained lifters, bigger calorie surpluses mostly added fat rather than extra muscle or strength. The write-up's rule of thumb is that 200–400 extra calories a day is plenty for trained lifters.<sup><a href="#s3">3</a></sup></li>
+      <li>Beginners can use more. One review-based guide suggests 300–500 extra calories a day in your first year of training, dropping to 200–300 for intermediates.<sup><a href="#s4">4</a></sup> A common starting point for skinny "hardgainers" is 300–500 calories above your daily burn.<sup><a href="#s5">5</a></sup></li>
+      <li>On rate of gain, one guide recommends about 0.25–0.5% of bodyweight per week for beginners.<sup><a href="#s6">6</a></sup> MacroFactor's research review found gains up to about 0.5% per week led to large lean-mass increases with little to no fat gain on average.<sup><a href="#s7">7</a></sup></li>
+      <li>Skinny beginners are the exception that can go faster. Bony to Beastly, a coaching site for thin men, says many skinny beginners gain more than a pound a week without visible fat. In a study it cites, 1 lb/week bulkers gained 2.6 lb muscle and 0.7 lb fat over 4 weeks, versus 5.3 lb muscle and 4 lb fat for 2 lb/week bulkers.<sup><a href="#s8">8</a></sup></li>
+    </ul>
+  </div>
+
+  <div class="calc" role="group" aria-labelledby="bk-title">
+    <h4 id="bk-title">Starting targets calculator</h4>
+    <div>
+      <div class="field"><label for="b-wt">Bodyweight (lb)</label><input id="b-wt" type="number" min="60" step="1" value="145"></div>
+      <div class="field"><label for="b-maint">Maintenance calories (what keeps your weight flat)</label><input id="b-maint" type="number" min="1000" step="50" value="2500"></div>
+      <div class="field"><label for="b-rate">Target gain per week (% of bodyweight)</label>
+        <select id="b-rate">
+          <option value="0.25">0.25% (lean, slower)</option>
+          <option value="0.5" selected>0.5% (standard beginner)</option>
+          <option value="0.75">0.75% (very skinny beginner)</option>
+        </select></div>
+      <p class="note">Don't know maintenance? Track a normal week of eating and weigh daily. If the weekly average didn't move, that's roughly your maintenance. A rough starting guess sometimes used for very lean men is about 22 calories per lb of bodyweight.<sup><a href="#s9">9</a></sup></p>
+    </div>
+    <div class="out" aria-live="polite">
+      <div><span>Weekly gain target</span><span id="b-o-wk">–</span></div>
+      <div><span>Monthly gain target</span><span id="b-o-mo">–</span></div>
+      <div><span>Daily surplus (≈3,500 kcal per lb)</span><span id="b-o-sur">–</span></div>
+      <div class="net"><span>Eat this many calories</span><span id="b-o-cal">–</span></div>
+      <div><span>Protein (1.6 g/kg)</span><span id="b-o-p1">–</span></div>
+      <div><span>Protein upper range (2.2 g/kg)</span><span id="b-o-p2">–</span></div>
+      <p class="note" style="font-family:var(--body)">The 3,500-calories-per-pound figure is a rough estimate. Treat this as a starting point and adjust from your actual weekly averages (Part 06).</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 2 ============ -->
+<section class="part" id="protein">
+  <div class="eyebrow">Part 02</div>
+  <h2>Protein</h2>
+  <div class="stats">
+    <div><b>~1.6 g/kg</b><span>Point where extra protein stopped adding muscle in a 49-study meta-analysis<sup><a href="#s10">10</a></sup></span></div>
+    <div><b>up to 2.2 g/kg</b><span>Upper end some people may benefit from<sup><a href="#s11">11</a></sup></span></div>
+    <div><b>20–40 g</b><span>Typical protein per meal, spread across the day<sup><a href="#s12">12</a></sup></span></div>
+  </div>
+  <div class="read">
+    <p>The landmark Morton meta-analysis (49 studies, 1,863 people) found that protein beyond about 1.62 g per kg per day added no further muscle from training.<sup><a href="#s10">10</a></sup> A 2022 meta-analysis of 74 trials found more protein gave small extra gains in lean mass, with the effect showing up in people under 65 who ate 1.6 g/kg or more while training.<sup><a href="#s13">13</a></sup></p>
+    <p>Practical points:</p>
+    <ul>
+      <li>Total daily protein matters more than precise timing, but spreading it across meals helps. One study found evenly distributed protein produced 25% higher muscle protein synthesis over 24 hours than a skewed pattern.<sup><a href="#s14">14</a></sup></li>
+      <li>20–40 g of casein (in milk, cottage cheese or casein powder) before bed stimulates protein synthesis overnight.<sup><a href="#s12">12</a></sup></li>
+      <li>For hardgainers, more protein beyond the target isn't the answer. Protein is filling, so one guide suggests not exceeding about 2.2 g/kg and getting the extra calories from carbs and fats instead.<sup><a href="#s15">15</a></sup></li>
+    </ul>
+    <p class="note">For scale: 140 lb ≈ 102 g protein a day at 1.6 g/kg; 160 lb ≈ 117 g.<sup><a href="#s11">11</a></sup></p>
+  </div>
+</section>
+
+<!-- ============ 3 ============ -->
+<section class="part" id="eatmore">
+  <div class="eyebrow">Part 03</div>
+  <h2>How to actually eat more</h2>
+  <p class="lede read">The hard part for most skinny people isn't knowing the number. It's eating that much without feeling stuffed. These are the tactics hardgainer coaches keep coming back to.</p>
+  <div class="grid g2">
+    <div class="card"><span class="tag good">Biggest lever</span><h4>Drink calories</h4><p>Liquid calories are much less filling than the same calories in solid food,<sup><a href="#s16">16</a></sup> which is why weight gainers come as shakes. A whole apple is far more filling than juice made from the same apple.<sup><a href="#s15">15</a></sup> One coach suggests keeping liquids to about 10–15% of daily intake, favoring milk and juice over soda.<sup><a href="#s17">17</a></sup></p></div>
+    <div class="card"><span class="tag good">Easy win</span><h4>Eat more often</h4><p>Eating 3,000 calories over three sittings is much harder than spreading the same amount over six meals.<sup><a href="#s17">17</a></sup> A self-described hardgainer recommends at least four meals a day, ideally 5–6, and says liquids count as meals.<sup><a href="#s18">18</a></sup></p></div>
+    <div class="card"><h4>Choose dense foods</h4><p>Hardgainer guides usually lean on peanut butter and nuts.<sup><a href="#s19">19</a></sup> Nut-free swaps with similar calorie density: sunflower seed butter, pumpkin and sunflower seeds, avocado. Other easy adds: olive oil on everything, whole milk, oats, rice, cheese and dried fruit.</p></div>
+    <div class="card"><h4>Don't burn it off</h4><p>Hardgainer guides warn against too much cardio<sup><a href="#s16">16</a></sup> and suggest cutting non-lifting calorie burn while bulking.<sup><a href="#s18">18</a></sup> Some skinny people simply move a lot without noticing (fidgeting, pacing, walking everywhere).<sup><a href="#s17">17</a></sup></p></div>
+    <div class="card"><h4>Increase gradually</h4><p>Raise your intake week by week instead of jumping straight to a huge number.<sup><a href="#s18">18</a></sup> Your stomach adapts. Expect to eat more as you get heavier, since a bigger body burns more at rest.<sup><a href="#s1">1</a></sup></p></div>
+    <div class="card"><h4>Measure, don't guess</h4><p>A food scale and a tracking app for the first few weeks show what two tablespoons of seed butter or olive oil actually looks like, and whether you're really eating what you think.<sup><a href="#s2">2</a></sup></p></div>
+  </div>
+
+  <h3>Example home shake</h3>
+  <div class="tablewrap">
+    <table>
+      <thead><tr><th>Ingredient</th><th>Amount</th><th>Approx. calories</th><th>Approx. protein</th></tr></thead>
+      <tbody>
+        <tr><td class="k">Whole milk</td><td>2 cups</td><td class="num">~300</td><td class="num">~16 g</td></tr>
+        <tr><td class="k">Rolled oats (blended)</td><td>½ cup</td><td class="num">~150</td><td class="num">~5 g</td></tr>
+        <tr><td class="k">Sunflower seed butter (nut-free brand)</td><td>2 tbsp</td><td class="num">~200</td><td class="num">~6 g</td></tr>
+        <tr><td class="k">Banana</td><td>1 medium</td><td class="num">~105</td><td class="num">~1 g</td></tr>
+        <tr><td class="k">Whey protein</td><td>1 scoop</td><td class="num">~120</td><td class="num">~24 g</td></tr>
+        <tr><td class="k">Total</td><td></td><td class="num"><b>~875</b></td><td class="num"><b>~52 g</b></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="note read">Values are typical nutrition-label figures and vary by brand; check your labels. One shake like this covers most of a beginner's daily surplus. Swap in Greek yogurt for extra protein, or another banana for more calories.</p>
+  <div class="callout read"><b>Peanut and tree nut allergy note.</b> Everything in this guide is written to be nut-free, but cross-contact is the real risk. Protein powders, mass gainers, granola, protein bars, oats and seed butters are often made on shared equipment with peanuts or tree nuts. Choose products labeled as made in a peanut- and tree-nut-free facility, read every label for "may contain" warnings, and recheck when a brand changes its recipe. Ask your allergist before adding seeds or coconut if you aren't sure they're safe for you.</div>
+</section>
+
+<!-- ============ 4 ============ -->
+<section class="part" id="training">
+  <div class="eyebrow">Part 04</div>
+  <h2>Can you really build muscle at home?</h2>
+  <div class="read">
+    <p>Yes, with two conditions: the sets have to be hard, and the difficulty has to increase over time.</p>
+    <ul>
+      <li>An 8-week study found push-ups at a load similar to 40% of a person's bench-press max, done to failure, were comparably effective for muscle growth and strength as bench press.<sup><a href="#s20">20</a></sup> A 2018 study found progressively harder push-up variations produced strength gains comparable to bench press over 4 weeks.<sup><a href="#s21">21</a></sup></li>
+      <li>Lighter loads build similar muscle to heavy ones when sets are taken close to failure. A Journal of Physiology study found load didn't dictate muscle growth in trained lifters training to failure.<sup><a href="#s22">22</a></sup></li>
+      <li>You don't have to hit absolute failure. A 2022 meta-analysis found training to failure wasn't better than stopping 1–2 reps short.<sup><a href="#s23">23</a></sup> Constant failure adds fatigue that can hurt later workouts.<sup><a href="#s24">24</a></sup></li>
+      <li>The American College of Sports Medicine's 2026 resistance-training guidance supports bodyweight exercise as effective resistance training.<sup><a href="#s24">24</a></sup></li>
+    </ul>
+    <p>The weak spot is legs and pulling muscles. External weight makes small increases easier to measure and is especially useful for leg training and for muscles that are hard to load with bodyweight alone.<sup><a href="#s24">24</a></sup> That's why a minimal home setup is worth it.</p>
+  </div>
+
+  <h3>Minimal equipment, in order of value</h3>
+  <div class="grid g3">
+    <div class="card"><span class="tag good">1st buy</span><h4>Doorway pull-up bar</h4><p>Pulling is the hardest pattern to train without equipment. A bar gives you chin-ups, pull-ups, hanging knee raises and, set low, rows.</p></div>
+    <div class="card"><span class="tag good">2nd buy</span><h4>Adjustable dumbbells</h4><p>Lets legs progress past bodyweight (goblet squats, split squats, Romanian deadlifts), plus rows, presses and curls.</p></div>
+    <div class="card"><span class="tag info">Cheap add</span><h4>Resistance bands / loaded backpack</h4><p>Band training shows results consistent with weights when you keep progressing.<sup><a href="#s23">23</a></sup> A backpack filled with books adds load to push-ups and squats.</p></div>
+  </div>
+
+  <h3>How to keep progressing without heavier weights</h3>
+  <p class="read">Progression can mean more reps and sets, harder leverage, single-limb versions, a bigger range of motion, or slower lowering. One guide suggests a "3-0-2" tempo: 3 seconds down, no pause, 2 seconds up.<sup><a href="#s23">23</a></sup><sup class="c"><a href="#s23">23</a></sup> Going from three sets of 10 push-ups to four sets of 12 over four weeks is progressive overload.<sup><a href="#s23">23</a></sup></p>
+  <div class="tablewrap">
+    <table class="ladder">
+      <thead><tr><th>Pattern</th><th>Easier</th><th>Standard</th><th>Harder</th><th>Hardest</th></tr></thead>
+      <tbody>
+        <tr><td class="k">Push (chest, triceps)</td><td>Incline push-up</td><td>Push-up</td><td>Decline / diamond push-up, backpack push-up</td><td>Archer, one-arm push-up progressions<sup><a href="#s21">21</a></sup></td></tr>
+        <tr><td class="k">Push (shoulders)</td><td>Pike push-up, knees bent</td><td>Pike push-up</td><td>Feet-elevated pike push-up</td><td>Handstand push-up progressions<sup><a href="#s27">25</a></sup></td></tr>
+        <tr><td class="k">Pull (back, biceps)</td><td>Table or low-bar row</td><td>Band-assisted chin-up</td><td>Chin-up / pull-up</td><td>Weighted backpack chin-up, slow negatives</td></tr>
+        <tr><td class="k">Legs (quads)</td><td>Bodyweight squat</td><td>Reverse lunge</td><td>Bulgarian split squat, dumbbell goblet squat</td><td>Pistol squat progressions<sup><a href="#s28">26</a></sup></td></tr>
+        <tr><td class="k">Legs (hips, hamstrings)</td><td>Glute bridge</td><td>Single-leg hip bridge</td><td>Dumbbell Romanian deadlift</td><td>Single-leg RDL with dumbbell</td></tr>
+        <tr><td class="k">Core</td><td>Dead bug</td><td>Hollow-body hold</td><td>Hanging knee raise</td><td>Hanging leg raise</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="note read">Move up a rung when you can do about 3 sets of 15–20 good reps. Lower-load sets in the 20–25 rep range built similar muscle to 8–12 rep sets in research when effort was matched.<sup><a href="#s23">23</a></sup></p>
+</section>
+
+<!-- ============ 5 ============ -->
+<section class="part" id="program">
+  <div class="eyebrow">Part 05</div>
+  <h2>A starter home program</h2>
+  <p class="read">Three or four full-body sessions a week, alternating Day A and Day B (for example Mon A, Wed B, Fri A, then Mon B the next week). Do 3 sets per exercise, each ending about 1–3 reps short of failure, with 1.5–2 minutes rest. The structure follows the push / pull / knee / hip / core split used in a calisthenics hypertrophy plan.<sup><a href="#s24">24</a></sup> Pick the rung of the ladder above that puts you in 8–20 reps.</p>
+  <div class="day">
+    <div class="card">
+      <h4>Day A</h4>
+      <ol>
+        <li>Push-up variation, 3 × 8–20</li>
+        <li>Chin-up or row variation, 3 × 6–15</li>
+        <li>Reverse lunge or split squat, 3 × 10–15 per leg</li>
+        <li>Hip bridge or RDL, 3 × 10–20</li>
+        <li>Dead bug or hollow hold, 3 sets</li>
+      </ol>
+    </div>
+    <div class="card">
+      <h4>Day B</h4>
+      <ol>
+        <li>Pike push-up variation, 3 × 6–15</li>
+        <li>Row variation (bar, table or dumbbell), 3 × 8–15</li>
+        <li>Squat variation (goblet or Bulgarian), 3 × 10–15</li>
+        <li>Single-leg hip bridge, 3 × 10–15 per leg</li>
+        <li>Hanging knee raise, 3 × 8–15</li>
+      </ol>
+    </div>
+    <div class="card">
+      <h4>Every week</h4>
+      <ol>
+        <li>Log reps for every set.</li>
+        <li>Try to beat last week by one rep or one harder variation.</li>
+        <li>Add a 4th set to lagging areas after 4–6 weeks.</li>
+        <li>Keep cardio light: walks, not long runs.</li>
+        <li>Sleep 7–9 hours; growth happens during recovery.</li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 6 ============ -->
+<section class="part" id="tracking">
+  <div class="eyebrow">Part 06</div>
+  <h2>Track and adjust</h2>
+  <div class="read">
+    <p>Daily weight swings with food, water and salt, which confuses people.<sup><a href="#s1">1</a></sup> Weigh every morning under the same conditions and compare weekly averages. Daily weight can swing 1–2 kg, but the weekly average is meaningful.<sup><a href="#s29">27</a></sup></p>
+  </div>
+  <div class="tablewrap">
+    <table>
+      <thead><tr><th>Your weekly average is…</th><th>Do this</th></tr></thead>
+      <tbody>
+        <tr><td class="k">Not moving, or below target</td><td>Add about 100–150 calories a day (an extra glass of milk or a spoonful of sunflower seed butter) and hold for two weeks. Guides suggest increments of 50–150 calories or 2.5–5% of intake.<sup><a href="#s29">27</a></sup><sup class="c"><a href="#s30">28</a></sup></td></tr>
+        <tr><td class="k">On target</td><td>Keep calories the same. Expect to raise them over time as you get heavier.<sup><a href="#s1">1</a></sup></td></tr>
+        <tr><td class="k">Well above target (e.g. 2+ lb/week after the first month)</td><td>Trim about 100–150 calories a day.<sup><a href="#s29">27</a></sup></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="grid g3">
+    <div class="card"><h4>Reps are going up</h4><p>The best sign the weight is muscle. Log every set.</p></div>
+    <div class="card"><h4>Measurements</h4><p>Monthly: waist, chest, upper arm, thigh. A growing arm with a steady waist is a good bulk.</p></div>
+    <div class="card"><h4>Photos</h4><p>Same lighting, same time, every 4 weeks. Changes are slow day to day but clear month to month.</p></div>
+  </div>
+  <div class="callout read"><b>When to talk to a doctor.</b> Very skinny people who have tracked carefully, eaten well above estimated needs for several weeks, and still can't gain should get checked. Thyroid issues, digestive problems and other conditions can affect weight. Also talk to a doctor first if you have a medical condition or take medication that affects appetite or weight.</div>
+</section>
+
+<!-- ============ SOURCES ============ -->
+<section class="part sources" id="sources">
+  <div class="eyebrow">References</div>
+  <h2>Sources</h2>
+  <p class="note read">General education, not medical advice. Calorie and protein numbers are starting points from research averages; individual needs vary.</p>
+  <ol>
+    <li id="s1"><a href="https://stronglifts.com/gain-weight/">StrongLifts — How to gain weight for skinny guys</a></li>
+    <li id="s2"><a href="https://www.bodybuilding.com/fun/5-muscle-building-eating-tips-for-hardgainers.html">Bodybuilding.com — Eating tips for hardgainers</a></li>
+    <li id="s3"><a href="https://menshealth.com.au/?p=61266">Men's Health — High-calorie bulking not necessary</a></li>
+    <li id="s4"><a href="https://docs-nine-silk.vercel.app/blog/caloric-surplus-for-muscle-gain">Caloric surplus for muscle gain (review summary)</a></li>
+    <li id="s5"><a href="https://www.unfinishedman.com/how-to-successfully-gain-weight-for-hardgainers">Unfinished Man — Gaining weight as a hardgainer</a></li>
+    <li id="s6"><a href="https://fitnessvolt.com/weight-gain-bulking-guide/">Fitness Volt — How quickly to gain weight bulking</a></li>
+    <li id="s7"><a href="https://macrofactor.com/bulking-calculator/">MacroFactor — How fast should you gain weight</a></li>
+    <li id="s8"><a href="https://bonytobeastly.com/how-fast-to-gain-weight-bulking/">Bony to Beastly — How fast to gain weight</a></li>
+    <li id="s9"><a href="https://mindpumppodcast.com/?p=42648">Mind Pump — Nutrition advice for skinny guys</a></li>
+    <li id="s10"><a href="https://pubmed.ncbi.nlm.nih.gov/28698222/">Morton et al. 2018 — Protein supplementation meta-analysis (PubMed)</a></li>
+    <li id="s11"><a href="https://foodmedcenter.org/?p=19629">FoodMed Center — Review of protein requirements</a></li>
+    <li id="s12"><a href="https://foodmedcenter.org/the-science-of-protein-and-muscle-growth-what-the-evidence-really-shows/">FoodMed Center — Protein and muscle growth evidence</a></li>
+    <li id="s13"><a href="https://experts.mcmaster.ca/scholarly-works/2169568">Nunes et al. 2022 — Protein intake meta-analysis (McMaster)</a></li>
+    <li id="s14"><a href="https://foodmedcenter.org/zh_cn/?p=19629">FoodMed Center — Protein distribution</a></li>
+    <li id="s15"><a href="https://orange-dinosaur-ksac.squarespace.com/articles/how-to-pack-on-mass-fast-for-skinny-guys-or-hard-gainers">How to pack on mass for skinny guys</a></li>
+    <li id="s16"><a href="https://www.muscleandstrength.com/articles/6-muscle-building-tips-hard-gainers">Muscle &amp; Strength — Tips for hard gainers</a></li>
+    <li id="s17"><a href="https://breakingmuscle.com/simple-ways-for-skinny-guys-to-eat-more/">Breaking Muscle — Simple ways for skinny guys to eat more</a></li>
+    <li id="s18"><a href="https://www.fitbod.me/blog/bulking-with-a-fast-metabolism">Fitbod — Bulking with a fast metabolism</a></li>
+    <li id="s19"><a href="https://learn.athleanx.com/articles/hardgainer-eating-plan-full-day-tips">Athlean-X — Hardgainer eating plan</a></li>
+    <li id="s20"><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC5812864">Kikuchi &amp; Nakazato — Push-up vs bench press hypertrophy (PMC)</a></li>
+    <li id="s21"><a href="https://getfitcraftcom.pages.dev/science/bodyweight-workout-results">FitCraft — Bodyweight training research summary</a></li>
+    <li id="s22"><a href="https://baye.com/low-reps-vs-high-reps/">Baye — High vs low load to failure</a></li>
+    <li id="s23"><a href="https://beta.bodykore.com/blog/build-muscles-without-heavy-weights">BodyKore — Building muscle without heavy weights</a></li>
+    <li id="s24"><a href="https://blog.caliverse.app/build-muscle-with-calisthenics/">Caliverse — Build muscle with calisthenics</a></li>
+    <li id="s27"><a href="https://www.boxrox.com/?p=240549">BOXROX — Calisthenics for the upper body</a></li>
+    <li id="s28"><a href="https://www.boxrox.com/?p=227217">BOXROX — Can you build muscle without weights?</a></li>
+    <li id="s29"><a href="https://glwc-framework.vercel.app/guides/lean-bulk-complete-guide">Lean bulk complete guide (weekly adjustments)</a></li>
+    <li id="s30"><a href="https://www.cliffsnotes.com/study-notes/30879671">Evidence-based lean bulking guide (adjustment rules)</a></li>
+  </ol>
+</section>
+</main>
+
+<footer class="wrap">Compiled November 2026. General education, not medical advice.</footer>
+
+<script>
+(function(){
+  var $=function(id){return document.getElementById(id);};
+  function calc(){
+    var wt=parseFloat($('b-wt').value)||0, m=parseFloat($('b-maint').value)||0, r=parseFloat($('b-rate').value)/100;
+    var wk=wt*r, sur=wk*3500/7, kg=wt/2.2046;
+    $('b-o-wk').textContent=wk.toFixed(2)+' lb';
+    $('b-o-mo').textContent=(wk*4.33).toFixed(1)+' lb';
+    $('b-o-sur').textContent='+'+Math.round(sur)+' kcal';
+    $('b-o-cal').textContent=Math.round((m+sur)/10)*10+' kcal/day';
+    $('b-o-p1').textContent=Math.round(kg*1.6)+' g/day';
+    $('b-o-p2').textContent=Math.round(kg*2.2)+' g/day';
+  }
+  ['b-wt','b-maint','b-rate'].forEach(function(id){$(id).addEventListener('input',calc);$(id).addEventListener('change',calc);});
+  calc();
+})();
+</script>
+</body>
+</html>

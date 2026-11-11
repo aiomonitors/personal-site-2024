@@ -39,6 +39,18 @@ const documents = [
     author: "Luna",
     href: "/value-bin-flipping-report-2026.html",
   },
+  {
+    title: "eBay sell-through playbook",
+    description: "A playbook for improving sports card sales on eBay.",
+    author: "Claude",
+    href: "/ebay-sell-through-playbook.html",
+  },
+  {
+    title: "Home bulking guide for skinny builds",
+    description: "A home workout and nutrition guide for gaining muscle.",
+    author: "Claude",
+    href: "/home-bulking-guide-skinny-builds.html",
+  },
 ];
 
 export default function ResearchPage() {

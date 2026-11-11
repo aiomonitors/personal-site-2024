@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>eBay Sell-Through Playbook</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* Plan: a field briefing styled after a graded-slab label and the back of a trading card.
+   Layout: single reading column with wide tables, a sticky part-nav, and "card-back" stat boxes. */
+:root{
+  --paper:#f3f4f0;
+  --panel:#ffffff;
+  --ink:#16202b;
+  --muted:#56616d;
+  --rule:#d4d8d2;
+  --accent:#b8102b;      /* slab-label red */
+  --accent-2:#1d4a73;    /* team navy */
+  --tint:#e8ecef;
+  --good:#1f7a4d; --warn:#a86a00; --bad:#b8102b;
+  --display:"Barlow Condensed","Arial Narrow",Arial,sans-serif;
+  --body:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#0f151c; --panel:#161e27; --ink:#e7eae5; --muted:#9aa5b0; --rule:#2a3542;
+    --accent:#ff5d72; --accent-2:#7fb2e0; --tint:#1c2631;
+    --good:#4cc38a; --warn:#e3a43a; --bad:#ff5d72; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#0f151c; --panel:#161e27; --ink:#e7eae5; --muted:#9aa5b0; --rule:#2a3542;
+  --accent:#ff5d72; --accent-2:#7fb2e0; --tint:#1c2631;
+  --good:#4cc38a; --warn:#e3a43a; --bad:#ff5d72; color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:64px}
+@media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--body);font-size:16.5px;line-height:1.6}
+a{color:var(--accent-2);text-underline-offset:2px}
+a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+h1,h2,h3,h4{font-family:var(--display);line-height:1.1;text-wrap:balance;margin:0;letter-spacing:.01em}
+h2{font-size:clamp(2rem,4.4vw,2.8rem);font-weight:700;text-transform:uppercase}
+h3{font-size:1.55rem;font-weight:600;text-transform:uppercase;margin-top:2.4rem}
+h4{font-size:1.2rem;font-weight:600;text-transform:uppercase;letter-spacing:.03em}
+p{margin:.7rem 0}
+.wrap{max-width:1080px;margin:0 auto;padding:0 20px}
+.read{max-width:68ch}
+.num,.mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
+
+/* Masthead styled like a slab label */
+.mast{border-bottom:1px solid var(--rule);background:var(--panel)}
+.label{display:grid;grid-template-columns:1fr auto;gap:12px 24px;align-items:end;padding:28px 0 22px}
+.label .kicker{font-family:var(--mono);font-size:.78rem;letter-spacing:.12em;text-transform:uppercase;color:var(--accent)}
+.label h1{font-size:clamp(2.6rem,7vw,4.6rem);font-weight:700;text-transform:uppercase;margin-top:6px}
+.label .cert{border:2px solid var(--accent);padding:10px 14px;text-align:right;font-family:var(--mono);font-size:.8rem;line-height:1.5}
+.label .cert b{display:block;font-family:var(--display);font-size:2rem;color:var(--accent);line-height:1}
+.dek{color:var(--muted);max-width:70ch;margin:0 0 22px}
+@media (max-width:560px){.label{grid-template-columns:1fr}.label .cert{text-align:left;justify-self:start}}
+
+nav.parts{position:sticky;top:0;z-index:5;background:var(--panel);border-bottom:1px solid var(--rule)}
+nav.parts ul{list-style:none;margin:0 auto;padding:0 20px;max-width:1080px;display:flex;gap:4px;overflow-x:auto;scrollbar-width:none}
+nav.parts ul::-webkit-scrollbar{display:none}
+nav.parts a{display:block;padding:12px 12px;font-family:var(--display);font-weight:600;font-size:1.05rem;text-transform:uppercase;letter-spacing:.04em;color:var(--ink);text-decoration:none;white-space:nowrap;border-bottom:3px solid transparent}
+nav.parts a:hover{border-bottom-color:var(--accent)}
+nav.parts a span{color:var(--accent);font-family:var(--mono);font-size:.8rem;margin-right:6px}
+
+section.part{padding:56px 0 24px;border-bottom:1px solid var(--rule)}
+.eyebrow{font-family:var(--mono);font-size:.8rem;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin-bottom:8px}
+.lede{font-size:1.12rem;color:var(--ink);max-width:68ch;margin-top:14px}
+
+/* Bottom line box */
+.bluf{background:var(--panel);border:1px solid var(--rule);border-left:6px solid var(--accent);padding:22px 24px;margin:36px 0 8px}
+.bluf ol{margin:10px 0 0;padding-left:1.3rem;display:grid;gap:8px}
+.bluf li::marker{font-family:var(--mono);color:var(--accent)}
+
+/* grids & cards */
+.grid{display:grid;gap:14px;margin-top:18px}
+.g2{grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+.g3{grid-template-columns:repeat(auto-fit,minmax(290px,1fr))}
+.card{background:var(--panel);border:1px solid var(--rule);padding:18px 18px 14px;display:flex;flex-direction:column;gap:6px}
+.card h4{color:var(--accent-2)}
+.card p{margin:.2rem 0;font-size:.96rem}
+.card .why{font-size:.9rem;color:var(--muted);border-top:1px dashed var(--rule);padding-top:8px;margin-top:auto}
+.tag{align-self:flex-start;display:inline-block;font-family:var(--mono);font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;padding:2px 7px;border:1px solid currentColor;border-radius:2px}
+.tag.good{color:var(--good)}.tag.warn{color:var(--warn)}.tag.bad{color:var(--bad)}.tag.info{color:var(--accent-2)}
+
+/* card-back stat box */
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));border:2px solid var(--ink);margin:22px 0;background:var(--panel)}
+.stats div{padding:12px 14px;border-right:1px solid var(--rule);border-bottom:1px solid var(--rule)}
+.stats b{display:block;font-family:var(--mono);font-size:1.45rem;font-weight:500;font-variant-numeric:tabular-nums;color:var(--accent)}
+.stats span{font-size:.86rem;color:var(--muted);line-height:1.35;display:block}
+
+/* tables */
+.tablewrap{overflow-x:auto;margin:18px 0;border:1px solid var(--rule);background:var(--panel)}
+table{border-collapse:collapse;width:100%;min-width:760px;font-size:.92rem}
+th,td{text-align:left;vertical-align:top;padding:10px 12px;border-bottom:1px solid var(--rule)}
+thead th{font-family:var(--display);text-transform:uppercase;letter-spacing:.05em;font-size:1rem;background:var(--tint);color:var(--ink);position:sticky;top:0}
+tbody tr:last-child td{border-bottom:0}
+td.k{font-weight:600;white-space:nowrap}
+
+/* funnel */
+.funnel{display:grid;gap:8px;margin:20px 0}
+.tier{display:grid;grid-template-columns:150px 1fr;gap:16px;background:var(--panel);border:1px solid var(--rule);padding:14px 16px;align-items:start}
+.tier .lvl{font-family:var(--display);text-transform:uppercase;font-weight:700;font-size:1.25rem;line-height:1.05}
+.tier .lvl small{display:block;font-family:var(--mono);font-size:.78rem;font-weight:400;color:var(--muted);text-transform:none;margin-top:4px}
+.tier p{margin:0 0 4px;font-size:.95rem}
+.tier:nth-child(1){border-left:6px solid var(--accent)}
+.tier:nth-child(2){border-left:6px solid var(--warn)}
+.tier:nth-child(3){border-left:6px solid var(--accent-2)}
+.tier:nth-child(4){border-left:6px solid var(--muted)}
+@media (max-width:560px){.tier{grid-template-columns:1fr;gap:6px}}
+
+/* checklist */
+.checklist{list-style:none;padding:0;margin:16px 0;display:grid;gap:10px}
+.checklist li{background:var(--panel);border:1px solid var(--rule);padding:12px 14px 12px 46px;position:relative}
+.checklist li::before{content:attr(data-n);position:absolute;left:12px;top:11px;font-family:var(--mono);font-size:.82rem;color:var(--accent);font-weight:500}
+.checklist b{font-weight:600}
+
+.quote{border-left:3px solid var(--accent-2);padding:4px 0 4px 16px;color:var(--muted);font-style:italic;margin:16px 0}
+.note{font-size:.88rem;color:var(--muted)}
+.callout{background:var(--tint);padding:14px 16px;margin:18px 0;border-radius:2px}
+
+/* calculator */
+.calc{background:var(--panel);border:2px solid var(--ink);padding:18px;margin:22px 0;display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px}
+.calc h4{grid-column:1/-1}
+.field{display:flex;flex-direction:column;gap:4px;margin-bottom:10px}
+.field label{font-size:.85rem;color:var(--muted)}
+.field input,.field select{font:inherit;font-family:var(--mono);padding:7px 9px;border:1px solid var(--rule);background:var(--paper);color:var(--ink);border-radius:2px}
+.out{font-family:var(--mono);font-variant-numeric:tabular-nums;font-size:.92rem}
+.out div{display:flex;justify-content:space-between;gap:10px;padding:5px 0;border-bottom:1px dotted var(--rule)}
+.out .net{font-size:1.25rem;font-weight:500;border-bottom:0;padding-top:10px}
+.out .net span:last-child{color:var(--good)}
+.out .net.neg span:last-child{color:var(--bad)}
+
+.sources ol{columns:2 340px;column-gap:32px;padding-left:1.4rem;font-size:.88rem}
+.sources li{break-inside:avoid;margin-bottom:6px}
+footer{padding:28px 0 60px;color:var(--muted);font-size:.85rem}
+sup a{font-family:var(--mono);font-size:.7rem;text-decoration:none;color:var(--accent)}
+</style>
+
+<style>
+sup.c::before{content:",";font-size:.7rem;color:var(--muted)}
+.flag{font-family:var(--mono);font-size:.82rem;padding:6px 8px;border-radius:2px;margin-top:8px;background:var(--tint)}
+.flag.warn{color:var(--warn)} .flag.ok{color:var(--good)}
+</style>
+</head>
+<body>
+
+<header class="mast">
+  <div class="wrap">
+    <div class="label">
+      <div>
+        <div class="kicker">Research briefing · Report 4 of the series</div>
+        <h1>eBay Sell-Through Playbook</h1>
+      </div>
+      <div class="cert"><b>6</b>levers · shipping, deals,<br>offers, search,<br>store, hygiene · Nov 2026</div>
+    </div>
+    <p class="dek">How card sellers set up eBay so more of their listings actually sell: shipping settings that batch multiple cards into one envelope, multi-card discounts, offer automation, search ranking, store structure, and how they handle listings that go stale.</p>
+  </div>
+</header>
+
+<nav class="parts" aria-label="Sections">
+  <ul>
+    <li><a href="#summary"><span>00</span>Bottom line</a></li>
+    <li><a href="#str"><span>01</span>Sell-through</a></li>
+    <li><a href="#shipping"><span>02</span>Combined shipping</a></li>
+    <li><a href="#deals"><span>03</span>Multi-card deals</a></li>
+    <li><a href="#offers"><span>04</span>Offers &amp; ads</a></li>
+    <li><a href="#search"><span>05</span>Search ranking</a></li>
+    <li><a href="#store"><span>06</span>Store setup</a></li>
+    <li><a href="#stale"><span>07</span>Stale listings</a></li>
+    <li><a href="#checklist"><span>08</span>Weekly routine</a></li>
+    <li><a href="#sources"><span>&#8599;</span>Sources</a></li>
+  </ul>
+</nav>
+
+<main class="wrap">
+
+<div class="bluf" id="summary">
+  <div class="eyebrow">Bottom line up front</div>
+  <ol>
+    <li><b>Make the second card cheap to add.</b> A combined shipping rule (first card pays shipping, each extra card adds a small amount or nothing) plus eBay Standard Envelope is what lets card sellers batch up to 15 raw cards into one envelope for about a dollar.</li>
+    <li><b>Plan for the 3-ounce wall.</b> eBay Standard Envelope stops at 3 oz, and eBay has no setting that switches a buyer to Ground Advantage automatically. Sellers cap the rule, raise the first-card price, or set price bands (≤$20 ships envelope, over $20 ships Ground Advantage).</li>
+    <li><b>Reward bigger carts.</b> Store subscribers use order-size discounts ("buy 3, save 15%"), volume pricing and free shipping over a spend threshold. eBay suggests setting thresholds just above your average order.</li>
+    <li><b>Automate offers.</b> Set Best Offer auto-accept and auto-decline from your costs, and send offers to watchers automatically.</li>
+    <li><b>Rank in search:</b> complete item specifics, keyword titles, competitive total cost (price plus shipping), free shipping on fixed-price listings, fast handling time, and clean seller metrics. Promoted Listings help, but attribution changes in 2026 made them more expensive.</li>
+    <li><b>Keep inventory fresh.</b> Sellers commonly end and "Sell Similar" listings older than about 90 days or 6 months after rechecking comps, though eBay has cautioned this may hurt more than it helps. List new cards every day or week.</li>
+  </ol>
+</div>
+
+<!-- ============ PART 1 ============ -->
+<section class="part" id="str">
+  <div class="eyebrow">Part 01</div>
+  <h2>What "sell-through" means and how to measure it</h2>
+  <div class="read">
+    <p>Sell-through rate is items sold divided by items listed over a period: 30 sales against 100 active listings in a month is 30%.<sup><a href="#s1">1</a></sup> It's a velocity measure, and velocity multiplies your margin over time.<sup><a href="#s1">1</a></sup></p>
+    <p>eBay's Product Research tool in Seller Hub (formerly Terapeak) is free and calculates a sell-through rate for any search,<sup><a href="#s2">2</a></sup> but only for items sold in the last 90 days or less, and eBay doesn't publish its exact formula.<sup><a href="#s3">3</a></sup> eBay doesn't show a per-listing sell-through rate for your own store, so you build it from Seller Hub reports.<sup><a href="#s4">4</a></sup></p>
+  </div>
+  <div class="stats">
+    <div><b>30–50%</b><span>Healthy 30-day sell-through target cited by one reseller guide<sup><a href="#s5">5</a></sup></span></div>
+    <div><b>&lt;15%</b><span>Same guide: a sign of a systemic pricing, category or listing problem<sup><a href="#s5">5</a></sup></span></div>
+    <div><b>90 days</b><span>Product Research's sell-through window<sup><a href="#s3">3</a></sup></span></div>
+  </div>
+  <p class="note read">There's no official eBay benchmark, so treat these figures as rules of thumb.<sup><a href="#s4">4</a></sup> Low-dollar base cards will naturally run lower than hits, so track sell-through by tier (hits, mid-tier, lots).</p>
+</section>
+
+<!-- ============ PART 2 ============ -->
+<section class="part" id="shipping">
+  <div class="eyebrow">Part 02</div>
+  <h2>Shipping settings that batch multiple cards</h2>
+  <p class="lede read">Combined shipping lets you put several items in one package instead of several, which cuts postage and gives buyers a reason to add more to their cart.<sup><a href="#s6">6</a></sup> Trading cards are one of the categories where it works best, because buyers naturally want several.<sup><a href="#s7">7</a></sup></p>
+
+  <h3>The building blocks</h3>
+  <div class="grid g2">
+    <div class="card">
+      <span class="tag good">Foundation</span>
+      <h4>eBay Standard Envelope (ESE)</h4>
+      <p>Tracked envelope service for raw cards: $0.69 (1 oz), $0.97 (2 oz), $1.25 (3 oz). eBay's help page caps it at 15 raw cards and no more than 2 toploaders per envelope.<sup><a href="#s8">8</a></sup> It includes up to $20 of protection on single-item orders and $50 on combined orders.<sup><a href="#s9">9</a></sup></p>
+      <p class="flag warn">Note: eBay's envelope-kit page says its 3-pocket kit ships "up to 24 cards" with ESE,<sup><a href="#s9">9</a></sup> which conflicts with the 15-card limit on the help page. Follow the help page.</p>
+    </div>
+    <div class="card">
+      <span class="tag good">Foundation</span>
+      <h4>Shipping policies (business policies)</h4>
+      <p>Discount rules attach to shipping policies, so every listing on a given policy gets the same combined-shipping behavior.<sup><a href="#s10">10</a></sup> Card sellers keep separate policies for ESE cards, Ground Advantage cards and lots.</p>
+    </div>
+  </div>
+
+  <h3>The three discount rule types</h3>
+  <div class="tablewrap">
+    <table>
+      <thead><tr><th>Rule</th><th>How it works</th><th>Use it for</th></tr></thead>
+      <tbody>
+        <tr><td class="k">Flat rule</td><td>First item pays full shipping; each additional item adds a fixed amount (for example $1.50), or nothing.<sup><a href="#s11">11</a></sup></td><td>Raw singles of similar weight. The standard card-seller setup.</td></tr>
+        <tr><td class="k">Calculated rule</td><td>eBay combines item weights and prices the real parcel.<sup><a href="#s12">12</a></sup> It only applies to listings with both calculated shipping and combined discounts set.<sup><a href="#s13">13</a></sup></td><td>Mixed inventory: singles plus slabs, lots or boxes.<sup><a href="#s7">7</a></sup></td></tr>
+        <tr><td class="k">Promotional rule</td><td>Free or discounted shipping when an order passes a spend or item threshold. It overrides your flat and calculated rules, and buyers see it highlighted on listings.<sup><a href="#s10">10</a></sup></td><td>"Free shipping over $25"-style offers that push buyers to add cards.</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="read">eBay's help page also mentions a "Max. shipping cost" option when creating a flat rule (noted there for eBay Live listings), which stops a 10-card order from charging ten add-on fees.<sup><a href="#s10">10</a></sup> One guide recommends stopping the add-on charge after three or four items and quoting larger orders manually.<sup><a href="#s7">7</a></sup></p>
+
+  <h3>The 3-ounce wall</h3>
+  <div class="read">
+    <p>A recurring complaint: a buyer orders four cards, pays about $2.30 in combined shipping, but the package is over 3 oz and has to go Ground Advantage at about $5. An eBay mentor confirmed there's no setting that switches the buyer to Ground Advantage after a set number of cards, and suggested raising the first card's shipping charge so that by the fourth card it approaches the Ground Advantage rate.<sup><a href="#s14">14</a></sup> Other fixes sellers use:</p>
+  </div>
+  <ul class="checklist">
+    <li data-n="01"><b>Price bands.</b> Cards at $20 and under get free shipping baked into the price and ship ESE; cards over $20 charge shipping and ship Ground Advantage.<sup><a href="#s15">15</a></sup> One guide warns against using ESE on any sale over $20.<sup><a href="#s16">16</a></sup></li>
+    <li data-n="02"><b>Watch the thickness.</b> Each envelope pocket can hold more than one card. When a stack exceeds ESE's ¼-inch limit, one seller just adds a non-machinable stamp.<sup><a href="#s17">17</a></sup></li>
+    <li data-n="03"><b>Cap the add-on.</b> Set a max shipping cost on the flat rule and quote big orders by hand.<sup><a href="#s7">7</a></sup></li>
+    <li data-n="04"><b>Check multi-quantity defaults.</b> One seller reports eBay quietly changed how shipping is computed for multi-quantity purchases in January 2025, and that he had to add a "No Discount" rule to stop eBay combining weights and undercharging.<sup><a href="#s18">18</a></sup></li>
+    <li data-n="05"><b>Lots still qualify.</b> eBay's shipping team confirmed ESE is live for the Mixed Card Lots category.<sup><a href="#s19">19</a></sup></li>
+  </ul>
+
+  <h3>Auctions and Best Offers</h3>
+  <p class="read">Automatic rules apply to Buy It Now checkout. For auction wins and accepted offers, sellers combine shipping by sending one invoice with adjusted shipping,<sup><a href="#s12">12</a></sup> or by issuing a partial refund if the buyer already paid separately.<sup><a href="#s20">20</a></sup> eBay also added a way for auction buyers to see that a seller offers combined shipping discounts before they bid.<sup><a href="#s21">21</a></sup></p>
+
+  <div class="calc" role="group" aria-labelledby="cs-title">
+    <h4 id="cs-title">Combined shipping rule tester</h4>
+    <div>
+      <div class="field"><label for="c-first">Shipping charged on first card ($)</label><input id="c-first" type="number" min="0" step="0.01" value="1.25"></div>
+      <div class="field"><label for="c-add">Charge for each additional card ($)</label><input id="c-add" type="number" min="0" step="0.01" value="0.25"></div>
+      <div class="field"><label for="c-cap">Maximum shipping charge ($, 0 = no cap)</label><input id="c-cap" type="number" min="0" step="0.01" value="0"></div>
+      <div class="field"><label for="c-n">Cards in the order</label><input id="c-n" type="number" min="1" step="1" value="4"></div>
+      <div class="field"><label for="c-oz">Packed weight per card (oz, incl. sleeve/toploader share)</label><input id="c-oz" type="number" min="0.1" step="0.1" value="0.8"></div>
+      <div class="field"><label for="c-base">Envelope + base packing weight (oz)</label><input id="c-base" type="number" min="0" step="0.1" value="0.5"></div>
+      <div class="field"><label for="c-ga">Your Ground Advantage cost if over 3 oz ($)</label><input id="c-ga" type="number" min="0" step="0.01" value="5.00"></div>
+    </div>
+    <div class="out" aria-live="polite">
+      <div><span>Buyer pays for shipping</span><span id="c-o-buyer">–</span></div>
+      <div><span>Package weight</span><span id="c-o-wt">–</span></div>
+      <div><span>Service needed</span><span id="c-o-svc">–</span></div>
+      <div><span>Your postage cost</span><span id="c-o-cost">–</span></div>
+      <div class="net" id="c-o-row"><span>Shipping profit / loss</span><span id="c-o-net">–</span></div>
+      <p class="note" style="font-family:var(--body)">ESE rates from eBay's help page ($0.69/0.97/1.25 by ounce), with its 15-card limit. Supplies aren't included. Weights per card vary with toploaders, so weigh a sample order.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PART 3 ============ -->
+<section class="part" id="deals">
+  <div class="eyebrow">Part 03</div>
+  <h2>Deals that make buyers add more cards</h2>
+  <p class="lede read">eBay's own 2026 holiday guidance suggests that dealers with big inventories of lower- and mid-priced cards use volume-based offers that grow the order instead of discounting individual cards.<sup><a href="#s22">22</a></sup> These tools sit under Seller Hub, Marketing, Discounts, and most require a store subscription.<sup><a href="#s23">23</a></sup></p>
+
+  <div class="tablewrap">
+    <table>
+      <thead><tr><th>Tool</th><th>What it does</th><th>Card-seller example</th><th>eBay's guidance</th></tr></thead>
+      <tbody>
+        <tr><td class="k">Order size discount</td><td>A discount once the cart hits a quantity or dollar threshold, across different listings</td><td>"Buy 3+ cards, save 15%"; "Spend $50, save $10"</td><td>Set thresholds slightly above your average order size; buyers respond better to a percentage off than a dollar amount.<sup><a href="#s23">23</a></sup></td></tr>
+        <tr><td class="k">Volume pricing</td><td>Tiered discount for multiple units of the same listing</td><td>Multi-quantity base or insert listings, or "pick your card" variation listings</td><td>Tiers like save 5% on 2, 10% on 3, 20% on 4+.<sup><a href="#s24">24</a></sup> It also works across variations in one listing.<sup><a href="#s25">25</a></sup></td></tr>
+        <tr><td class="k">Shipping discount</td><td>Free or reduced shipping above a threshold or for a limited time</td><td>"Free shipping on orders over $25"</td><td>Set the threshold slightly above your average order value.<sup><a href="#s26">26</a></sup></td></tr>
+        <tr><td class="k">Sale event / markdown</td><td>Visible price cut on chosen listings or whole store categories</td><td>"20% off all Bears cards this weekend"</td><td>The sale price shows as the Buy It Now price in search results.<sup><a href="#s27">27</a></sup></td></tr>
+        <tr><td class="k">Coded coupon</td><td>A code you share with buyers</td><td>"THANKS10" printed on a packing slip</td><td>Stacks with sale events and shipping discounts, but not with order or volume discounts.<sup><a href="#s28">28</a></sup></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="callout read"><b>Stacking rule.</b> When a cart qualifies for volume pricing, a codeless coupon and an order discount at once, eBay applies only the single best one.<sup><a href="#s29">29</a></sup> Design one primary multi-card offer rather than three overlapping ones.</div>
+  <p class="read">The deal and the shipping rule should work together. If "buy 4, save 15%" pushes orders past 3 oz, you're back at the Ground Advantage problem, so check the tester above with your typical order size.</p>
+</section>
+
+<!-- ============ PART 4 ============ -->
+<section class="part" id="offers">
+  <div class="eyebrow">Part 04</div>
+  <h2>Converting watchers: offers and ads</h2>
+
+  <h3>Best Offer, automated</h3>
+  <div class="read">
+    <p>Buyers can send offers, and you accept, decline or counter. Set auto-accept and auto-decline thresholds so only the middle band reaches you.<sup><a href="#s30">30</a></sup> One seller recommends basing both numbers on your costs rather than a flat percentage off, since the only numbers that matter are what you paid and what eBay takes.<sup><a href="#s31">31</a></sup> Another sets auto-decline at any price that would leave 10% margin or less.<sup><a href="#s32">32</a></sup></p>
+    <ul>
+      <li>A worked example from one guide: on an $80 listing with a $58 floor, decline under $55 and accept over $72, so strong offers close instantly even at 3 a.m. The trade-off is that some lowball buyers simply leave.<sup><a href="#s33">33</a></sup></li>
+      <li>eBay's current help page gives you 24 hours to respond, not the 48 many older guides say.<sup><a href="#s31">31</a></sup></li>
+      <li>Buyers on eBay's forums complain about sellers who turn on Best Offer but auto-decline anything more than a penny off. If you turn it on, leave real room.<sup><a href="#s34">34</a></sup></li>
+    </ul>
+  </div>
+
+  <h3>Offers to watchers</h3>
+  <p class="read">Seller Hub can send offers to buyers who've shown interest, such as watchers or cart abandoners,<sup><a href="#s35">35</a></sup> and you can set offers to send automatically.<sup><a href="#s36">36</a></sup> Watchers only receive one offer each, so make it count.<sup><a href="#s37">37</a></sup> Tracking watchers and allowing offers are among the basic tips a card-selling newsletter gives for lifting sales.<sup><a href="#s38">38</a></sup></p>
+
+  <h3>Promoted Listings in 2026</h3>
+  <div class="grid g2">
+    <div class="card"><h4>General (cost per sale)</h4><p>Formerly "Standard." You pay your ad rate, a percentage of the total sale, only on an attributed sale.<sup><a href="#s39">39</a></sup> In trading card singles, 31% of items use General ads, per eBay's own listing-form insights.<sup><a href="#s40">40</a></sup></p></div>
+    <div class="card"><h4>Priority (cost per click)</h4><p>Formerly "Advanced." Since January 2026, only Priority ads can take the first ad slot at the top of search results.<sup><a href="#s41">41</a></sup> eBay also changed General attribution and warned sellers that General spend may rise.<sup><a href="#s42">42</a></sup></p></div>
+  </div>
+  <p class="read">Seller reaction is mixed. One UK forum post calls both strategies skewed toward eBay, because the ad rate charged is the one at time of sale and attribution can hit items you didn't mean to promote heavily.<sup><a href="#s43">43</a></sup> A practical approach from one guide: work out the highest ad rate your margin can absorb before testing.<sup><a href="#s44">44</a></sup> On $1–3 cards that ceiling is usually near zero, so card sellers tend to promote hits and mid-tier cards and leave base unpromoted.</p>
+</section>
+
+<!-- ============ PART 5 ============ -->
+<section class="part" id="search">
+  <div class="eyebrow">Part 05</div>
+  <h2>Ranking in eBay search</h2>
+  <p class="lede read">eBay says Best Match considers how closely a listing matches the search, how popular the item is, price, listing quality and completeness, terms like return policy and handling time, and the seller's track record.<sup><a href="#s45">45</a></sup></p>
+  <div class="grid g3">
+    <div class="card"><h4>Item specifics</h4><p>eBay's search uses structured data (category, specifics, identifiers), so detailed specifics improve both findability and ranking.<sup><a href="#s46">46</a></sup> Filters like team, player, grade and parallel only work if you fill them in.</p></div>
+    <div class="card"><h4>Total cost</h4><p>The algorithm compares price plus shipping against competitors, and free shipping gets a small additional boost.<sup><a href="#s47">47</a></sup> eBay says free shipping can help fixed-price listings in some categories, but auctions get no search advantage from it.<sup><a href="#s48">48</a></sup></p></div>
+    <div class="card"><h4>Handling time</h4><p>A shorter handling time means an earlier estimated delivery and preference in search, but eBay warns not to shorten it if you can't meet it.<sup><a href="#s46">46</a></sup></p></div>
+    <div class="card"><h4>Titles</h4><p>Up to 80 characters; use them for words buyers search and details that set your card apart.<sup><a href="#s49">49</a></sup> The format from Report 1: year, brand, player, card number, parallel, grade, plus team.</p></div>
+    <div class="card"><h4>Card conditions</h4><p>eBay now requires its trading-card condition values and condition descriptors, including when relisting or using Sell Similar.<sup><a href="#s50">50</a></sup></p></div>
+    <div class="card"><h4>Seller performance</h4><p>Defect rate, late shipments and unresolved cases all feed ranking.<sup><a href="#s51">51</a></sup> Ship on time; one late-shipment streak costs more visibility than any title tweak gains.</p></div>
+  </div>
+</section>
+
+<!-- ============ PART 6 ============ -->
+<section class="part" id="store">
+  <div class="eyebrow">Part 06</div>
+  <h2>Store subscription and layout</h2>
+  <div class="tablewrap">
+    <table>
+      <thead><tr><th>Tier</th><th>Monthly (yearly renewal)</th><th>Monthly (monthly renewal)</th><th>Free fixed-price listings</th><th>Notes</th></tr></thead>
+      <tbody>
+        <tr><td class="k">No store</td><td class="num">$0</td><td class="num">$0</td><td class="num">250</td><td>Most sellers start here</td></tr>
+        <tr><td class="k">Starter</td><td class="num">$4.95</td><td class="num">$7.95</td><td class="num">250</td><td>Entry tier for store subscribers</td></tr>
+        <tr><td class="k">Basic</td><td class="num">$21.95</td><td class="num">$27.95</td><td class="num">1,000</td><td>Sourcing Insights requires Basic or higher<sup><a href="#s49">49</a></sup></td></tr>
+        <tr><td class="k">Premium</td><td class="num">$59.95</td><td class="num">$74.95</td><td class="num">10,000</td><td>For sellers past 1,000 active listings</td></tr>
+        <tr><td class="k">Anchor</td><td class="num">$299.95</td><td class="num">$349.95</td><td class="num">25,000</td><td>High-volume dealers</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="note read">eBay's discount tools (order discounts, volume pricing, shipping discounts, coupons, sale events) are offered to store subscribers.<sup><a href="#s23">23</a></sup> Prices and allowances from eBay's store subscription page and a 2026 store guide.<sup><a href="#s52">52</a></sup><sup class="c"><a href="#s53">53</a></sup> Third-party fee guides also report a lower final value fee for Basic and above, but quote different rates (about 12.35% to 12.7%),<sup><a href="#s54">54</a></sup><sup class="c"><a href="#s55">55</a></sup> so confirm the trading-card rate on eBay's fee page before using it in your math.</p>
+
+  <h3>Store categories</h3>
+  <div class="read">
+    <p>Store categories are your store's aisles. You can create up to 300 categories in three levels and assign each listing to two of them. eBay suggests 7–10 top-level categories with short names under 30 characters, organized the way buyers shop.<sup><a href="#s56">56</a></sup></p>
+    <p>One card seller assigns each card two categories, by year and by team, and team collectors click straight to their team.<sup><a href="#s57">57</a></sup> Common card setups also include "Rookie Cards," "Graded" and "By Player" sections.<sup><a href="#s58">58</a></sup> Team categories pair naturally with sale events: mark down a whole team's category before a big game.</p>
+  </div>
+</section>
+
+<!-- ============ PART 7 ============ -->
+<section class="part" id="stale">
+  <div class="eyebrow">Part 07</div>
+  <h2>Stale listings and listing volume</h2>
+  <div class="tablewrap">
+    <table>
+      <thead><tr><th>Action</th><th>What happens</th><th>Who uses it</th></tr></thead>
+      <tbody>
+        <tr><td class="k">Revise</td><td>Same listing, same item number and watchers</td><td>Price fixes.<sup><a href="#s59">59</a></sup></td></tr>
+        <tr><td class="k">Relist</td><td>Keeps watchers</td><td>One high-volume seller swears by a mass end-and-relist of listings older than 30 days, reporting a two-day jump in impressions and sales.<sup><a href="#s60">60</a></sup></td></tr>
+        <tr><td class="k">Sell Similar</td><td>Brand-new item number, treated as a new listing</td><td>Common rules: end at about 90 days,<sup><a href="#s61">61</a></sup> or end listings older than 6 months and recheck comps before relisting.<sup><a href="#s62">62</a></sup></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="read">The practice is debated. eBay told sellers at eBay Open that end-and-relist may hurt more than it helps, while some eBay employees and many sellers still say listings go stale after 90 days.<sup><a href="#s63">63</a></sup> Sellers on r/eBaySellerAdvice say eBay won't suspend you for it, but the reposted listing is treated as new, which cuts both ways.<sup><a href="#s64">64</a></sup> The common ground: recheck comps and fix price, title and photos before relisting, rather than relisting unchanged.<sup><a href="#s65">65</a></sup></p>
+
+  <h3>Keep the funnel full</h3>
+  <div class="read">
+    <p>Sell-through improves when fresh inventory keeps arriving. Reseller workflow guides recommend listing daily or on weekly targets and tracking sell-through by category.<sup><a href="#s62">62</a></sup> For cards, the bottleneck is listing time, which is what bulk tools address:</p>
+    <ul>
+      <li><b>eBay's AI bulk listing for trading cards</b>, officially launched in 2024 after years of delays.<sup><a href="#s66">66</a></sup></li>
+      <li><b>Card Dealer Pro</b> (from CollX): feed cards into a scanner, it identifies them with AI, proposes title and price, and publishes to eBay.<sup><a href="#s67">67</a></sup><sup class="c"><a href="#s68">68</a></sup></li>
+      <li><b>Kronocard / Kronozio</b>: bulk scanning, AI documentation and eBay sync. Its free plan includes 50 eBay listings, and a paid plan starts at $8.<sup><a href="#s69">69</a></sup><sup class="c"><a href="#s70">70</a></sup></li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============ PART 8 ============ -->
+<section class="part" id="checklist">
+  <div class="eyebrow">Part 08</div>
+  <h2>A weekly sell-through routine</h2>
+  <ol class="checklist">
+    <li data-n="01"><b>Shipping policies:</b> ESE policy for cards ≤$20 with a flat combined rule and a cap; Ground Advantage policy for cards over $20 and slabs; calculated policy for lots and boxes.</li>
+    <li data-n="02"><b>One headline multi-card offer:</b> an order-size discount or free shipping above a threshold set just over your average order.<sup><a href="#s23">23</a></sup><sup class="c"><a href="#s26">26</a></sup></li>
+    <li data-n="03"><b>Offers on autopilot:</b> cost-based auto-accept/decline thresholds on every Best Offer listing; automatic offers to watchers.</li>
+    <li data-n="04"><b>New listings</b> with full item specifics, condition descriptors and team in the title, assigned to team and year store categories.</li>
+    <li data-n="05"><b>Sale event</b> on one store category tied to the week's games or news.</li>
+    <li data-n="06"><b>Stale sweep:</b> pull the oldest listings, recheck comps, fix price and photos, then Revise or Sell Similar.</li>
+    <li data-n="07"><b>Ad check:</b> confirm Promoted Listings rates still fit each tier's margin; drop ads from low-dollar cards.</li>
+    <li data-n="08"><b>Measure:</b> sell-through by tier, average order size, and how often orders hit the 3-ounce wall.</li>
+  </ol>
+</section>
+
+<!-- ============ SOURCES ============ -->
+<section class="part sources" id="sources">
+  <div class="eyebrow">References</div>
+  <h2>Sources</h2>
+  <p class="note read">eBay changes tools and fees often. Official eBay pages were current on retrieval in November 2026; third-party figures are noted where they disagree. Reddit views come from archived snapshots.</p>
+  <ol>
+    <li id="s1"><a href="https://closo.co/blogs/platform-specific-guides/what-is-a-good-sell-through-rate-on-ebay">Closo — What is a good sell-through rate on eBay</a></li>
+    <li id="s2"><a href="https://www.practicalecommerce.com/how-to-use-terapeak-for-ebay-2021">Practical Ecommerce — Using Terapeak</a></li>
+    <li id="s3"><a href="https://flowlister.com/tools/sell-through-rate-calculator/">FlowLister — Sell-through rate calculator</a></li>
+    <li id="s4"><a href="https://slayva.com/how-to-calculate-ebay-sell-through-rate/">Slayva — Calculating and improving sell-through</a></li>
+    <li id="s5"><a href="https://underpricedai.com/blog/manage-stale-ebay-listings-list-daily-in-2026-for-steady-sales">Underpriced AI — Manage stale listings, list daily</a></li>
+    <li id="s6"><a href="https://www.outfy.com/blog/how-to-combine-shipping-on-ebay/">Outfy — How to combine shipping on eBay</a></li>
+    <li id="s7"><a href="https://closo.co/blogs/platform-specific-guides/how-to-combine-shipping-on-ebay">Closo — How to combine shipping on eBay</a></li>
+    <li id="s8"><a href="https://www.ebay.com/help/shipping-items/selling/setting-shipping-options/ebay-standard-envelope?id=5308">eBay Help — eBay standard envelope</a></li>
+    <li id="s9"><a href="https://www.ebay.com/sellercenter/shipping/ebay-labels-services/ebay-domestic-shipping-services/ebay-standard-envelope">eBay Seller Center — eBay standard envelope</a></li>
+    <li id="s10"><a href="https://www.ebay.com/help/shipping-discounts/shipping-items/selling/shipping-rates?id=4168">eBay Help — Shipping discounts</a></li>
+    <li id="s11"><a href="https://closo.co/blogs/platform-specific-guides/ebay-combine-shipping">Closo — eBay combine shipping rule types</a></li>
+    <li id="s12"><a href="https://www.nifty.ai/post/how-to-offer-combined-shipping-on-ebay">Nifty — How to offer combined shipping</a></li>
+    <li id="s13"><a href="https://export.ebay.com/en/services-tools/shipping/shipping-tips-and-best-practice/combined-shipping">eBay — Offering combined shipping</a></li>
+    <li id="s14"><a href="https://community.ebay.com/forum/ask-a-mentor-57913/topic/combined-shipping-423424/">eBay Community — Combined shipping past 3 oz</a></li>
+    <li id="s15"><a href="https://reddit.sentinel-team.org/posts/1qjmynl/snapshots/2026-01-24T05%3A50%3A04.285861Z">r/eBaySellerAdvice (snapshot) — ESE vs Ground Advantage pricing</a></li>
+    <li id="s16"><a href="https://ballcardgeniusbeginner.substack.com/p/dont-make-this-mistake-when-selling">Ballcard Genius Beginner — Shipping mistake on $15–20 cards</a></li>
+    <li id="s17"><a href="https://community.ebay.com/forum/part-time-sellers-57922/topic/shipping-for-sports-cards-sellers-how-do-you-charge-such-cheap-shipping-1684/?focus_post=2240">eBay Community — How card sellers charge cheap shipping</a></li>
+    <li id="s18"><a href="https://www.ecommercebytes.com/8drd">EcommerceBytes — ESE loophole letters</a></li>
+    <li id="s19"><a href="https://community.ebay.com/t5/Report-eBay-Technical-Issues/eBay-standard-envelope-unable-to-be-used-when-selecting-quot-lot/m-p/33165420/highlight/true">eBay Community — ESE for Mixed Card Lots</a></li>
+    <li id="s20"><a href="https://edesk.com/?p=3059">eDesk — eBay combined shipping</a></li>
+    <li id="s21"><a href="https://community.ebay.com/forum/announcements-57928/topic/exciting-news-for-auction-sellers-who-offer-combined-shipping-7410/">eBay Community — Auction sellers who offer combined shipping</a></li>
+    <li id="s22"><a href="https://www.sportscollectorsdaily.com/why-sports-card-sellers-may-want-to-prepare-early-for-the-holiday-rush/">Sports Collectors Daily — Prepare early for the holiday rush</a></li>
+    <li id="s23"><a href="https://www.ebay.com/sellercenter/growth/seller-hub-discounts/order-size-discounts">eBay Seller Center — Order size discounts</a></li>
+    <li id="s24"><a href="https://www.ebay.com/sellercenter/growth/seller-hub-discounts/volume-pricing">eBay Seller Center — Volume pricing</a></li>
+    <li id="s25"><a href="https://innovation.ebayinc.com/stories/ebay-users-can-save-with-more/">eBay Inc. — Volume pricing for variations</a></li>
+    <li id="s26"><a href="https://www.ebay.com/sellercenter/growth/seller-hub-promotions/shipping-discounts">eBay Seller Center — Shipping discounts</a></li>
+    <li id="s27"><a href="https://export.ebay.com/en/marketing/promote-listings/promotions-manager-old">eBay — Promotions and markdowns</a></li>
+    <li id="s28"><a href="https://www.ebay.com/help/selling/ebay-tools/promotioins-manager?id=4094">eBay Help — Discounts Manager stacking</a></li>
+    <li id="s29"><a href="https://pages.ebay.com/specialoffers/volumepricing/">eBay — Volume pricing FAQ</a></li>
+    <li id="s30"><a href="https://www.ebay.com/sellercenter/growth/seller-hub-discounts/offers-to-buyers-best-offer">eBay Seller Center — Offers to buyers</a></li>
+    <li id="s31"><a href="https://flowlister.com/blog/ebay-best-offer-for-sellers/">FlowLister — Best Offer for sellers</a></li>
+    <li id="s32"><a href="https://nifty.ai/post/ebay-best-offer-strategy">Nifty — Best Offer strategy</a></li>
+    <li id="s33"><a href="https://closo.co/blogs/platform-specific-guides/ebay-competing-offers">Closo — Set two numbers, save three hours</a></li>
+    <li id="s34"><a href="https://community.ebay.com/forum/buying-57914/topic/why-do-sellers-use-best-offer-but-then-not-accept-any-best-offers-465002/">eBay Community — Sellers who never accept offers</a></li>
+    <li id="s35"><a href="https://www.ebay.com/sellercenter/growth/seller-hub-discounts/offers-to-buyers-best-offer">eBay Seller Center — Offers to watchers</a></li>
+    <li id="s36"><a href="https://www.ebay.com/sellercenter/growth/seller-hub-promotions/offers-to-buyers-best-offer">eBay Seller Center — Automatic offers</a></li>
+    <li id="s37"><a href="https://www.godaddy.com/garage/ebay-watchers-into-buyers/">GoDaddy — Turn watchers into buyers</a></li>
+    <li id="s38"><a href="https://ballcardgeniusbeginner.substack.com/p/7-actionable-tips-to-increase-your">Ballcard Genius Beginner — 7 tips to increase sales</a></li>
+    <li id="s39"><a href="https://blog.vendoo.co/ebay-promoted-listings-guide">Vendoo — Promoted Listings guide</a></li>
+    <li id="s40"><a href="https://valueaddedresource.net/ebay-item-insights-promoted-listings-usage-by-category">Value Added Resource — Promoted Listings usage by category</a></li>
+    <li id="s41"><a href="https://resellcalendar.com/news/news/ebay-promoted-listing-ad-fee-update-january-2026/">Resell Calendar — January 2026 ad policy update</a></li>
+    <li id="s42"><a href="https://community.ebay.com/forum/announcements-57928/topic/seller-announcement-updates-to-ebays-promoted-listings-are-coming-soon-8506/">eBay Community — Promoted Listings updates</a></li>
+    <li id="s43"><a href="https://community.ebay.co.uk/t5/Member-To-Member-Support/Why-eBay-s-Promoted-Listings-Are-a-Trap-Sellers-Should-Avoid/td-p/7894467">eBay UK Community — Promoted Listings critique</a></li>
+    <li id="s44"><a href="https://sagnikbhattacharya.com/blog/ebay-promoted-listings-ad-rate-ai-check">Ad rate margin-floor method</a></li>
+    <li id="s45"><a href="https://www.ebay.co.uk/help/selling/listings/listing-tips/optimising-listings-best-match?id=4166">eBay Help — Optimising listings for Best Match</a></li>
+    <li id="s46"><a href="https://export.ebay.com/en/growth/listings/how-optimize-your-listings/tips-listing-optimization/">eBay — Listing optimization tips</a></li>
+    <li id="s47"><a href="https://www.zikanalytics.com/blog/?p=2673">ZIK Analytics — Cassini ranking factors</a></li>
+    <li id="s48"><a href="https://pages.ebay.com/SE/en-US/sellerinformation/growing/bestmatchtips.html">eBay — Best Match tips</a></li>
+    <li id="s49"><a href="https://slayva.com/ebay-seo-2026-rank-page-one-terapeak-ai/">Slayva — eBay SEO 2026</a></li>
+    <li id="s50"><a href="https://www.ebay.com/sellercenter/selling/what-to-sell/selling-trading-cards">eBay Seller Center — Selling trading cards</a></li>
+    <li id="s51"><a href="https://www.zikanalytics.com/blog/ebay-cassini/">ZIK Analytics — eBay Cassini</a></li>
+    <li id="s52"><a href="https://export.ebay.com/en/growth/ebay-store/subscriptions-and-fees/">eBay — Store subscriptions and fees</a></li>
+    <li id="s53"><a href="https://ecomclips.com/blog/how-to-build-an-ebay-store-in-2026-complete-setup-guide-for-sellers/">Ecomclips — eBay store setup 2026</a></li>
+    <li id="s54"><a href="https://www.frooition.com/ebay-fee-calculator-uk-usa/">Frooition — eBay fee calculator 2026</a></li>
+    <li id="s55"><a href="https://www.getonecart.com/tools/ebay-fee-calculator/">OneCart — eBay fee calculator</a></li>
+    <li id="s56"><a href="https://www.ebay.ca/pages/help/stores/contextual/store-category-guidelines.html">eBay — Store category guidelines</a></li>
+    <li id="s57"><a href="https://www.freedomcardboard.com/forum/threads/any-advice-for-a-new-ebay-store-seller.59200/post-887188">Freedom Cardboard — Advice for a new eBay store seller</a></li>
+    <li id="s58"><a href="https://www.zikanalytics.com/blog/how-to-sell-baseball-cards-on-ebay/">ZIK Analytics — Selling baseball cards on eBay</a></li>
+    <li id="s59"><a href="https://closo.co/blogs/crosslisting/ending-ebay-listing-early-guide-what-i-learned-ending-listings-as-a-high-volume-reseller">Closo — Ending listings early</a></li>
+    <li id="s60"><a href="https://www.scavengerlife.com/forums/topic/ebay-store-experiments-to-improve-sales/">Scavenger Life — Store experiments</a></li>
+    <li id="s61"><a href="https://reddit.sentinel-team.org/posts/1smzevu/snapshots/2026-04-16T23%3A16%3A04.998824Z">Reddit (snapshot) — How often do you end and Sell Similar?</a></li>
+    <li id="s62"><a href="https://underpricedai.com/blog/2026-ebay-flipping-workflow-end-stale-listings-sell-similar-for-profit">Underpriced AI — End stale listings &amp; Sell Similar</a></li>
+    <li id="s63"><a href="https://www.valueaddedresource.net/is-ebay-end-relist-a-myth/">Value Added Resource — Is end &amp; relist a myth?</a></li>
+    <li id="s64"><a href="https://reddit.sentinel-team.org/posts/1rpkq20/snapshots/2026-03-10T18%3A01%3A26.669271Z">r/eBaySellerAdvice (snapshot) — Is end and Sell Similar legit?</a></li>
+    <li id="s65"><a href="https://reddit.sentinel-team.org/posts/1rbnm47/snapshots/2026-02-23T18%3A40%3A01.949982Z">Reddit (snapshot) — Rechecking comps before Sell Similar</a></li>
+    <li id="s66"><a href="https://valueaddedresource.net/ebay-rolls-out-new-image-based-listing-trading-cards">Value Added Resource — eBay AI bulk listing for trading cards</a></li>
+    <li id="s67"><a href="https://ximilar.com/?p=16099">Ximilar — Best tools for card collectors</a></li>
+    <li id="s68"><a href="https://www.collx.app">CollX — Card Dealer Pro</a></li>
+    <li id="s69"><a href="https://cardlines.com/?p=5524">CardLines — Kronocard bulk listing</a></li>
+    <li id="s70"><a href="https://home.kronozio.com/?p=5228">Kronozio — eBay selling</a></li>
+  </ol>
+</section>
+</main>
+
+<footer class="wrap">Compiled November 2026 from eBay's seller documentation and card-seller communities. Verify current fees and limits on eBay before changing your settings.</footer>
+
+<script>
+(function(){
+  var $=function(id){return document.getElementById(id);};
+  var fmt=function(n){return (n<0?'-$':'$')+Math.abs(n).toFixed(2);};
+  function calc(){
+    var first=parseFloat($('c-first').value)||0, add=parseFloat($('c-add').value)||0;
+    var cap=parseFloat($('c-cap').value)||0, n=Math.max(1,Math.floor(parseFloat($('c-n').value)||1));
+    var oz=parseFloat($('c-oz').value)||0, base=parseFloat($('c-base').value)||0, ga=parseFloat($('c-ga').value)||0;
+    var buyer=first+add*(n-1); if(cap>0) buyer=Math.min(buyer,cap);
+    var wt=base+oz*n, svc, cost;
+    if(n<=15 && wt<=3){ var w=Math.ceil(wt); cost=w<=1?0.69:(w<=2?0.97:1.25); svc='eBay Standard Envelope ('+w+' oz)'; }
+    else { cost=ga; svc=n>15?'Ground Advantage (over 15 cards)':'Ground Advantage (over 3 oz)'; }
+    var net=buyer-cost;
+    $('c-o-buyer').textContent=fmt(buyer);
+    $('c-o-wt').textContent=wt.toFixed(1)+' oz';
+    $('c-o-svc').textContent=svc;
+    $('c-o-cost').textContent=fmt(-cost);
+    $('c-o-net').textContent=fmt(net);
+    $('c-o-row').classList.toggle('neg',net<0);
+  }
+  ['c-first','c-add','c-cap','c-n','c-oz','c-base','c-ga'].forEach(function(id){$(id).addEventListener('input',calc);});
+  calc();
+})();
+</script>
+</body>
+</html>
